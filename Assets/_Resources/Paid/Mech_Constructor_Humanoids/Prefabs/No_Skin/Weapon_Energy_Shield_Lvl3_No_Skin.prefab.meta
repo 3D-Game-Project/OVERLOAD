@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 23837c17dedcd9d4cbe00f15628a650c
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 80255
+  packageName: 'Mech Constructor: Humanoid Robots'
+  packageVersion: 2.1
+  assetPath: Assets/Mech_Constructor_Humanoids/Prefabs/No_Skin/Weapon_Energy_Shield_Lvl3_No_Skin.prefab
+  uploadId: 609318

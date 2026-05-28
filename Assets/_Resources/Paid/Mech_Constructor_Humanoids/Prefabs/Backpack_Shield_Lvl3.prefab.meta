@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: f8e4f9e654ed2314a9d342e8cc9dd700
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 80255
+  packageName: 'Mech Constructor: Humanoid Robots'
+  packageVersion: 2.1
+  assetPath: Assets/Mech_Constructor_Humanoids/Prefabs/Backpack_Shield_Lvl3.prefab
+  uploadId: 609318

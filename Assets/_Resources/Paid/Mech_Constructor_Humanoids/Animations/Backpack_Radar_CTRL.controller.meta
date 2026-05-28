@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: d58b1da523f42a448a2025e6625cef58
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 80255
+  packageName: 'Mech Constructor: Humanoid Robots'
+  packageVersion: 2.1
+  assetPath: Assets/Mech_Constructor_Humanoids/Animations/Backpack_Radar_CTRL.controller
+  uploadId: 609318

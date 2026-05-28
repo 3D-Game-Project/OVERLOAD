@@ -1,0 +1,57 @@
+fileFormatVersion: 2
+guid: 0b7d581be71023f49b3f40ca8ecce30b
+labels:
+- Mech
+- Robot
+- Constructor
+- Modular
+- Humanoid
+- Android
+- Droid
+- Worker
+- Soldier
+- lowpoly
+- low-poly
+- handpainted
+- hand-painted
+- scifi
+- sci-fi
+- mobile
+- animated
+- walking
+- battle
+- military
+- unit
+- multilevel
+- armed
+- light
+- heavy
+- harvester
+- miner
+- porter
+- melee
+- gun
+- robots
+- droids
+- androids
+- mechs
+- units
+- bot
+- bots
+- weapon
+- cartoon
+- cartoony
+- fighter
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 80255
+  packageName: 'Mech Constructor: Humanoid Robots'
+  packageVersion: 2.1
+  assetPath: Assets/Mech_Constructor_Humanoids/Prefabs/Gadgets/Gadget_HandGuard_Lvl2.prefab
+  uploadId: 609318

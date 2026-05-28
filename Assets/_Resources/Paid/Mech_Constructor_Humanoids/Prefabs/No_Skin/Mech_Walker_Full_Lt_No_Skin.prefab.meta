@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 2c9f0c26a96a90d48a3a4e62775718ab
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 80255
+  packageName: 'Mech Constructor: Humanoid Robots'
+  packageVersion: 2.1
+  assetPath: Assets/Mech_Constructor_Humanoids/Prefabs/No_Skin/Mech_Walker_Full_Lt_No_Skin.prefab
+  uploadId: 609318

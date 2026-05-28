@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 04d6f1967dc624e459e4d11d377f480d
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 80255
+  packageName: 'Mech Constructor: Humanoid Robots'
+  packageVersion: 2.1
+  assetPath: Assets/Mech_Constructor_Humanoids/Animations/Weapon_Shield_Left_CTRL.controller
+  uploadId: 609318

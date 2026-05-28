@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: dab0c33df630147419af7053135054e4
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 80255
+  packageName: 'Mech Constructor: Humanoid Robots'
+  packageVersion: 2.1
+  assetPath: Assets/Mech_Constructor_Humanoids/Animations/Arm_Weapon_CTRL.controller
+  uploadId: 609318

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 34538988dad064d4a920f1954a15f2fd
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 80255
+  packageName: 'Mech Constructor: Humanoid Robots'
+  packageVersion: 2.1
+  assetPath: Assets/Mech_Constructor_Humanoids/Prefabs/Weapon_Shotgun_Bullet.prefab
+  uploadId: 609318

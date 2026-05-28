@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: c7b79a690c7bd0849b7c87093e62c1a1
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 80255
+  packageName: 'Mech Constructor: Humanoid Robots'
+  packageVersion: 2.1
+  assetPath: Assets/Mech_Constructor_Humanoids/Materials/A_FX_Shield_Cell_Mat.mat
+  uploadId: 609318
