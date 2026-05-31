@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 28ec98c81d00d1f40836c6bda5441a9c
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 80255
+  packageName: 'Mech Constructor: Humanoid Robots'
+  packageVersion: 2.1
+  assetPath: Assets/Mech_Constructor_Humanoids/Animations/Hand_Saw_CTRL.controller
+  uploadId: 609318

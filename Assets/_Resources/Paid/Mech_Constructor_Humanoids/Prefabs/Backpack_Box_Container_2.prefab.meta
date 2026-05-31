@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: cce87188bfb847640bf277217219600d
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 80255
+  packageName: 'Mech Constructor: Humanoid Robots'
+  packageVersion: 2.1
+  assetPath: Assets/Mech_Constructor_Humanoids/Prefabs/Backpack_Box_Container_2.prefab
+  uploadId: 609318

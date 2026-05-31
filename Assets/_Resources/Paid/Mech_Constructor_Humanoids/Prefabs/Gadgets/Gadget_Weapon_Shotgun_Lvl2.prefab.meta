@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 22b82702677b8d742a1c3a918fef893d
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 80255
+  packageName: 'Mech Constructor: Humanoid Robots'
+  packageVersion: 2.1
+  assetPath: Assets/Mech_Constructor_Humanoids/Prefabs/Gadgets/Gadget_Weapon_Shotgun_Lvl2.prefab
+  uploadId: 609318

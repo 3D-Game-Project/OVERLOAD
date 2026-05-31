@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 5f6c45d1a0e2644479f6ed39b5c786e0
+TextScriptImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 80255
+  packageName: 'Mech Constructor: Humanoid Robots'
+  packageVersion: 2.1
+  assetPath: Assets/Mech_Constructor_Humanoids/Materials/Source/MC_Humanoids__Source_PSD_Link.txt
+  uploadId: 609318

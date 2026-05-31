@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 4a5ac0340d4d87a4c8b892820b670e26
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 80255
+  packageName: 'Mech Constructor: Humanoid Robots'
+  packageVersion: 2.1
+  assetPath: Assets/Mech_Constructor_Humanoids/Prefabs/Gadgets/Gadget_Weapon_Minigun_Lvl2.prefab
+  uploadId: 609318

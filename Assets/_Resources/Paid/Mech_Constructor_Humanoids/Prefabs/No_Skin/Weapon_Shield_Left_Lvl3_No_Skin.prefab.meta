@@ -1,0 +1,57 @@
+fileFormatVersion: 2
+guid: d835e58ae6ee08e48911cccd3804be2a
+labels:
+- Mech
+- droids
+- Robot
+- Constructor
+- Modular
+- Humanoid
+- Android
+- Droid
+- Worker
+- Soldier
+- lowpoly
+- low-poly
+- handpainted
+- scifi
+- hand-painted
+- sci-fi
+- mobile
+- animated
+- walking
+- battle
+- military
+- unit
+- multilevel
+- armed
+- light
+- heavy
+- harvester
+- miner
+- porter
+- melee
+- gun
+- robots
+- androids
+- mechs
+- units
+- bot
+- bots
+- weapon
+- cartoon
+- cartoony
+- fighter
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 80255
+  packageName: 'Mech Constructor: Humanoid Robots'
+  packageVersion: 2.1
+  assetPath: Assets/Mech_Constructor_Humanoids/Prefabs/No_Skin/Weapon_Shield_Left_Lvl3_No_Skin.prefab
+  uploadId: 609318

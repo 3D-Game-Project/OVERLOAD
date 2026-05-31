@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 77c5a2eef51c9d84c80ea8c1e5c62731
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 80255
+  packageName: 'Mech Constructor: Humanoid Robots'
+  packageVersion: 2.1
+  assetPath: Assets/Mech_Constructor_Humanoids/Prefabs/Cockpit_Trucker_No_Interior.prefab
+  uploadId: 609318

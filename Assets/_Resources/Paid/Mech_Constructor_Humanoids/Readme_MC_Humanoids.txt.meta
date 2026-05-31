@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 332955acf184b274fa6117537ccbd2a2
+TextScriptImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 80255
+  packageName: 'Mech Constructor: Humanoid Robots'
+  packageVersion: 2.1
+  assetPath: Assets/Mech_Constructor_Humanoids/Readme_MC_Humanoids.txt
+  uploadId: 609318

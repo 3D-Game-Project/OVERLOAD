@@ -1,0 +1,57 @@
+fileFormatVersion: 2
+guid: a7627a0749ca4484e9f4ee32ea217efb
+labels:
+- Mech
+- Robot
+- Constructor
+- Modular
+- Humanoid
+- Android
+- Droid
+- Worker
+- Soldier
+- lowpoly
+- low-poly
+- handpainted
+- hand-painted
+- scifi
+- sci-fi
+- mobile
+- animated
+- walking
+- battle
+- military
+- unit
+- multilevel
+- armed
+- light
+- heavy
+- harvester
+- miner
+- porter
+- melee
+- gun
+- robots
+- droids
+- androids
+- mechs
+- units
+- bot
+- bots
+- weapon
+- cartoon
+- cartoony
+- fighter
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 80255
+  packageName: 'Mech Constructor: Humanoid Robots'
+  packageVersion: 2.1
+  assetPath: Assets/Mech_Constructor_Humanoids/Prefabs/Humanoids/Mech_Humanoid_Lvl2_V2.prefab
+  uploadId: 609318

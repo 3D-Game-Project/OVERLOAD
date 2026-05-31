@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 7e28e18f43cb0dc43a45b6d420bb9d4a
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 80255
+  packageName: 'Mech Constructor: Humanoid Robots'
+  packageVersion: 2.1
+  assetPath: Assets/Mech_Constructor_Humanoids/Prefabs/Cockpit_Humanoid_Lvl1.prefab
+  uploadId: 609318

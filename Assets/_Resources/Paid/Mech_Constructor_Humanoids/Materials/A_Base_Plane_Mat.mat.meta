@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 186d20f716b17644c914d08c8381c105
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 80255
+  packageName: 'Mech Constructor: Humanoid Robots'
+  packageVersion: 2.1
+  assetPath: Assets/Mech_Constructor_Humanoids/Materials/A_Base_Plane_Mat.mat
+  uploadId: 609318

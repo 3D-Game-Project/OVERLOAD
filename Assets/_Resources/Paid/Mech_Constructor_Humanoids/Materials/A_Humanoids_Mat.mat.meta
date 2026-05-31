@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: e1dda54fad679ce4d96e32f57c2cd8a5
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 80255
+  packageName: 'Mech Constructor: Humanoid Robots'
+  packageVersion: 2.1
+  assetPath: Assets/Mech_Constructor_Humanoids/Materials/A_Humanoids_Mat.mat
+  uploadId: 609318

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 6601774c33cd28b4694233da0bdbf77d
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 80255
+  packageName: 'Mech Constructor: Humanoid Robots'
+  packageVersion: 2.1
+  assetPath: Assets/Mech_Constructor_Humanoids/Prefabs/Gadgets/Gadget_Weapon_Launcher.prefab
+  uploadId: 609318
