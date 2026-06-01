@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1b1fcedf4d30334f861d12febf4455f, type: 3}
+  m_Name: Test_Player_4
+  m_EditorClassIdentifier: Assembly-CSharp::AttackPartsData
+  _partsName: test_4
+  _partsPrefab: {fileID: 2554462508650119762, guid: 2578ee6a666bc8040bf18ae626221ab9, type: 3}
+  _requirePower: 0
+  _partsType: 0
+  _fireType: 1
+  _damage: 10
+  _range: 10
+  _fireCooldown: 1
+  _maxMagazineSize: 0
+  _bulletPrefab: {fileID: 0}
