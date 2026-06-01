@@ -8,9 +8,9 @@ public class FireManager : MonoBehaviour
     [SerializeField] private LayerMask _targetLayer;
 
     public WeaponRuntime WeaponRuntime { get; set; }
-    
+    private IAimProvider _aimProvider;
+
     private BulletPool _bulletPool;
-    private Camera _camera;
 
     private Coroutine _reloadCoroutine;
 
@@ -20,8 +20,6 @@ public class FireManager : MonoBehaviour
     // ==> 무기 프리팹마다 BulletPool 스크립트 부착시 발생되는 누락현상 방지와 오브젝트풀링을 통한 총알 사전 생성을 통해 프레임 드랍 방지
     private void Awake()
     {
-        if(_camera == null) _camera = Camera.main;
-        
         if(_attackPartsData != null)
         {
             WeaponRuntime = new WeaponRuntime(_attackPartsData);
@@ -34,6 +32,11 @@ public class FireManager : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        _aimProvider = GetComponentInParent<IAimProvider>();
+    }
+
     // FireManager를 Enemy와 Player 둘 다가 사용할 예정이기 때문에
     // CompareTag를 통해 플레이어인 경우에만 마우스 클릭으로 발사 및 리로드 처리
     private void Update()
@@ -44,7 +47,7 @@ public class FireManager : MonoBehaviour
         {
             if (Input.GetMouseButton(0))
             {
-                Vector3 crosshairTarget = GetCameraTargetPoint();
+                Vector3 crosshairTarget = _aimProvider != null ? _aimProvider.GetAimPoint() : transform.position + transform.forward * _attackPartsData.Range;
                 TryFire(crosshairTarget);
             }
 
@@ -71,7 +74,6 @@ public class FireManager : MonoBehaviour
         }
     }
 
-    // GetCameraTargetPoint을 통해 크로스헤어의 좌표를 받아서 총알 생성 혹은 히트스캔 처리
     public void TryFire(Vector3 targetPoint)
     {
         if (WeaponRuntime.TryFire())
@@ -88,17 +90,6 @@ public class FireManager : MonoBehaviour
                     break;
             }
         }
-    }
-
-    // 플레이어 전용 크로스헤어 계산
-    // ViewportPointToRay를 통한 중앙 계산
-    // Raycast계산시 무언가 맞았을 경우 물체의 좌표를, 아닌 경우 (허공) 무기파츠의 사거리 기준 좌표를 반환
-    private Vector3 GetCameraTargetPoint()
-    {
-        if (_camera == null) return _muzzlePoint.position + _muzzlePoint.forward * _attackPartsData.Range;
-
-        Ray _ray = _camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
-        return Physics.Raycast(_ray, out RaycastHit _hit, _attackPartsData.Range) ? _hit.point : _ray.GetPoint(_attackPartsData.Range);
     }
 
     // 총알 생성 (ProjectTile은 해당 방향으로 발사되도록 처리해야하기 때문에)
@@ -182,6 +173,8 @@ public class FireManager : MonoBehaviour
         {
             child.gameObject.layer = ownerLayer;
         }
+
+        _aimProvider = GetComponentInParent<IAimProvider>();
 
         if (_attackPartsData != null)
         {

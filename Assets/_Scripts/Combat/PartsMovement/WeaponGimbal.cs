@@ -50,10 +50,8 @@ public class WeaponGimbalController : MonoBehaviour
         Quaternion targetLocalRot = Quaternion.LookRotation(localTargetPos, Vector3.up);
         Vector3 targetEuler = targetLocalRot.eulerAngles;
 
-        //float yaw = NormalizeAngle(targetEuler.y);
         float pitch = NormalizeAngle(targetEuler.x);
 
-        //yaw = Mathf.Clamp(yaw, -maxHorizontalAngle, maxHorizontalAngle);
         pitch = Mathf.Clamp(pitch, -maxVerticalAngle, maxVerticalAngle);
 
         Quaternion clampedLocalRot = Quaternion.Euler(pitch, 0f, 0f);
