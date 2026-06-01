@@ -1932,8 +1932,12 @@ PrefabInstance:
       value: Weapon_GLauncher_lvl1
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: e995d756b9163ac45bc8cdcb7a13be6e, type: 3}
+      propertyPath: m_LocalScale.x
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: e995d756b9163ac45bc8cdcb7a13be6e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -0.97
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: e995d756b9163ac45bc8cdcb7a13be6e, type: 3}
       propertyPath: m_LocalPosition.y
