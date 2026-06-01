@@ -19,11 +19,6 @@ public class EnemyData : UnitData
     public LayerMask TargetLayer;
     public LayerMask ObstacleLayer;
 
-    //[Header("Combat")]
-    //public float AttackRange = 2.1f;
-    //public float AttackCooldown = 1.2f;
-    //public float AttackStopDistanceRate = 0.85f;
-
     [Header("Patrol")]
     public float WaitAtPatrolPoint = 1.0f;
 }

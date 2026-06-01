@@ -25,7 +25,6 @@ public class EnemyBehaviorBridge : MonoBehaviour
             return;
         }
 
-        // 수동 할당이 비어 있으면 scene의 PatrolPoint 루트를 기준으로 자동 수집한다.
         GameObject patrolRootObject = GameObject.Find("PatrolPoint");
         if (patrolRootObject == null) return;
 
@@ -51,12 +50,16 @@ public class EnemyBehaviorBridge : MonoBehaviour
         return point != null ? point.position : transform.position;
     }
 
+    // 현재 기체 하위에 부착된 무기 파츠 리스트 실시간 갱신
+    // 기존 무기 목록 비운 후, 다시 할당
     public void UpdateEquippedWeapons()
     {
         _equippedWeapons.Clear();
         _equippedWeapons.AddRange(GetComponentsInChildren<FireManager>());
     }
 
+    // 장착된 모든 무기 파츠중 가장 짧은 무기파츠의 공격사거리를 반환
+    // => AI가 총을 최초 발사하는 시점을 가장 짧은 무기의 사거리 기준으로 처리하기 위해
     public float GetMinAttackRange()
     {
         if (_equippedWeapons == null || _equippedWeapons.Count <= 0)
@@ -94,6 +97,7 @@ public class EnemyBehaviorBridge : MonoBehaviour
         return hasValidWeapon ? minRange : 2f;
     }
 
+    // targetPoint를 기준으로 기체에 부착된 모든 무기파츠에 사격명령처리
     public void FireAllWeapons(Vector3 targetPoint)
     {
         //Debug.Log($"<color=green>[AI Flow 6] 무기 브릿지 작동.</color> 현재 장착 중인 총 {_equippedWeapons.Count}개 일괄 TryFire 순회 시작.");

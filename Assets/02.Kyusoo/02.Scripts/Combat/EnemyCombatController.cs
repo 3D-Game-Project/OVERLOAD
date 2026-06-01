@@ -17,12 +17,14 @@ public class EnemyCombatController : MonoBehaviour
     private void OnEnable()
     {
         if (UnitRuntime == null) return;
+        UnitRuntime.OnHealthChanged += HealthChanged;
         UnitRuntime.OnDeath += Death;
     }
 
     private void OnDisable()
     {
         if (UnitRuntime == null) return;
+        UnitRuntime.OnHealthChanged -= HealthChanged;
         UnitRuntime.OnDeath -= Death;
     }
 
@@ -30,6 +32,12 @@ public class EnemyCombatController : MonoBehaviour
     {
         if (UnitRuntime == null) return;
         UnitRuntime.TakeDamage(damage);
+
+    }
+
+    public void HealthChanged(int currentHp, int maxHp)
+    {
+        Debug.Log($"몬스터 피격 {currentHp}");
     }
 
     private void Death()

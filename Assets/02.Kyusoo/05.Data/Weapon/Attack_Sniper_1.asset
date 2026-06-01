@@ -10,14 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e1b1fcedf4d30334f861d12febf4455f, type: 3}
-  m_Name: Attack_Parts_Laser
+  m_Name: Attack_Sniper_1
   m_EditorClassIdentifier: Assembly-CSharp::AttackPartsData
-  _partsName: attackParts_Laser
-  _partsPrefab: {fileID: 9034563065373128712, guid: a1f9da796243f0f41927a241d4b6b4fc, type: 3}
-  _requirePower: 0
+  _partsName: sniper_1
+  _partsPrefab: {fileID: 100000, guid: 8a019139a647e3a409c2591013013522, type: 3}
+  _requirePower: 40
+  _partsType: 0
   _fireType: 1
-  _damage: 10
-  _range: 10
-  _fireCooldown: 1
+  _damage: 15
+  _range: 15
+  _fireCooldown: 4
   _maxMagazineSize: 0
   _bulletPrefab: {fileID: 0}

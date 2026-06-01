@@ -155,12 +155,72 @@ public class FireManager : MonoBehaviour
         }
     }
 
+    // 동적 장착 시 무기 파츠의 소유자 정보(레이어 및 타겟) 및 데이터 런타임 초기화
+    // 인스펙터에 총구 정보가 누락되었을 시 자식 오브젝트 트리를 자동 탐색하여 보정 처리
+    // 소유자(Player/Enemy)기준  레이어 설정
+    // 무기 교체 타이밍에 맞춰 기존에 생성되어 있던 탄환 오브젝트 풀을 완전 청소(Destroy)한 뒤, 새 무기 스펙 탄창 수량에 맞게 재구축
+    public void SetWeaponOwner(LayerMask targetLayer, int ownerLayer)
+    {
+        if (_muzzlePoint == null)
+        {
+            _muzzlePoint = FindChildMuzzle(transform, "MuzzlePoint");
+
+            if (_muzzlePoint != null)
+            {
+                Debug.Log($"muzzlePoint 찾기 성공.");
+            }
+            else
+            {
+                _muzzlePoint = transform;
+            }
+        }
+
+        _targetLayer = targetLayer;
+        gameObject.layer = ownerLayer;
+
+        foreach (Transform child in transform)
+        {
+            child.gameObject.layer = ownerLayer;
+        }
+
+        if (_attackPartsData != null)
+        {
+            WeaponRuntime = new WeaponRuntime(_attackPartsData);
+
+            if (_attackPartsData.FireType == FireType.Projectile && _attackPartsData.BulletPrefab != null)
+            {
+                if (TryGetComponent(out BulletPool oldPool)) Destroy(oldPool);
+
+                _bulletPool = gameObject.AddComponent<BulletPool>();
+                _bulletPool.Initialize(_attackPartsData.BulletPrefab, _attackPartsData.MaxMagazineSize);
+            }
+        }
+    }
+
+    // 총구 위치 자동 탐색
+    // 하이어라키 하위 구조 기준 재귀 함수 형태로 순회하여 MuzzlePoint 문자열로 찾아서 연결
+    private Transform FindChildMuzzle(Transform parent, string targetName)
+    {
+        foreach (Transform child in parent)
+        {
+            if (child.name == targetName)
+                return child;
+
+            Transform found = FindChildMuzzle(child, targetName);
+            if (found != null)
+                return found;
+        }
+        return null;
+    }
+
+    // 무기 재장전시 동작되는 코루틴
     private void ReloadStarted()
     {
         if (_reloadCoroutine != null) StopCoroutine(_reloadCoroutine);
         _reloadCoroutine = StartCoroutine(ReloadCoroutine());
     }
 
+    // 2초 대기 후 Reload완료되었다고 알리기
     private IEnumerator ReloadCoroutine()
     {
         yield return new WaitForSeconds(2f);

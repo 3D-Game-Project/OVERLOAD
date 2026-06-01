@@ -10,14 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e1b1fcedf4d30334f861d12febf4455f, type: 3}
-  m_Name: Attack_Parts_Rifle
+  m_Name: Attack_DoubleGun_5
   m_EditorClassIdentifier: Assembly-CSharp::AttackPartsData
-  _partsName: attackParts_Rifle
-  _partsPrefab: {fileID: 2483869928728128549, guid: bd173e1c04c78d54089847bf046e57c6, type: 3}
-  _requirePower: 0
+  _partsName: double_gun_5
+  _partsPrefab: {fileID: 100014, guid: 2e4a28d7408c2514eb630a271fe9dba1, type: 3}
+  _requirePower: 50
+  _partsType: 0
   _fireType: 0
-  _damage: 10
+  _damage: 25
   _range: 10
-  _fireCooldown: 1
-  _maxMagazineSize: 5
+  _fireCooldown: 0.5
+  _maxMagazineSize: 10
   _bulletPrefab: {fileID: 100000, guid: 7e2d264e03fb2fb4fb2b1e559515830a, type: 3}
