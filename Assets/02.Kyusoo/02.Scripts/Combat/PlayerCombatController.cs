@@ -1,8 +1,10 @@
 ﻿using UnityEngine;
 
-public class PlayerCombatController : MonoBehaviour
+public class PlayerCombatController : MonoBehaviour,IAimProvider
 {
-    [SerializeField] private UnitData _unitData; 
+    [SerializeField] private UnitData _unitData;
+    [SerializeField ]private Vector3 _currentAimPoint;
+    [SerializeField] private LayerMask targetAndObstacleLayer;
 
     public UnitRuntime UnitRuntime { get; private set; }
 
@@ -11,6 +13,20 @@ public class PlayerCombatController : MonoBehaviour
         if (_unitData != null)
         {
             UnitRuntime = new UnitRuntime(_unitData);
+        }
+    }
+
+    private void Update()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
+
+        if (Physics.Raycast(ray, out RaycastHit hit, 100f, targetAndObstacleLayer))
+        {
+            _currentAimPoint = hit.point;
+        }
+        else
+        {
+            _currentAimPoint = ray.origin + ray.direction * 100f;
         }
     }
 
@@ -58,5 +74,10 @@ public class PlayerCombatController : MonoBehaviour
     {
         // 사망 애니메이션 재생
         Destroy(gameObject);
+    }
+
+    public Vector3 GetAimPoint()
+    {
+        return _currentAimPoint;
     }
 }
