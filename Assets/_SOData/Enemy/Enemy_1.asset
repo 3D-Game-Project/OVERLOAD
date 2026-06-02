@@ -19,11 +19,11 @@ MonoBehaviour:
   _dropParts:
   - {fileID: 11400000, guid: c3aa0aa7f04c820498fe87a2bfd88ea6, type: 2}
   - {fileID: 11400000, guid: b386ace27aeccd24a95ce6e189cf730a, type: 2}
-  PatrolSpeed: 10
-  ChaseSpeed: 15
+  PatrolSpeed: 5
+  ChaseSpeed: 7
   RotationSpeed: 720
   DetectRadius: 20
-  ViewAngle: 120
+  ViewAngle: 360
   TargetLayer:
     serializedVersion: 2
     m_Bits: 64

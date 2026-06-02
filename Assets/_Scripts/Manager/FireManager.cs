@@ -13,6 +13,7 @@ public class FireManager : MonoBehaviour
     private BulletPool _bulletPool;
 
     private Coroutine _reloadCoroutine;
+    public AttackPartsData AttackPartsData => _attackPartsData;
 
     // 카메라 세팅 방지
     // 공격파트 정보 수집

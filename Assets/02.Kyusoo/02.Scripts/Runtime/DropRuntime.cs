@@ -20,7 +20,7 @@ public class DropRuntime
         }
 
         List<PartsData> _dropList = new List<PartsData>();
-        _maxDropCount = Random.Range(2, 3); 
+        _maxDropCount = Random.Range(1, 3); 
 
         for (int i = 0; i < _enemyData.DropParts.Count; i++)
         {
@@ -28,12 +28,12 @@ public class DropRuntime
 
             _dropList.Add(_enemyData.DropParts[i]);
 
-            //int randomIndex = Random.Range(1, 11);
+            int randomIndex = Random.Range(1, 11);
 
-            //if(randomIndex >= 9)
-            //{
-            //    _dropList.Add(_enemyData.DropParts[i]);
-            //}
+            if (randomIndex >= 9)
+            {
+                _dropList.Add(_enemyData.DropParts[i]);
+            }
         }
 
         if(_dropList.Count > 0)
@@ -42,17 +42,29 @@ public class DropRuntime
         }
     }
 
+    // 필드에 생성시킬 파츠와 생성위치를 받아 프리팹을 생성하는 함수
+    // 위치의 경우 몬스터의 위치를 기준으로 1만큼 랜덤한 위치에 생성되도록 처리
+    // Collider를 적용하는 이유는 드랍처리를 진행할 때, OnTriggerEnter를 진행하기 위해 추가
+    // Collider의 최초 크기가 작은것을 고려하여 size center를 조정
     private void CreateDropParts(List<PartsData> _dropList, Vector3 spawnPosition)
     {
         Debug.Log($"드랍 파츠 아이템 생성");
         for(int i = 0; i < _dropList.Count; i++)
         {
             GameObject dropPart = Object.Instantiate(_dropList[i].PartsPrefab);
+            dropPart.AddComponent<BoxCollider>();
+            BoxCollider collider = dropPart.GetComponent<BoxCollider>();
+            if (collider != null)
+            {
+                collider.isTrigger = true;
+                collider.center = new Vector3(-0.3f, 0, 0.6f);
+                collider.size = new Vector3(1f, 1f, 3f);
+            }
             dropPart.transform.localScale = Vector3.one * 0.5f;
 
-            Vector3 randomOffset = Random.insideUnitSphere * 1f;
+            Vector3 randomOffset = Random.insideUnitSphere * 3f;
             randomOffset.y = 0f;
-            dropPart.transform.position = spawnPosition + randomOffset;
+            dropPart.transform.position = spawnPosition + randomOffset + new Vector3(0, 0.4f, 0);
         }
     }
 
