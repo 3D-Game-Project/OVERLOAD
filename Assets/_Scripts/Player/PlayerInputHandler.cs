@@ -11,6 +11,8 @@ public class PlayerInputHandler : MonoBehaviour, GameInputAction.IPlayerInputMap
     public Vector2 MoveInput { get; private set; }
     public bool IsJumpPressed { get; private set; }
 
+    public bool IsInteractPressed { get; private set; }
+
     private void Awake()
     {
         GameInput = new GameInputAction();
@@ -42,5 +44,17 @@ public class PlayerInputHandler : MonoBehaviour, GameInputAction.IPlayerInputMap
             IsJumpPressed = true;
         else if (context.canceled)
             IsJumpPressed = false;
+    }
+
+    public void OnPickup(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            IsInteractPressed = true;
+        }
+        else if (context.canceled)
+        {
+            IsInteractPressed = false;
+        }
     }
 }
