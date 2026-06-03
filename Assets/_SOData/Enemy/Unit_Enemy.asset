@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd2b8b7e8e2402c46ab54b7755e8f77e, type: 3}
+  m_Name: Unit_Enemy
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyData
+  _unitName: enemy
+  _maxHp: 100
+  _enemyPrefab: {fileID: 5311241036037250776, guid: 46cef883db62a234a915028368888d70, type: 3}
+  _enemyType: 0
+  _dropParts:
+  - {fileID: 11400000, guid: c3aa0aa7f04c820498fe87a2bfd88ea6, type: 2}
+  - {fileID: 11400000, guid: b386ace27aeccd24a95ce6e189cf730a, type: 2}
+  PatrolSpeed: 5
+  ChaseSpeed: 7
+  RotationSpeed: 720
+  DetectRadius: 20
+  ViewAngle: 360
+  TargetLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  ObstacleLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  WaitAtPatrolPoint: 1

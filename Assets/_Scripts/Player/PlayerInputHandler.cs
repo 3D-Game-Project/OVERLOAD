@@ -10,6 +10,8 @@ public class PlayerInputHandler : MonoBehaviour, GameInputAction.IPlayerInputMap
     }
     public Vector2 MoveInput { get; private set; }
     public bool IsJumpPressed { get; private set; }
+    public bool IsPickupPressed { get; private set; }
+    public bool InventoryTriggered { get; set; }
 
     private void Awake()
     {
@@ -43,4 +45,27 @@ public class PlayerInputHandler : MonoBehaviour, GameInputAction.IPlayerInputMap
         else if (context.canceled)
             IsJumpPressed = false;
     }
+
+    public void OnPickup(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            IsPickupPressed = true;
+            Debug.Log("Pickup Pressed");
+        }
+        else if (context.canceled)
+        {
+            IsPickupPressed = false;
+        }
+    }
+
+    public void OnInventory(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            InventoryTriggered = true;
+        }
+    }
+
+
 }
