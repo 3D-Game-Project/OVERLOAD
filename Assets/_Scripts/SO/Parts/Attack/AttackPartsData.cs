@@ -16,7 +16,8 @@ public class AttackPartsData : PartsData
 
     public int Damage => _damage;
     public float Range => _range;
-    public float FireCooldown => _fireCooldown;    public int MaxMagazineSize => _maxMagazineSize;
+    public float FireCooldown => _fireCooldown;    
+    public int MaxMagazineSize => _maxMagazineSize;
     public GameObject BulletPrefab => _bulletPrefab;
     public FireType FireType => _fireType;
 }
