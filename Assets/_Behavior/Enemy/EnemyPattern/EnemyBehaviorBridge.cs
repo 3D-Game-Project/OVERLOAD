@@ -100,11 +100,22 @@ public class EnemyBehaviorBridge : MonoBehaviour
     // targetPoint를 기준으로 기체에 부착된 모든 무기파츠에 사격명령처리
     public void FireAllWeapons(Vector3 targetPoint)
     {
-        //Debug.Log($"<color=green>[AI Flow 6] 무기 브릿지 작동.</color> 현재 장착 중인 총 {_equippedWeapons.Count}개 일괄 TryFire 순회 시작.");
+        Transform rootTransform = gameObject.transform.root;
 
-        foreach (var weapon in _equippedWeapons)
+        Vector3 lookDirection = targetPoint - rootTransform.position;
+
+
+        if (lookDirection != Vector3.zero)
         {
-            weapon.TryFire(targetPoint);
+            float angle = Vector3.Angle(rootTransform.forward, lookDirection);
+
+            if(angle <= 10f)
+            {
+                foreach (var weapon in _equippedWeapons)
+                {
+                    weapon.TryFire(targetPoint);
+                }
+            }
         }
     }
 }

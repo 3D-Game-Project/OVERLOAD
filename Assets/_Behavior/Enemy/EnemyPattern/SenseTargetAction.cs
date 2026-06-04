@@ -197,7 +197,13 @@ public partial class SenseTargetAction : Action
 
                         if (bridge != null && target != null)
                         {
-                            Vector3 targetAimPoint = target.position + Vector3.up * 1f;
+                            Vector3 baseAimPoint = target.position + Vector3.up * 1f;
+
+                            Vector3 randomOffset = UnityEngine.Random.insideUnitSphere * 2f;
+                            randomOffset.y *= 0.3f;
+
+                            Vector3 targetAimPoint = baseAimPoint + randomOffset;
+
                             bridge.FireAllWeapons(targetAimPoint);
                         }
 

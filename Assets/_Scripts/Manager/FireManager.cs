@@ -22,7 +22,7 @@ public class FireManager : MonoBehaviour
     // ==> 무기 프리팹마다 BulletPool 스크립트 부착시 발생되는 누락현상 방지와 오브젝트풀링을 통한 총알 사전 생성을 통해 프레임 드랍 방지
     private void Awake()
     {
-        if(_attackPartsData != null)
+        if (_attackPartsData != null)
         {
             WeaponRuntime = new WeaponRuntime(_attackPartsData);
 
@@ -80,7 +80,8 @@ public class FireManager : MonoBehaviour
     {
         if (WeaponRuntime.TryFire())
         {
-            //Debug.Log($"<color=white><b>[AI Flow 7] 최종 격발 무기 통과!!</b></color> 파츠명: {gameObject.name} | 발사 타입: {_attackPartsData.FireType}");
+            //RotateToPlayer(targetPoint);
+
 
             switch (_attackPartsData.FireType)
             {
@@ -127,7 +128,7 @@ public class FireManager : MonoBehaviour
 
         if (Physics.Raycast(_muzzlePoint.position, _fireDirection, out RaycastHit _hit, _attackPartsData.Range, _targetLayer))
         {
-            
+
             Debug.Log($"FindHitScan {_hit.collider.name}");
 
             EnemyCombatController enemy = _hit.collider.GetComponentInParent<EnemyCombatController>();
@@ -223,4 +224,17 @@ public class FireManager : MonoBehaviour
         WeaponRuntime.CompleteReload();
         _reloadCoroutine = null;
     }
+
+    // 몬스터 기준 플레이어가 후방에 있어도 총알이 뒤로 발사되지 않도록 플레이어 방향으로 회전시키는 함수
+    // lookDirection.y = 0f;를 통해 몬스터가 상하로 회전하지않도록 처리
+    //private void RotateToPlayer(Vector3 targetPoint)
+    //{
+    //    if (gameObject.transform.root == null || !gameObject.transform.root.CompareTag("Enemy")) return;
+    //    Transform rootTransform = gameObject.transform.root;
+
+    //    Vector3 lookDirection = targetPoint - rootTransform.position;
+    //    lookDirection.y = 0f;
+
+    //    if (lookDirection != Vector3.zero) rootTransform.rotation = Quaternion.Slerp(rootTransform.rotation, Quaternion.LookRotation(lookDirection), Time.deltaTime * 5f);
+    //}
 }
