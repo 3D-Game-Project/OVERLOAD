@@ -15,8 +15,6 @@ public class FireManager : MonoBehaviour
     private Coroutine _reloadCoroutine;
     public AttackPartsData AttackPartsData => _attackPartsData;
 
-    public AttackPartsData AttackPartsData => _attackPartsData;
-
     // 카메라 세팅 방지
     // 공격파트 정보 수집
     // 발사타입이 Projecttile 일경우 해당 게임오브젝트에 BulletPool 컴포넌트 생성, 프리팹 생성

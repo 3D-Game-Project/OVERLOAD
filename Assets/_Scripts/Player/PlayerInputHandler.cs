@@ -13,6 +13,7 @@ public class PlayerInputHandler : MonoBehaviour, GameInputAction.IPlayerInputMap
     public bool IsJumpHeld { get; private set; }
     public bool IsBoostHeld { get; private set; }
 
+    public bool InventoryTriggered { get; set; }
     public bool IsPickupPressed { get; private set; }
 
     private void Awake()
@@ -69,19 +70,6 @@ public class PlayerInputHandler : MonoBehaviour, GameInputAction.IPlayerInputMap
         if (context.canceled)
         {
             IsBoostHeld = false;
-        }
-    }
-
-    public void OnPickup(InputAction.CallbackContext context)
-    {
-        if (context.started)
-        {
-            IsPickupPressed = true;
-            Debug.Log("Pickup Pressed");
-        }
-        else if (context.canceled)
-        {
-            IsPickupPressed = false;
         }
     }
 

@@ -111,18 +111,18 @@ public partial class @GameInputAction: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Boost"",
+                    ""name"": ""Pickup"",
                     ""type"": ""Button"",
-                    ""id"": ""20d77929-f139-4509-8d23-08921c3e0ab7"",
+                    ""id"": ""d4c007d9-e54f-4488-ba28-fe40f405978e"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Pickup"",
+                    ""name"": ""Boost"",
                     ""type"": ""Button"",
-                    ""id"": ""d4c007d9-e54f-4488-ba28-fe40f405978e"",
+                    ""id"": ""20d77929-f139-4509-8d23-08921c3e0ab7"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -207,18 +207,6 @@ public partial class @GameInputAction: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""52f56b0c-0b57-4a7c-baa7-cd0da7fab3e6"",
-                    ""path"": ""<Keyboard>/leftShift"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Boost"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                
-                {
-                    ""name"": """",
                     ""id"": ""6726e311-03d2-41de-8886-758637503b36"",
                     ""path"": ""<Keyboard>/z"",
                     ""interactions"": """",
@@ -238,6 +226,17 @@ public partial class @GameInputAction: IInputActionCollection2, IDisposable
                     ""action"": ""Inventory"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""52f56b0c-0b57-4a7c-baa7-cd0da7fab3e6"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Boost"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -248,8 +247,8 @@ public partial class @GameInputAction: IInputActionCollection2, IDisposable
         m_PlayerInputMap = asset.FindActionMap("PlayerInputMap", throwIfNotFound: true);
         m_PlayerInputMap_Move = m_PlayerInputMap.FindAction("Move", throwIfNotFound: true);
         m_PlayerInputMap_Jump = m_PlayerInputMap.FindAction("Jump", throwIfNotFound: true);
-        m_PlayerInputMap_Boost = m_PlayerInputMap.FindAction("Boost", throwIfNotFound: true);
         m_PlayerInputMap_Pickup = m_PlayerInputMap.FindAction("Pickup", throwIfNotFound: true);
+        m_PlayerInputMap_Boost = m_PlayerInputMap.FindAction("Boost", throwIfNotFound: true);
         m_PlayerInputMap_Inventory = m_PlayerInputMap.FindAction("Inventory", throwIfNotFound: true);
     }
 
@@ -333,8 +332,8 @@ public partial class @GameInputAction: IInputActionCollection2, IDisposable
     private List<IPlayerInputMapActions> m_PlayerInputMapActionsCallbackInterfaces = new List<IPlayerInputMapActions>();
     private readonly InputAction m_PlayerInputMap_Move;
     private readonly InputAction m_PlayerInputMap_Jump;
-    private readonly InputAction m_PlayerInputMap_Boost;
     private readonly InputAction m_PlayerInputMap_Pickup;
+    private readonly InputAction m_PlayerInputMap_Boost;
     private readonly InputAction m_PlayerInputMap_Inventory;
     /// <summary>
     /// Provides access to input actions defined in input action map "PlayerInputMap".
@@ -356,13 +355,13 @@ public partial class @GameInputAction: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @Jump => m_Wrapper.m_PlayerInputMap_Jump;
         /// <summary>
-        /// Provides access to the underlying input action "PlayerInputMap/Boost".
-        /// </summary>
-        public InputAction @Boost => m_Wrapper.m_PlayerInputMap_Boost;
-        /// <summary>
         /// Provides access to the underlying input action "PlayerInputMap/Pickup".
         /// </summary>
         public InputAction @Pickup => m_Wrapper.m_PlayerInputMap_Pickup;
+        /// <summary>
+        /// Provides access to the underlying input action "PlayerInputMap/Boost".
+        /// </summary>
+        public InputAction @Boost => m_Wrapper.m_PlayerInputMap_Boost;
         /// <summary>
         /// Provides access to the underlying input action "PlayerInputMap/Inventory".
         /// </summary>
@@ -402,12 +401,12 @@ public partial class @GameInputAction: IInputActionCollection2, IDisposable
             @Pickup.started += instance.OnPickup;
             @Pickup.performed += instance.OnPickup;
             @Pickup.canceled += instance.OnPickup;
-            @Inventory.started += instance.OnInventory;
-            @Inventory.performed += instance.OnInventory;
-            @Inventory.canceled += instance.OnInventory;
             @Boost.started += instance.OnBoost;
             @Boost.performed += instance.OnBoost;
             @Boost.canceled += instance.OnBoost;
+            @Inventory.started += instance.OnInventory;
+            @Inventory.performed += instance.OnInventory;
+            @Inventory.canceled += instance.OnInventory;
         }
 
         /// <summary>
@@ -428,12 +427,12 @@ public partial class @GameInputAction: IInputActionCollection2, IDisposable
             @Pickup.started -= instance.OnPickup;
             @Pickup.performed -= instance.OnPickup;
             @Pickup.canceled -= instance.OnPickup;
-            @Inventory.started -= instance.OnInventory;
-            @Inventory.performed -= instance.OnInventory;
-            @Inventory.canceled -= instance.OnInventory;
             @Boost.started -= instance.OnBoost;
             @Boost.performed -= instance.OnBoost;
             @Boost.canceled -= instance.OnBoost;
+            @Inventory.started -= instance.OnInventory;
+            @Inventory.performed -= instance.OnInventory;
+            @Inventory.canceled -= instance.OnInventory;
         }
 
         /// <summary>
@@ -489,19 +488,19 @@ public partial class @GameInputAction: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnJump(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "Boost" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnBoost(InputAction.CallbackContext context);
-        /// <summary>
         /// Method invoked when associated input action "Pickup" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnPickup(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Boost" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnBoost(InputAction.CallbackContext context);
         /// <summary>
         /// Method invoked when associated input action "Inventory" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
