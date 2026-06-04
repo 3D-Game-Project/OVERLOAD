@@ -43,11 +43,17 @@ public class EnemyCombatController : MonoBehaviour
     private void Death()
     {
         Invoke("PlayDeathAnimation", 2f);
+
+        Destroy(gameObject, 2f);
+
     }
 
     private void PlayDeathAnimation()
     {
         // 사망 애니메이션 재생
-        Destroy(gameObject);
+
+        DropRuntime dropRuntime = new DropRuntime();
+        Debug.Log($"사망 후 드랍처리");
+        dropRuntime.DropParts(UnitRuntime.UnitData as EnemyData, transform.position);
     }
 }

@@ -71,6 +71,11 @@ public partial class SetLastAttackTimeAction : Action
             //Debug.Log("<color=red>[AI Flow 5] 조준 완료!</color> 비헤이비어 트리에서 무기 브릿지로 전탄 격발 명령 하달.");
 
             bridge.FireAllWeapons(targetAimPoint);
+            Animator animator = Self.Value.GetComponent<Animator>();
+            if (animator != null)
+            {
+                animator.SetTrigger("Shoot");
+            }
         }
 
         // Trigger 발행 전에 RPG 컨트롤러의 공격 분기 파라미터를 먼저 맞춘다.
