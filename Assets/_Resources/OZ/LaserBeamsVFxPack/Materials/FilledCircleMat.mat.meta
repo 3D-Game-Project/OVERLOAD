@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: b26ae64be6613f64ca3d03f4806600ed
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 358152
+  packageName: Laser Beam-Urp Pack
+  packageVersion: 1.0
+  assetPath: Assets/LaserBeamsVFxPack/Materials/FilledCircleMat.mat
+  uploadId: 853540

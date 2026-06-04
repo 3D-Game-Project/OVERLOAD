@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: e0b04be6715b80049adccf51f7b9b1b7
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 358152
+  packageName: Laser Beam-Urp Pack
+  packageVersion: 1.0
+  assetPath: Assets/LaserBeamsVFxPack/Materials/LaserMat_3.2.mat
+  uploadId: 853540

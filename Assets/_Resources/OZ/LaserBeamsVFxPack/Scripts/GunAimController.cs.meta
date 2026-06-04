@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 1825f4f14cd1ae840abe6524350531d7
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 358152
+  packageName: Laser Beam-Urp Pack
+  packageVersion: 1.0
+  assetPath: Assets/LaserBeamsVFxPack/Scripts/GunAimController.cs
+  uploadId: 853540
