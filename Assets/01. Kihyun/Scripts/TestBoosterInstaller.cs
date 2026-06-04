@@ -1,5 +1,7 @@
 using UnityEngine;
 
+// 부스터 테스트용
+// 파츠 시스템 추가 후 삭제 예정
 public class TestBoosterInstaller : MonoBehaviour
 {
     [Header("Player Components")]

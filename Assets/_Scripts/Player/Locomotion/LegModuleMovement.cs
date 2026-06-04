@@ -11,13 +11,17 @@ public class LegModuleMovement : MonoBehaviour
     [SerializeField] private Transform _coreYawRoot;
     [SerializeField] private Transform _legYawRoot;
 
-    [Header("Movement")]
+    // 기본적인 수평 이동 설정
+    // 속도 및 가감속, 데드존 설정
+    [Header("Movement Settings")]
     [SerializeField] private float _moveSpeed = 3.5f;
     [SerializeField] private float _acceleration = 12f;
     [SerializeField] private float _decceleration = 16f;
     [SerializeField] private float _inputDeadZone = 0.05f;
 
-    [Header("Rotation")]
+    // 다리 모듈 회전용
+    // 코어와 독립적으로 작동을 위해 변수 두개로 나눔
+    [Header("Rotation Settings")]
     [SerializeField] private float _coreYawSpeed = 720f;
     [SerializeField] private float _legYawSpeed = 360f;
 
@@ -25,6 +29,8 @@ public class LegModuleMovement : MonoBehaviour
     [SerializeField] private float _coreForwardYawOffset = 0f;
     [SerializeField] private float _legForwardYawOffset = 0f;
 
+    // 공중에 뜨면 이동이 속도 감소를 위해 추가
+    // 부스터로 기능 이동할수도
     [Header("Air Control")]
     [SerializeField] private bool _groundMoveOnly = true;
     [SerializeField] private float _airControlMultiplier = 0.2f;
@@ -59,10 +65,12 @@ public class LegModuleMovement : MonoBehaviour
         bool hasMoveInput = moveDirection.sqrMagnitude > 0.001f;
 
         UpdateCoreYaw(cameraForward);
-        UpdateLegYaw(moveDirection, hasMoveInput);
+        UpdateLegYaw(cameraForward, hasMoveInput);
         UpdateMovement(moveDirection, hasMoveInput);
     }
 
+    // 코어와 동일하게 input 읽어오기
+    // Update에서 일괄 적용
     private Vector2 ReadMoveInput()
     {
         Vector2 input = _playerInput.MoveInput;
@@ -79,6 +87,8 @@ public class LegModuleMovement : MonoBehaviour
         return input;
     }
 
+    // 코어와 동일한 카메라를 통해 방향 확인하는 함수
+    // 이후에 에임 용으로 따로 뺄 예정
     private Vector3 GetCameraForwardOnPlane()
     {
         if (_cameraTransform == null)
@@ -93,6 +103,7 @@ public class LegModuleMovement : MonoBehaviour
         return forward.normalized;
     }
 
+    // 위와 동일
     private Vector3 GetCameraRightOnPlane()
     {
         if (_cameraTransform == null)

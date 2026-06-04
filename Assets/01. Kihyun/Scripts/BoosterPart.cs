@@ -5,18 +5,18 @@ public class BoosterPart : MonoBehaviour
     [Header("Data")]
     [SerializeField] private BoosterData _boosterData;
 
-    private PlayerLocomotionMotor _locomotionMotor;
+    private PlayerLocomotionMotor _motor;
     private CorePowerController _corePower;
-    private PlayerInputHandler _inputHandler;
+    private PlayerInputHandler _playerInput;
 
     public void Initialize(
         PlayerLocomotionMotor locomotionMotor,
         CorePowerController corePower,
         PlayerInputHandler inputHandler)
     {
-        _locomotionMotor = locomotionMotor;
+        _motor = locomotionMotor;
         _corePower = corePower;
-        _inputHandler = inputHandler;
+        _playerInput = inputHandler;
     }
 
     private void Update()
@@ -32,14 +32,14 @@ public class BoosterPart : MonoBehaviour
     private bool CanOperate()
     {
         return _boosterData != null
-            && _locomotionMotor != null
+            && _motor != null
             && _corePower != null
-            && _inputHandler != null;
+            && _playerInput != null;
     }
 
     private void HandleAcceleration()
     {
-        if (!_inputHandler.IsBoostHeld)
+        if (!_playerInput.IsBoostHeld)
             return;
 
         float outputRatio = _corePower.PowerRatio;
@@ -54,15 +54,15 @@ public class BoosterPart : MonoBehaviour
             outputRatio
         );
 
-        _locomotionMotor.RequestHorizontalSpeedMultiplier(finalMultiplier);
+        _motor.RequestHorizontalSpeedMultiplier(finalMultiplier);
     }
 
     private void HandleJump()
     {
-        if (!_inputHandler.IsJumpPressed)
+        if (!_playerInput.IsJumpPressed)
             return;
 
-        if (!_locomotionMotor.IsGrounded)
+        if (!_motor.IsGrounded)
             return;
 
         float outputRatio = _corePower.PowerRatio;
@@ -72,15 +72,15 @@ public class BoosterPart : MonoBehaviour
 
         float finalJumpVelocity = _boosterData.jumpVelocity * outputRatio;
 
-        _locomotionMotor.ApplyJump(finalJumpVelocity);
+        _motor.ApplyJump(finalJumpVelocity);
     }
 
     private void HandleAirBoost()
     {
-        if (_locomotionMotor.IsGrounded)
+        if (_motor.IsGrounded)
             return;
 
-        if (!_inputHandler.IsJumpHeld)
+        if (!_playerInput.IsJumpHeld)
             return;
 
         if (_boosterData.airMode == BoosterAirMode.FlyAndGlide)
@@ -102,8 +102,8 @@ public class BoosterPart : MonoBehaviour
         {
             float finalFlyVelocity = _boosterData.flyUpVelocity * outputRatio;
 
-            _locomotionMotor.SetVerticalVelocity(finalFlyVelocity);
-            _locomotionMotor.IgnoreGroundSnapThisFrame();
+            _motor.SetVerticalVelocity(finalFlyVelocity);
+            _motor.IgnoreGroundSnapThisFrame();
         }
         else
         {
@@ -118,6 +118,6 @@ public class BoosterPart : MonoBehaviour
         if (!_corePower.TryUsePower(powerCost))
             return;
 
-        _locomotionMotor.RequestFallSpeedLimit(_boosterData.glideFallSpeed);
+        _motor.RequestFallSpeedLimit(_boosterData.glideFallSpeed);
     }
 }
