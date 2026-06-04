@@ -12,12 +12,12 @@ public class EnemyData : UnitData
     public List<PartsData> DropParts => _dropParts;
 
     [Header("Movement")]
-    public float PatrolSpeed = 1.8f;
-    public float ChaseSpeed = 3.8f;
+    public float PatrolSpeed = 4f;
+    public float ChaseSpeed = 5f;
     public float RotationSpeed = 720f;
 
     [Header("Detection")]
-    public float DetectRadius = 10f;
+    public float DetectRadius = 20f;
     public float ViewAngle = 120f;
     public LayerMask TargetLayer;
     public LayerMask ObstacleLayer;

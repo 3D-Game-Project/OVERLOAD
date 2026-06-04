@@ -3,14 +3,18 @@ using UnityEngine;
 public class PlayerInteractController : MonoBehaviour
 {
     private PlayerInputHandler _inputHandler;
+    private PlayerInventory _inventory;
 
     private PartsData _targetParts;
 
     private GameObject _target;
 
+
+
     private void Awake()
     {
         _inputHandler = GetComponent<PlayerInputHandler>();
+        _inventory = GetComponent<PlayerInventory>();
     }
 
     private void Update()
@@ -58,6 +62,11 @@ public class PlayerInteractController : MonoBehaviour
     {
         Debug.Log($"Pickup »£√‚");
         Destroy(_target.gameObject);
+
+        if (_inventory != null && _targetParts != null)
+        {
+            _inventory.AddItem(_targetParts);
+        }
 
         _targetParts = null;
         _target = null;

@@ -84,4 +84,27 @@ public class PlayerInputHandler : MonoBehaviour, GameInputAction.IPlayerInputMap
             IsPickupPressed = false;
         }
     }
+
+    public void OnPickup(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            IsPickupPressed = true;
+            Debug.Log("Pickup Pressed");
+        }
+        else if (context.canceled)
+        {
+            IsPickupPressed = false;
+        }
+    }
+
+    public void OnInventory(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            InventoryTriggered = true;
+        }
+    }
+
+
 }

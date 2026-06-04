@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Unit_Player
   m_EditorClassIdentifier: Assembly-CSharp::PlayerData
   _unitName: Player
-  _maxHp: 100
+  _maxHp: 1000
   _playerPrefab: {fileID: 0}
