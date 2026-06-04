@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class PlayerCombatController : MonoBehaviour,IAimProvider
+public class PlayerCombatController : MonoBehaviour
 {
     [SerializeField] private UnitData _unitData;
     [SerializeField ]private Vector3 _currentAimPoint;
@@ -16,19 +16,19 @@ public class PlayerCombatController : MonoBehaviour,IAimProvider
         }
     }
 
-    private void Update()
-    {
-        Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
+    //private void Update()
+    //{
+    //    Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
 
-        if (Physics.Raycast(ray, out RaycastHit hit, 100f, targetAndObstacleLayer))
-        {
-            _currentAimPoint = hit.point;
-        }
-        else
-        {
-            _currentAimPoint = ray.origin + ray.direction * 100f;
-        }
-    }
+    //    if (Physics.Raycast(ray, out RaycastHit hit, 100f, targetAndObstacleLayer))
+    //    {
+    //        _currentAimPoint = hit.point;
+    //    }
+    //    else
+    //    {
+    //        _currentAimPoint = ray.origin + ray.direction * 100f;
+    //    }
+    //}
 
     private void OnEnable()
     {
@@ -76,8 +76,8 @@ public class PlayerCombatController : MonoBehaviour,IAimProvider
         Destroy(gameObject);
     }
 
-    public Vector3 GetAimPoint()
-    {
-        return _currentAimPoint;
-    }
+    //public Vector3 GetAimPoint()
+    //{
+    //    return _currentAimPoint;
+    //}
 }
