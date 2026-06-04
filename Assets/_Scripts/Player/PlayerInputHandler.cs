@@ -10,6 +10,8 @@ public class PlayerInputHandler : MonoBehaviour, GameInputAction.IPlayerInputMap
     }
     public Vector2 MoveInput { get; private set; }
     public bool IsJumpPressed { get; private set; }
+    public bool IsJumpHeld { get; private set; }
+    public bool IsBoostHeld { get; private set; }
 
     private void Awake()
     {
@@ -31,6 +33,11 @@ public class PlayerInputHandler : MonoBehaviour, GameInputAction.IPlayerInputMap
         GameInput?.Dispose();
     }
 
+    private void LateUpdate()
+    {
+        IsJumpPressed = false;
+    }
+
     public void OnMove(InputAction.CallbackContext context)
     {
         MoveInput = context.ReadValue<Vector2>();
@@ -38,9 +45,28 @@ public class PlayerInputHandler : MonoBehaviour, GameInputAction.IPlayerInputMap
 
     public void OnJump(InputAction.CallbackContext context)
     {
-        if (context.started || context.performed)
+        if (context.started)
+        {
             IsJumpPressed = true;
-        else if (context.canceled)
-            IsJumpPressed = false;
+            IsJumpHeld = true;
+        }
+
+        if (context.canceled)
+        {
+            IsJumpHeld = false;
+        }
+    }
+
+    public void OnBoost(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            IsBoostHeld = true;
+        }
+
+        if (context.canceled)
+        {
+            IsBoostHeld = false;
+        }
     }
 }
