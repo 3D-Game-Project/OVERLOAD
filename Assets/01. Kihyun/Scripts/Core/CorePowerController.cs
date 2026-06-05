@@ -14,7 +14,7 @@ public class CorePowerController : MonoBehaviour
     public float CurrentPower => _currentPower;
     public float MaxPower => _maxPower;
 
-    // _현재 남은 출력 비율로 계산
+    // 현재 남은 출력 비율로 계산
     public float PowerRatio => _maxPower <= 0f ? 0f : _currentPower / _maxPower;
 
     private void Update()
