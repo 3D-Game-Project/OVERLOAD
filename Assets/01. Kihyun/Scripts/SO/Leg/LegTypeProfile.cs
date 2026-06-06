@@ -16,6 +16,7 @@ public class LegTypeProfile : ScriptableObject
     [SerializeField] private float _slopeLimit;
 
     [Header("이동 특성")]
+    [SerializeField] private float _dashMultiplier;
     [SerializeField] private float _turnSpeedMultiplier = 1f;
     [SerializeField] private float _stability = 1f;
 
@@ -27,6 +28,7 @@ public class LegTypeProfile : ScriptableObject
     public float MaxClimbHeight => _maxClimbHeight;
     public float SlopeLimit => _slopeLimit;
 
+    public float DashMultiplier => _dashMultiplier;
     public float TurnSpeedMultiplier => _turnSpeedMultiplier;
     public float Stability => _stability;
 }

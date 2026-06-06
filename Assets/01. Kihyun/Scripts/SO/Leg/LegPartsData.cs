@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New_Leg_Parts", menuName = "Data/Parts/Leg/Leg")]
+[CreateAssetMenu(fileName = "New_Leg_Parts", menuName = "Data/Parts/Leg/LegParts")]
 public class LegPartsData : PartsData
 {
     public override PartsType PartsType => PartsType.Leg;
@@ -15,8 +15,6 @@ public class LegPartsData : PartsData
 
     [Header("코어 파워 소모")]
     [SerializeField] private float _dashPowerCost;
-    [SerializeField] private float _glidePowerCost;
-    [SerializeField] private float _flightPowerCost;
 
     // 프로필
     public LegType LegType => _legTypeProfile.LegType;
@@ -26,6 +24,4 @@ public class LegPartsData : PartsData
     public float Acceleration => _acceleration;
     public float Decceleration => _decceleration;
     public float DashPowerCost => _dashPowerCost;
-    public float GlidePowerCost => _glidePowerCost;
-    public float FlightPowerCost => _flightPowerCost;
 }
