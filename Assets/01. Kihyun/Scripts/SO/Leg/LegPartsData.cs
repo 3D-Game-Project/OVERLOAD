@@ -13,8 +13,8 @@ public class LegPartsData : PartsData
     [SerializeField] private float _acceleration;
     [SerializeField] private float _decceleration;
 
-    [Header("코어 파워 소모")]
-    [SerializeField] private float _dashPowerCost;
+    [Header("코어 에너지 소모")]
+    [SerializeField] private float _dashEnergyCost;
 
     // 프로필
     public LegType LegType => _legTypeProfile.LegType;
@@ -23,5 +23,5 @@ public class LegPartsData : PartsData
     public float MoveSpeed => _moveSpeed;
     public float Acceleration => _acceleration;
     public float Decceleration => _decceleration;
-    public float DashPowerCost => _dashPowerCost;
+    public float DashEnergyCost => _dashEnergyCost;
 }

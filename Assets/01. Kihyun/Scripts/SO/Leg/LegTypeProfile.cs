@@ -21,7 +21,7 @@ public class LegTypeProfile : ScriptableObject
     [SerializeField] private float _stability = 1f;
 
     public LegType LegType => _legType;
-    public Vector3 CoreMountPositino => _coreMountPosition;
+    public Vector3 CoreMountPosition => _coreMountPosition;
 
     public bool CanMoveOnRoughTerrain => _canMoveOnRoughTerrain;
     public float RoughTerrainSpeedMultiplier => _roughTerrainSpeedMultiplier;

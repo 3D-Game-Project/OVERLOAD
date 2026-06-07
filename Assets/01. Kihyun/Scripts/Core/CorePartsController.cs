@@ -1,102 +1,167 @@
-//using System.Collections.Generic;
-//using UnityEngine;
+using System.Collections.Generic;
+using UnityEngine;
 
-//public class CorePartsController : MonoBehaviour
-//{
-//    [Header("Core References")]
-//    [SerializeField] private CorePowerController _powerController;
-//    [SerializeField] private PlayerInputHandler _inputHandler;
+public class CorePartsController : MonoBehaviour
+{
+    [Header("Test Attach")]
+    [SerializeField] private PartsData _testPartsData;
+    [SerializeField] private AttachmentSlot _testSlot;
+    [SerializeField] private bool _attachOnStart = true;
 
-//    private CorePartContext _context;
+    [Header("Core Controllers")]
+    [SerializeField] private CoreLoadController _coreLoadController;
+    [SerializeField] private CoreEnergyController _coreEnergyController;
 
-//    private readonly List<IPart> _allParts = new();
-//    private readonly List<IWeaponPart> _weaponParts = new();
-//    private readonly List<ILocomotionPart> _locomotionParts = new();
-//    private readonly List<IBoosterPart> _boosterParts = new();
+    private readonly List<GameObject> _attachedPartObjects = new();
 
-//    private void Awake()
-//    {
-//        _context = new CorePartContext(
-//            transform,
-//            _powerController,
-//            _inputHandler
-//        );
-//    }
+    private void Start()
+    {
+        if (_attachOnStart)
+        {
+            AttachPart(_testPartsData, _testSlot);
+        }
+    }
 
-//    public void AttachPart(PartsData data, Transform attachPoint)
-//    {
-//        if (data == null)
-//        {
-//            Debug.LogWarning("장착할 PartsData가 없습니다.");
-//            return;
-//        }
+    public void AttachPart(PartsData partsData, AttachmentSlot slot)
+    {
+        if (partsData == null)
+        {
+            Debug.LogWarning("장착할 PartsData가 없습니다.");
+            return;
+        }
 
-//        if (data.PartsPrefab == null)
-//        {
-//            Debug.LogWarning($"{data.PartsName}의 프리팹이 없습니다.");
-//            return;
-//        }
+        if (slot == null)
+        {
+            Debug.LogWarning("장착할 AttachmentSlot이 없습니다.");
+            return;
+        }
 
-//        if (!_powerController.CanEquip(data.RequiredPower))
-//        {
-//            Debug.LogWarning("코어 출력이 부족해서 장착할 수 없습니다.");
-//            return;
-//        }
+        if (!slot.CanAttach(partsData))
+        {
+            Debug.LogWarning($"{slot.SlotId} 슬롯에는 {partsData.PartsType} 파츠를 장착할 수 없습니다.");
+            return;
+        }
 
-//        GameObject partObject = Instantiate(data.PartsPrefab, attachPoint);
-//        partObject.transform.localPosition = Vector3.zero;
-//        partObject.transform.localRotation = Quaternion.identity;
+        if (partsData.PartsPrefab == null)
+        {
+            Debug.LogWarning($"{partsData.PartsName}에 PartsPrefab이 없습니다.");
+            return;
+        }
 
-//        if (!partObject.TryGetComponent(out IPart part))
-//        {
-//            Debug.LogError($"{data.PartsPrefab.name}에 IPart를 구현한 스크립트가 없습니다.");
-//            Destroy(partObject);
-//            return;
-//        }
+        if (_coreLoadController != null)
+        {
+            if (!_coreLoadController.CanEquip(partsData.RequiredLoad))
+            {
+                Debug.LogWarning("코어 장착 부하 한도를 초과해서 파츠를 장착할 수 없습니다.");
+                return;
+            }
+        }
 
-//        part.Initialize(data, _context);
-//        part.OnAttached();
+        GameObject partObject = Instantiate(partsData.PartsPrefab);
 
-//        RegisterPart(part);
+        AlignPartToSlot(partObject.transform, slot.AttachPoint);
 
-//        _powerController.AddRequiredPower(data.RequiredPower);
-//    }
+        partObject.transform.SetParent(slot.AttachPoint, true);
 
-//    private void RegisterPart(IPart part)
-//    {
-//        _allParts.Add(part);
+        slot.SetAttachedObject(partObject);
+        _attachedPartObjects.Add(partObject);
 
-//        if (part is IWeaponPart weaponPart)
-//            _weaponParts.Add(weaponPart);
+        if (_coreLoadController != null)
+        {
+            _coreLoadController.AddLoad(partsData.RequiredLoad);
+        }
 
-//        if (part is ILocomotionPart locomotionPart)
-//            _locomotionParts.Add(locomotionPart);
+        InitializePart(partsData, partObject);
 
-//        if (part is IBoosterPart boosterPart)
-//            _boosterParts.Add(boosterPart);
-//    }
+        Debug.Log($"{partsData.PartsName} 파츠 장착 완료");
+    }
 
-//    public void DetachPart(IPart part)
-//    {
-//        if (part == null)
-//            return;
+    private void AlignPartToSlot(Transform partRoot, Transform slotTransform)
+    {
+        if (partRoot == null || slotTransform == null)
+            return;
 
-//        part.OnDetached();
+        PartAttachAnchor anchor =
+            partRoot.GetComponentInChildren<PartAttachAnchor>(true);
 
-//        _allParts.Remove(part);
+        if (anchor == null)
+        {
+            Debug.LogWarning($"{partRoot.name}에 PartAttachAnchor가 없습니다. 프리팹 루트를 기준으로 부착합니다.");
 
-//        if (part is IWeaponPart weaponPart)
-//            _weaponParts.Remove(weaponPart);
+            partRoot.position = slotTransform.position;
+            partRoot.rotation = slotTransform.rotation;
+            return;
+        }
 
-//        if (part is ILocomotionPart locomotionPart)
-//            _locomotionParts.Remove(locomotionPart);
+        Quaternion rotationOffset =
+            slotTransform.rotation * Quaternion.Inverse(anchor.transform.rotation);
 
-//        if (part is IBoosterPart boosterPart)
-//            _boosterParts.Remove(boosterPart);
+        partRoot.rotation = rotationOffset * partRoot.rotation;
 
-//        _powerController.RemoveRequiredPower(part.Data.RequiredPower);
+        Vector3 positionOffset =
+            slotTransform.position - anchor.transform.position;
 
-//        if (part is MonoBehaviour mono)
-//            Destroy(mono.gameObject);
-//    }
-//}
+        partRoot.position += positionOffset;
+    }
+
+    private void InitializePart(PartsData partsData, GameObject partObject)
+    {
+        if (partsData is LegPartsData legPartsData)
+        {
+            LegPartController legPartController =
+                partObject.GetComponentInChildren<LegPartController>(true);
+
+            if (legPartController == null)
+            {
+                Debug.LogWarning($"{partObject.name}에 LegPartController가 없습니다.");
+                return;
+            }
+
+            legPartController.Initialize(legPartsData);
+        }
+
+        // 나중에 무기 통합 시:
+        // AttackPartController에게 AttackPartsData와 CoreEnergyController를 넘기면 됨.
+        //
+        // 나중에 부스터 통합 시:
+        // BoosterPartController에게 BoosterPartsData와 CoreEnergyController를 넘기면 됨.
+    }
+
+    public void DetachPart(AttachmentSlot slot)
+    {
+        if (slot == null)
+            return;
+
+        if (!slot.HasPart)
+            return;
+
+        GameObject attachedObject = slot.AttachedObject;
+
+        if (attachedObject == null)
+        {
+            slot.Clear();
+            return;
+        }
+
+        PartsData partsData = null;
+
+        LegPartController legPartController =
+            attachedObject.GetComponentInChildren<LegPartController>(true);
+
+        if (legPartController != null)
+        {
+            partsData = legPartController.Data;
+        }
+
+        if (_coreLoadController != null && partsData != null)
+        {
+            _coreLoadController.RemoveLoad(partsData.RequiredLoad);
+        }
+
+        _attachedPartObjects.Remove(attachedObject);
+
+        slot.Clear();
+
+        Destroy(attachedObject);
+    }
+}
