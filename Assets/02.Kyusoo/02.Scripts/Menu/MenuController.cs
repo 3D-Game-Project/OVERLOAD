@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -18,6 +19,16 @@ public class MenuController : MonoBehaviour
     [Header("상단 네비게이션 버튼")]
     [SerializeField] private Button previousBtn;
     [SerializeField] private Button nextBtn;
+
+    [Header("Zelda Style 3개 탭 텍스트 참조")]
+    [SerializeField] private TextMeshProUGUI _leftTabText;    
+    [SerializeField] private TextMeshProUGUI _currentTabText;  
+    [SerializeField] private TextMeshProUGUI _rightTabText;   
+
+    [Header("탭 이름 정의 (순서 일치 필수)")]
+    [SerializeField] private string[] tabNames = { "Character", "Shop", "Inventory", "Settings" };
+
+    [SerializeField] private GameObject playerPrefab;
 
     private GameObject[] _tabPanels;
     private int _currentTabIndex = 0;
@@ -74,31 +85,61 @@ public class MenuController : MonoBehaviour
         {
             _inputHandler.InteractTriggered = false;
 
-            if (IsShop && !_isMenuOpen)
+            if (!_isMenuOpen)
             {
-                OpenMenu(1);
+                if (IsShop) OpenMenu(1);
+            }
+            else if (_currentTabIndex == 1)
+            {
+                CloseMenu();
+            }
+            else
+            {
+                if (IsShop) SwitchTab(1);
             }
         }
     }
 
     // 메뉴 열기
     // 이미지와 패널 활성화시키기
+    // 패널 활성화와 동시에 캐릭터 정면 프리뷰생성
     public void OpenMenu(int targetTabIdx)
     {
         _isMenuOpen = true;
         if (backgroundImage != null) backgroundImage.SetActive(true);
         if (mainInterfacePanel != null) mainInterfacePanel.SetActive(true);
 
+        Time.timeScale = 0f;
+
+        Cursor.lockState = CursorLockMode.None; 
+        Cursor.visible = true;
+
+        if (MechPreviewStudio.Instance != null && playerPrefab != null)
+        {
+            MechPreviewStudio.Instance.SetupPreviewModel(playerPrefab);
+        }
+
         SwitchTab(targetTabIdx);
     }
 
     // 메뉴 닫기
     // 이미지, 패널 비활성화시키기
+    // 캐릭터 정면뷰 제거처리
     public void CloseMenu()
     {
         _isMenuOpen = false;
         if (backgroundImage != null) backgroundImage.SetActive(false);
         if (mainInterfacePanel != null) mainInterfacePanel.SetActive(false);
+
+        Time.timeScale = 1f;
+
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+
+        if (MechPreviewStudio.Instance != null)
+        {
+            MechPreviewStudio.Instance.CleanUpPreview();
+        }
     }
 
     // 탭 전환처리
@@ -114,6 +155,7 @@ public class MenuController : MonoBehaviour
                 _tabPanels[i].SetActive(i == _currentTabIndex);
             }
         }
+        UpdateTabNavigationTexts();
     }
 
     // 탭전환 (다음탭)
@@ -144,6 +186,30 @@ public class MenuController : MonoBehaviour
         }
 
         SwitchTab(prevIdx);
+    }
+
+    // 현재 탭에 따른 텍스트 변경 함수
+    private void UpdateTabNavigationTexts()
+    {
+        if (tabNames == null || tabNames.Length == 0) return;
+
+        if (_currentTabText != null) _currentTabText.text = tabNames[_currentTabIndex];
+
+        // [좌측] 이전 탭 인덱스 계산 (상점 조건부 스킵 반영)
+        int previousIdx = (_currentTabIndex - 1 + _tabPanels.Length) % _tabPanels.Length;
+        if (previousIdx == 1 && !IsShop)
+        {
+            previousIdx = (previousIdx - 1 + _tabPanels.Length) % _tabPanels.Length;
+        }
+        if (_leftTabText != null) _leftTabText.text = tabNames[previousIdx];
+
+        // [우측] 다음 탭 인덱스 계산 (상점 조건부 스킵 반영)
+        int nextIdx = (_currentTabIndex + 1) % _tabPanels.Length;
+        if (nextIdx == 1 && !IsShop)
+        {
+            nextIdx = (nextIdx + 1) % _tabPanels.Length;
+        }
+        if (_rightTabText != null) _rightTabText.text = tabNames[nextIdx];
     }
 
 }
