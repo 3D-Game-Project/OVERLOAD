@@ -49,7 +49,6 @@ public class FireManager : MonoBehaviour
             if (Input.GetMouseButton(0))
             {
                 Vector3 crosshairTarget = _aimProvider != null ? _aimProvider.GetAimPoint() : Camera.main.transform.position + Camera.main.transform.forward * _attackPartsData.Range;
-                Debug.Log($"[사격 시도] 조준점 좌표: {crosshairTarget}");
                 TryFire(crosshairTarget);
             }
 

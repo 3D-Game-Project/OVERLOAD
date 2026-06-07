@@ -15,7 +15,6 @@ public class PlayerInventory : MonoBehaviour
     public event Action OnInventoryChanged; 
 
     private PlayerInputHandler _inputHandler;
-    private bool _isInventoryOpen = false;
 
     // 시작시 PlayerInputHandler 컴포넌트 참조
     // 재화 초기 설정 수정
