@@ -1,6 +1,5 @@
-using UnityEngine;
-
 public interface ILocomotionPart : IPart
 {
-    void Move(Vector3 moveDirection);
+    void HandleLocomotion(LocomotionCommand command, float deltaTime);
+    void StopLocomotion();
 }

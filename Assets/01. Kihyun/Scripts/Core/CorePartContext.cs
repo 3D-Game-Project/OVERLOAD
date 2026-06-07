@@ -5,6 +5,7 @@ public class CorePartContext
     public Transform OwnerRoot { get; }
     public PlayerInputHandler InputHandler { get; }
     public PlayerLocomotionMotor LocomotionMotor { get; }
+    public MovementCoordinator MovementCoordinator { get; }
     public Transform CameraTransform { get; }
     public Transform CoreYawRoot { get; }
     public Transform LegYawRoot { get; }
@@ -14,6 +15,7 @@ public class CorePartContext
         Transform ownerRoot,
         PlayerInputHandler inputHandler,
         PlayerLocomotionMotor locomotionMotor,
+        MovementCoordinator movementCoordinator,
         Transform cameraTransform,
         Transform coreYawRoot,
         Transform legYawRoot,
@@ -22,6 +24,7 @@ public class CorePartContext
         OwnerRoot = ownerRoot;
         InputHandler = inputHandler;
         LocomotionMotor = locomotionMotor;
+        MovementCoordinator = movementCoordinator;
         CameraTransform = cameraTransform;
         CoreYawRoot = coreYawRoot;
         LegYawRoot = legYawRoot;

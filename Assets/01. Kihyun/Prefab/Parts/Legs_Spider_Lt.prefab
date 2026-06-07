@@ -1133,7 +1133,7 @@ Transform:
   m_GameObject: {fileID: 8423101242249763884}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 10, y: -0, z: 0}
+  m_LocalPosition: {x: 0, y: -0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1152,14 +1152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05202799900d4af44ae63f3ac60747b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LegPartController
-  _legPartsData: {fileID: 0}
-  _motor: {fileID: 0}
-  _playerInput: {fileID: 0}
-  _cameraTransform: {fileID: 0}
-  _coreYawRoot: {fileID: 0}
-  _legYawRoot: {fileID: 0}
   _baseCoreYawSpeed: 720
   _baseLegYawSpeed: 360
-  _inputDeadZone: 0.05
   _coreForwardYawOffset: 0
   _legForwardYawOffset: 0
