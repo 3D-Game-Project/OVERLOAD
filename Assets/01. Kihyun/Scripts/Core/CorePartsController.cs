@@ -12,7 +12,29 @@ public class CorePartsController : MonoBehaviour
     [SerializeField] private CoreLoadController _coreLoadController;
     [SerializeField] private CoreEnergyController _coreEnergyController;
 
+    [Header("Movement References")]
+    [SerializeField] private PlayerInputHandler _inputHandler;
+    [SerializeField] private PlayerLocomotionMotor _locomotionMotor;
+    [SerializeField] private Transform _cameraTransform;
+    [SerializeField] private Transform _coreYawRoot;
+    [SerializeField] private Transform _legYawRoot;
+
+    private CorePartContext _context;
+
     private readonly List<GameObject> _attachedPartObjects = new();
+
+    private void Awake()
+    {
+        _context = new CorePartContext(
+            transform,
+            _inputHandler,
+            _locomotionMotor,
+            _cameraTransform,
+            _coreYawRoot,
+            _legYawRoot,
+            _coreEnergyController
+        );
+    }
 
     private void Start()
     {
@@ -117,14 +139,8 @@ public class CorePartsController : MonoBehaviour
                 return;
             }
 
-            legPartController.Initialize(legPartsData);
+            legPartController.Initialize(legPartsData, _context);
         }
-
-        // 나중에 무기 통합 시:
-        // AttackPartController에게 AttackPartsData와 CoreEnergyController를 넘기면 됨.
-        //
-        // 나중에 부스터 통합 시:
-        // BoosterPartController에게 BoosterPartsData와 CoreEnergyController를 넘기면 됨.
     }
 
     public void DetachPart(AttachmentSlot slot)

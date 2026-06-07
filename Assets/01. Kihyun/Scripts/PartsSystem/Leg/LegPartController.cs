@@ -2,18 +2,6 @@ using UnityEngine;
 
 public class LegPartController : MonoBehaviour
 {
-    [Header("Test Data")]
-    [SerializeField] private LegPartsData _legPartsData;
-
-    [Header("Temporary References")]
-    [SerializeField] private PlayerLocomotionMotor _motor;
-    [SerializeField] private PlayerInputHandler _playerInput;
-    [SerializeField] private Transform _cameraTransform;
-
-    [Header("Rotation Roots")]
-    [SerializeField] private Transform _coreYawRoot;
-    [SerializeField] private Transform _legYawRoot;
-
     [Header("Base Rotation")]
     [SerializeField] private float _baseCoreYawSpeed = 720f;
     [SerializeField] private float _baseLegYawSpeed = 360f;
@@ -27,32 +15,17 @@ public class LegPartController : MonoBehaviour
 
     private LegPartsData _data;
     private LegTypeProfile _profile;
+    private CorePartContext _context;
 
     private Vector3 _currentHorizontalVelocity;
 
     public LegPartsData Data => _data;
     public LegTypeProfile Profile => _profile;
 
-    private void Awake()
-    {
-        if (_legYawRoot == null)
-            _legYawRoot = transform;
-
-        if (_cameraTransform == null && Camera.main != null)
-            _cameraTransform = Camera.main.transform;
-    }
-
-    private void Start()
-    {
-        if (_legPartsData != null)
-        {
-            Initialize(_legPartsData);
-        }
-    }
-
-    public void Initialize(LegPartsData data)
+    public void Initialize(LegPartsData data, CorePartContext context)
     {
         _data = data;
+        _context = context;
 
         if (_data == null)
         {
@@ -72,19 +45,16 @@ public class LegPartController : MonoBehaviour
             $"다리 파츠 초기화 완료\n" +
             $"Parts Name: {_data.PartsName}\n" +
             $"Leg Type: {_data.LegType}\n" +
-            $"Move Speed: {_data.MoveSpeed}\n" +
-            $"Acceleration: {_data.Acceleration}\n" +
-            $"Core Mount Position: {_profile.CoreMountPosition}\n" +
-            $"Slope Limit: {_profile.SlopeLimit}"
+            $"Move Speed: {_data.MoveSpeed}"
         );
     }
 
     private void Update()
     {
-        if (_data == null || _profile == null)
+        if (_data == null || _profile == null || _context == null)
             return;
 
-        if (_motor == null || _playerInput == null)
+        if (_context.InputHandler == null || _context.LocomotionMotor == null)
             return;
 
         Vector2 moveInput = ReadMoveInput();
@@ -107,7 +77,7 @@ public class LegPartController : MonoBehaviour
 
     private Vector2 ReadMoveInput()
     {
-        Vector2 input = _playerInput.MoveInput;
+        Vector2 input = _context.InputHandler.MoveInput;
 
         if (input.sqrMagnitude > 1f)
             input.Normalize();
@@ -123,10 +93,10 @@ public class LegPartController : MonoBehaviour
 
     private Vector3 GetCameraForwardOnPlane()
     {
-        if (_cameraTransform == null)
+        if (_context.CameraTransform == null)
             return transform.forward;
 
-        Vector3 forward = _cameraTransform.forward;
+        Vector3 forward = _context.CameraTransform.forward;
         forward.y = 0f;
 
         if (forward.sqrMagnitude < 0.001f)
@@ -137,10 +107,10 @@ public class LegPartController : MonoBehaviour
 
     private Vector3 GetCameraRightOnPlane()
     {
-        if (_cameraTransform == null)
+        if (_context.CameraTransform == null)
             return transform.right;
 
-        Vector3 right = _cameraTransform.right;
+        Vector3 right = _context.CameraTransform.right;
         right.y = 0f;
 
         if (right.sqrMagnitude < 0.001f)
@@ -168,7 +138,7 @@ public class LegPartController : MonoBehaviour
 
     private void UpdateCoreYaw(Vector3 cameraForward)
     {
-        if (_coreYawRoot == null)
+        if (_context.CoreYawRoot == null)
             return;
 
         if (cameraForward.sqrMagnitude < 0.001f)
@@ -178,8 +148,8 @@ public class LegPartController : MonoBehaviour
             Quaternion.LookRotation(cameraForward, Vector3.up) *
             Quaternion.Euler(0f, _coreForwardYawOffset, 0f);
 
-        _coreYawRoot.rotation = Quaternion.RotateTowards(
-            _coreYawRoot.rotation,
+        _context.CoreYawRoot.rotation = Quaternion.RotateTowards(
+            _context.CoreYawRoot.rotation,
             targetRotation,
             _baseCoreYawSpeed * Time.deltaTime
         );
@@ -187,7 +157,7 @@ public class LegPartController : MonoBehaviour
 
     private void UpdateLegYaw(Vector3 moveDirection, bool hasMoveInput)
     {
-        if (_legYawRoot == null)
+        if (_context.LegYawRoot == null)
             return;
 
         if (!hasMoveInput)
@@ -203,8 +173,8 @@ public class LegPartController : MonoBehaviour
         float finalLegYawSpeed =
             _baseLegYawSpeed * _profile.TurnSpeedMultiplier;
 
-        _legYawRoot.rotation = Quaternion.RotateTowards(
-            _legYawRoot.rotation,
+        _context.LegYawRoot.rotation = Quaternion.RotateTowards(
+            _context.LegYawRoot.rotation,
             targetRotation,
             finalLegYawSpeed * Time.deltaTime
         );
@@ -229,14 +199,16 @@ public class LegPartController : MonoBehaviour
             moveRate * Time.deltaTime
         );
 
-        _motor.SetHorizontalVelocity(_currentHorizontalVelocity);
+        _context.LocomotionMotor.SetHorizontalVelocity(_currentHorizontalVelocity);
     }
 
     private void OnDisable()
     {
         _currentHorizontalVelocity = Vector3.zero;
 
-        if (_motor != null)
-            _motor.SetHorizontalVelocity(Vector3.zero);
+        if (_context != null && _context.LocomotionMotor != null)
+        {
+            _context.LocomotionMotor.SetHorizontalVelocity(Vector3.zero);
+        }
     }
 }
