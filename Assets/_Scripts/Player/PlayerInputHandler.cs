@@ -16,6 +16,9 @@ public class PlayerInputHandler : MonoBehaviour, GameInputAction.IPlayerInputMap
     public bool InventoryTriggered { get; set; }
     public bool IsPickupPressed { get; private set; }
 
+    public bool MenuTriggered { get; set; }
+    public bool InteractTriggered { get; set; }
+
     private void Awake()
     {
         GameInput = new GameInputAction();
@@ -92,6 +95,16 @@ public class PlayerInputHandler : MonoBehaviour, GameInputAction.IPlayerInputMap
         {
             InventoryTriggered = true;
         }
+    }
+
+    public void OnMenu(InputAction.CallbackContext context)
+    {
+        if (context.started) MenuTriggered = true;
+    }
+
+    public void OnInteract(InputAction.CallbackContext context)
+    {
+        if (context.started) InteractTriggered = true;
     }
 
 

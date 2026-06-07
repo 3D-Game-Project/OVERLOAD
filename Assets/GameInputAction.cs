@@ -136,6 +136,24 @@ public partial class @GameInputAction: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Menu"",
+                    ""type"": ""Button"",
+                    ""id"": ""9e90d6ae-a963-423b-9b71-ed8ab2f19174"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Interact"",
+                    ""type"": ""Button"",
+                    ""id"": ""a871414a-5977-4f61-848f-705a40cddde8"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -237,6 +255,28 @@ public partial class @GameInputAction: IInputActionCollection2, IDisposable
                     ""action"": ""Boost"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3b3755d6-1cd9-490b-9feb-4fc39a82bce5"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Menu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a3a3c918-1f09-4247-9f6b-fbbc05fae8e1"",
+                    ""path"": ""<Keyboard>/g"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -250,6 +290,8 @@ public partial class @GameInputAction: IInputActionCollection2, IDisposable
         m_PlayerInputMap_Pickup = m_PlayerInputMap.FindAction("Pickup", throwIfNotFound: true);
         m_PlayerInputMap_Boost = m_PlayerInputMap.FindAction("Boost", throwIfNotFound: true);
         m_PlayerInputMap_Inventory = m_PlayerInputMap.FindAction("Inventory", throwIfNotFound: true);
+        m_PlayerInputMap_Menu = m_PlayerInputMap.FindAction("Menu", throwIfNotFound: true);
+        m_PlayerInputMap_Interact = m_PlayerInputMap.FindAction("Interact", throwIfNotFound: true);
     }
 
     ~@GameInputAction()
@@ -335,6 +377,8 @@ public partial class @GameInputAction: IInputActionCollection2, IDisposable
     private readonly InputAction m_PlayerInputMap_Pickup;
     private readonly InputAction m_PlayerInputMap_Boost;
     private readonly InputAction m_PlayerInputMap_Inventory;
+    private readonly InputAction m_PlayerInputMap_Menu;
+    private readonly InputAction m_PlayerInputMap_Interact;
     /// <summary>
     /// Provides access to input actions defined in input action map "PlayerInputMap".
     /// </summary>
@@ -366,6 +410,14 @@ public partial class @GameInputAction: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "PlayerInputMap/Inventory".
         /// </summary>
         public InputAction @Inventory => m_Wrapper.m_PlayerInputMap_Inventory;
+        /// <summary>
+        /// Provides access to the underlying input action "PlayerInputMap/Menu".
+        /// </summary>
+        public InputAction @Menu => m_Wrapper.m_PlayerInputMap_Menu;
+        /// <summary>
+        /// Provides access to the underlying input action "PlayerInputMap/Interact".
+        /// </summary>
+        public InputAction @Interact => m_Wrapper.m_PlayerInputMap_Interact;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -407,6 +459,12 @@ public partial class @GameInputAction: IInputActionCollection2, IDisposable
             @Inventory.started += instance.OnInventory;
             @Inventory.performed += instance.OnInventory;
             @Inventory.canceled += instance.OnInventory;
+            @Menu.started += instance.OnMenu;
+            @Menu.performed += instance.OnMenu;
+            @Menu.canceled += instance.OnMenu;
+            @Interact.started += instance.OnInteract;
+            @Interact.performed += instance.OnInteract;
+            @Interact.canceled += instance.OnInteract;
         }
 
         /// <summary>
@@ -433,6 +491,12 @@ public partial class @GameInputAction: IInputActionCollection2, IDisposable
             @Inventory.started -= instance.OnInventory;
             @Inventory.performed -= instance.OnInventory;
             @Inventory.canceled -= instance.OnInventory;
+            @Menu.started -= instance.OnMenu;
+            @Menu.performed -= instance.OnMenu;
+            @Menu.canceled -= instance.OnMenu;
+            @Interact.started -= instance.OnInteract;
+            @Interact.performed -= instance.OnInteract;
+            @Interact.canceled -= instance.OnInteract;
         }
 
         /// <summary>
@@ -508,5 +572,19 @@ public partial class @GameInputAction: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnInventory(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Menu" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnMenu(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Interact" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnInteract(InputAction.CallbackContext context);
     }
 }
