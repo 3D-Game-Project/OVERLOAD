@@ -23,6 +23,7 @@ public class CorePartsController : MonoBehaviour
     [SerializeField] private PlayerLocomotionMotor _locomotionMotor;
     [SerializeField] private MovementCoordinator _movementCoordinator;
     [SerializeField] private CoreMovementController _coreMovementController;
+    [SerializeField] private PlayerBodyShapeController _bodyShapeController;
     [SerializeField] private Transform _cameraTransform;
     [SerializeField] private Transform _coreYawRoot;
     [SerializeField] private Transform _legYawRoot;
@@ -63,6 +64,9 @@ public class CorePartsController : MonoBehaviour
         if (_coreMovementController == null)
             _coreMovementController = GetComponent<CoreMovementController>();
 
+        if (_bodyShapeController == null)
+            _bodyShapeController = GetComponent<PlayerBodyShapeController>();
+
         if (_cameraTransform == null && Camera.main != null)
             _cameraTransform = Camera.main.transform;
 
@@ -90,6 +94,8 @@ public class CorePartsController : MonoBehaviour
 
             AttachPart(setup.partsData, setup.slot);
         }
+
+        _bodyShapeController?.RebuildShapeFromVisuals();
     }
 
     private void Update()
