@@ -1,15 +1,14 @@
 using UnityEngine;
 
-public class PartsData : ScriptableObject
+public abstract class PartsData : ScriptableObject
 {
     [SerializeField] private string _partsName;
     [SerializeField] private GameObject _partsPrefab;
-    [SerializeField] private int _requirePower;
-    [SerializeField] private PartsType _partsType;
+    [SerializeField] private int _requiredLoad;
 
     public string PartsName => _partsName;
     public GameObject PartsPrefab => _partsPrefab;
-    public int RequirePower => _requirePower;
+    public int RequiredLoad => _requiredLoad;
 
-    public PartsType PartsType => _partsType;
+    public abstract PartsType PartsType { get; }
 }

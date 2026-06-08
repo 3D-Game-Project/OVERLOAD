@@ -16,6 +16,15 @@ public class GroundSensor : MonoBehaviour
     [SerializeField] private float _skinOffset = 0.05f;
     [SerializeField] private LayerMask _groundLayer = ~0;   // 우선은 everything으로 설정
 
+    private void Awake()
+    {
+        if (_characterController == null)
+            _characterController = GetComponent<CharacterController>();
+
+        if (_ignoreRoot == null)
+            _ignoreRoot = transform;
+    }
+
     // 바닥 감지 -> groundinfo에 담기 -> 찾았으면 true 반환
     public bool TryGetGround(out GroundInfo groundInfo)
     {
