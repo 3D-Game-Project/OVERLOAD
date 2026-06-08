@@ -15,7 +15,7 @@ MonoBehaviour:
   _partsName: BoosterPartsDemo
   _partsPrefab: {fileID: 8397542037179671392, guid: 76bb3994dee75d842bffe2efec8500de, type: 3}
   _requiredLoad: 0
-  _boosterFunction: 0
+  _boosterFunction: 11
   _jumpVelocity: 8
   _jumpEnergyCost: 15
   _dashSpeed: 12
