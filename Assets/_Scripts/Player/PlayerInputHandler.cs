@@ -14,7 +14,7 @@ public class PlayerInputHandler : MonoBehaviour, GameInputAction.IPlayerInputMap
     public bool IsBoostHeld { get; private set; }
 
     public bool InventoryTriggered { get; set; }
-    public bool IsPickupPressed { get; private set; }
+    public bool IsPickupPressed { get; set; }
 
     public bool MenuTriggered { get; set; }
     public bool InteractTriggered { get; set; }
