@@ -109,8 +109,6 @@ public class MenuController : MonoBehaviour
         if (backgroundImage != null) backgroundImage.SetActive(true);
         if (mainInterfacePanel != null) mainInterfacePanel.SetActive(true);
 
-        Time.timeScale = 0f;
-
         Cursor.lockState = CursorLockMode.None; 
         Cursor.visible = true;
 
@@ -130,8 +128,6 @@ public class MenuController : MonoBehaviour
         _isMenuOpen = false;
         if (backgroundImage != null) backgroundImage.SetActive(false);
         if (mainInterfacePanel != null) mainInterfacePanel.SetActive(false);
-
-        Time.timeScale = 1f;
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;

@@ -534,8 +534,8 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 3793630781079509341}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -957,7 +957,7 @@ RectTransform:
   m_Father: {fileID: 6664342765553553042}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: 0, y: 2.5}
   m_SizeDelta: {x: 10, y: 5}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -1694,7 +1694,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &8644944429195127106
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1762,6 +1762,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8020168524798673176}
+  - component: {fileID: 8777351352287550773}
   - component: {fileID: 2420620093511108760}
   m_Layer: 5
   m_Name: RInventory
@@ -1789,6 +1790,14 @@ RectTransform:
   m_AnchoredPosition: {x: 400, y: 0}
   m_SizeDelta: {x: 800, y: 800}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &8777351352287550773
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3926708027972733605}
+  m_CullTransparentMesh: 1
 --- !u!114 &2420620093511108760
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2831,7 +2840,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInventoryUI
   _inventory: {fileID: 0}
-  _slotPrefab: {fileID: 1231527266715915483}
+  _slotPrefab: {fileID: 2355425815489113303, guid: ad60831d351a12e468a76d5dbb19923a, type: 3}
   _slotParent: {fileID: 8020168524798673176}
 --- !u!1 &6629379139900800869
 GameObject:
