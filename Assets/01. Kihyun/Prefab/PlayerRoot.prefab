@@ -476,7 +476,7 @@ GameObject:
   - component: {fileID: 6882837048745345502}
   - component: {fileID: 8292241741423163496}
   - component: {fileID: 554437559433896092}
-  - component: {fileID: 4062558482168223478}
+  - component: {fileID: 6039434109314213488}
   - component: {fileID: 4740975415817124192}
   m_Layer: 0
   m_Name: PlayerRoot
@@ -494,7 +494,7 @@ Transform:
   m_GameObject: {fileID: 8560611295260395016}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 5, z: 0}
+  m_LocalPosition: {x: -0.712811, y: -0.00000018508547, z: 0.905222}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -676,7 +676,7 @@ MonoBehaviour:
   _coreYawRoot: {fileID: 1984183087415090231}
   _legYawRoot: {fileID: 20554035174693987}
   _inputDeadZone: 0.05
---- !u!114 &4062558482168223478
+--- !u!114 &6039434109314213488
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -685,10 +685,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 8560611295260395016}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2a398930385b61b49a061b79c88ce5b9, type: 3}
+  m_Script: {fileID: 11500000, guid: 4f8404f12fa067b4493ea4a2ae724800, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerBodyShapeController
-  _characterController: {fileID: 0}
+  _characterController: {fileID: 4832782925708161307}
   _visualRoot: {fileID: 7484337154046585310}
   _heightPadding: 0.05
   _minHeight: 0.5
