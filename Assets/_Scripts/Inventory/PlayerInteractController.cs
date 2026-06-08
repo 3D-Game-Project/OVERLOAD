@@ -19,8 +19,10 @@ public class PlayerInteractController : MonoBehaviour
 
     private void Update()
     {
-        if(_inputHandler.IsPickupPressed && _targetParts != null)
+        if (_inputHandler.IsPickupPressed && _targetParts != null)
         {
+            _inputHandler.IsPickupPressed = false;
+
             PickupParts();
         }
     }
@@ -60,13 +62,13 @@ public class PlayerInteractController : MonoBehaviour
     // 현재는 그 이후 동작처리인 아이템 삭제만 진행
     private void PickupParts()
     {
-        Debug.Log($"Pickup 호출");
-        Destroy(_target.gameObject);
+        if (_target == null || _targetParts == null) return;
 
         if (_inventory != null && _targetParts != null)
         {
             _inventory.AddItem(_targetParts);
         }
+        Destroy(_target.gameObject);
 
         _targetParts = null;
         _target = null;
