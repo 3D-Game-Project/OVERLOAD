@@ -9,13 +9,18 @@ public class CoreMovementController : MonoBehaviour
     [SerializeField] private float _decceleration = 8f;
 
     [Header("Core Vertical Thruster")]
-    [SerializeField] private float _verticalAcceleration = 18f;
-    [SerializeField] private float _maxRiseSpeed = 3.5f;
+    [SerializeField] private float _verticalAcceleration = 45f;
+    [SerializeField] private float _maxRiseSpeed = 5f;
     [SerializeField] private float _verticalEnergyCostPerSec = 12f;
+
+    [Header("Core Dash")]
+    [SerializeField] private float _coreDashSpeed = 12f;
+    [SerializeField] private float _coreDashDuration = 0.15f;
+    [SerializeField] private float _coreDashEnergyCost = 18f;
 
     [Header("Height Limit")]
     [SerializeField] private GroundSensor _groundSensor;
-    [SerializeField] private float _maxHeightFromGround = 2.5f;
+    [SerializeField] private float _maxHeightFromGround = 10f;
     [SerializeField] private float _heightSlowdownRange = 0.7f;
     [SerializeField] private float _ceilingDamping = 20f;
 
@@ -29,6 +34,10 @@ public class CoreMovementController : MonoBehaviour
 
     private bool _hasGroundBelow;
     private float _heightFromGround;
+
+    private bool _isCoreDashing;
+    private float _coreDashTimer;
+    private Vector3 _coreDashDirection;
 
     private void Awake()
     {
@@ -54,32 +63,51 @@ public class CoreMovementController : MonoBehaviour
         bool hasBoosterPart,
         float deltaTime)
     {
-        HandleCoreHorizontalMovement(
-            command,
-            hasLocomotionPart,
-            deltaTime
-        );
+        bool hasNoParts =
+            !hasLocomotionPart && !hasBoosterPart;
 
-        HandleCoreVerticalThruster(
-            hasBoosterPart,
-            deltaTime
-        );
+        bool hasOnlyLeg =
+            hasLocomotionPart && !hasBoosterPart;
+
+        bool hasOnlyBooster =
+            !hasLocomotionPart && hasBoosterPart;
+
+        bool hasLegAndBooster =
+            hasLocomotionPart && hasBoosterPart;
+
+        if (hasNoParts)
+        {
+            HandleCoreHorizontalMovement(command, deltaTime);
+            HandleCoreVerticalThruster(deltaTime);
+            return;
+        }
+
+        if (hasOnlyLeg)
+        {
+            StopCoreHorizontalMovement();
+            HandleCoreShortDash(command, deltaTime);
+            return;
+        }
+
+        if (hasOnlyBooster)
+        {
+            HandleCoreHorizontalMovement(command, deltaTime);
+            return;
+        }
+
+        if (hasLegAndBooster)
+        {
+            StopCoreHorizontalMovement();
+            return;
+        }
     }
 
     private void HandleCoreHorizontalMovement(
         LocomotionCommand command,
-        bool hasLocomotionPart,
         float deltaTime)
     {
         if (_movementCoordinator == null)
             return;
-
-        // 다리 파츠가 있으면 일반 수평 이동은 다리 파츠가 담당
-        if (hasLocomotionPart)
-        {
-            _currentHorizontalVelocity = Vector3.zero;
-            return;
-        }
 
         float moveSpeed = GetMoveSpeed();
 
@@ -105,9 +133,7 @@ public class CoreMovementController : MonoBehaviour
         );
     }
 
-    private void HandleCoreVerticalThruster(
-        bool hasBoosterPart,
-        float deltaTime)
+    private void HandleCoreVerticalThruster(float deltaTime)
     {
         if (_movementCoordinator == null)
             return;
@@ -118,14 +144,10 @@ public class CoreMovementController : MonoBehaviour
         if (_locomotionMotor == null)
             return;
 
-        // 부스터 파츠가 있으면 수직 이동은 부스터가 담당
-        if (hasBoosterPart)
+        if (!_inputHandler.IsJumpHeld)
             return;
 
         UpdateGroundInfo();
-
-        if (!_inputHandler.IsJumpHeld)
-            return;
 
         if (!_hasGroundBelow)
             return;
@@ -170,6 +192,65 @@ public class CoreMovementController : MonoBehaviour
                 velocityChange
             );
         }
+    }
+
+    private void HandleCoreShortDash(LocomotionCommand command, float deltaTime)
+    {
+        if (_movementCoordinator == null)
+            return;
+
+        if (_inputHandler == null)
+            return;
+
+        // 대시 중이면 지속시간 동안 매 프레임 속도 전달
+        if (_isCoreDashing)
+        {
+            _coreDashTimer -= deltaTime;
+
+            if (_coreDashTimer > 0f)
+            {
+                Vector3 dashVelocity =
+                    _coreDashDirection * _coreDashSpeed;
+
+                _movementCoordinator.SubmitAdditionalHorizontalVelocity(
+                    dashVelocity
+                );
+
+                return;
+            }
+
+            _isCoreDashing = false;
+            _coreDashDirection = Vector3.zero;
+        }
+
+        // 새 대시 시작
+        if (!_inputHandler.IsBoostPressed)
+            return;
+
+        Vector3 dashDirection = command.MoveDirection;
+
+        // 입력이 없으면 카메라/코어가 바라보는 방향으로 대시
+        if (dashDirection.sqrMagnitude < 0.001f)
+        {
+            dashDirection = command.LookDirection;
+        }
+
+        dashDirection.y = 0f;
+
+        if (dashDirection.sqrMagnitude < 0.001f)
+            return;
+
+        if (!TryUseEnergy(_coreDashEnergyCost))
+            return;
+
+        _isCoreDashing = true;
+        _coreDashTimer = _coreDashDuration;
+        _coreDashDirection = dashDirection.normalized;
+    }
+
+    private void StopCoreHorizontalMovement()
+    {
+        _currentHorizontalVelocity = Vector3.zero;
     }
 
     private void UpdateGroundInfo()
@@ -235,6 +316,14 @@ public class CoreMovementController : MonoBehaviour
         );
     }
 
+    private bool TryUseEnergy(float amount)
+    {
+        if (_energyController == null)
+            return true;
+
+        return _energyController.TryUseEnergy(amount);
+    }
+
     private bool TryUseEnergyPerSec(float costPerSec)
     {
         if (_energyController == null)
@@ -256,5 +345,8 @@ public class CoreMovementController : MonoBehaviour
     public void StopCoreMovement()
     {
         _currentHorizontalVelocity = Vector3.zero;
+        _isCoreDashing = false;
+        _coreDashTimer = 0f;
+        _coreDashDirection = Vector3.zero;
     }
 }

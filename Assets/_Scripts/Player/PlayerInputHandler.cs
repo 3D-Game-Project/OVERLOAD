@@ -11,6 +11,7 @@ public class PlayerInputHandler : MonoBehaviour, GameInputAction.IPlayerInputMap
     public Vector2 MoveInput { get; private set; }
     public bool IsJumpPressed { get; private set; }
     public bool IsJumpHeld { get; private set; }
+    public bool IsBoostPressed { get; private set; }
     public bool IsBoostHeld { get; private set; }
 
     public bool InventoryTriggered { get; set; }
@@ -39,6 +40,7 @@ public class PlayerInputHandler : MonoBehaviour, GameInputAction.IPlayerInputMap
     private void LateUpdate()
     {
         IsJumpPressed = false;
+        IsBoostPressed = false;
     }
 
     public void OnMove(InputAction.CallbackContext context)
@@ -64,6 +66,7 @@ public class PlayerInputHandler : MonoBehaviour, GameInputAction.IPlayerInputMap
     {
         if (context.started)
         {
+            IsBoostPressed = true;
             IsBoostHeld = true;
         }
 
