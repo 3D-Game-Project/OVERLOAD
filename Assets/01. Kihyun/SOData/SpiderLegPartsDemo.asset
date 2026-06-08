@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: SpiderLegPartsDemo
   m_EditorClassIdentifier: Assembly-CSharp::LegPartsData
   _partsName: SpiderLegTestDemo
-  _partsPrefab: {fileID: 100000, guid: 18981a06fb298f345ab489e86c560f5c, type: 3}
-  _requiredPower: 0
+  _partsPrefab: {fileID: 8423101242249763884, guid: 4460234c743e802469d74b6830c7004b, type: 3}
+  _requiredLoad: 0
   _legTypeProfile: {fileID: 11400000, guid: c78541e47dd59b044a76185612e811fa, type: 2}
   _moveSpeed: 4
   _acceleration: 12
   _decceleration: 16
-  _dashPowerCost: 20
+  _dashEnergyCost: 0

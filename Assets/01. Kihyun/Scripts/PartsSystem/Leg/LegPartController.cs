@@ -3,11 +3,9 @@ using UnityEngine;
 public class LegPartController : PartBehaviour, ILocomotionPart
 {
     [Header("Base Rotation")]
-    [SerializeField] private float _baseCoreYawSpeed = 720f;
     [SerializeField] private float _baseLegYawSpeed = 360f;
 
     [Header("Model Offset")]
-    [SerializeField] private float _coreForwardYawOffset = 0f;
     [SerializeField] private float _legForwardYawOffset = 0f;
 
     private LegPartsData _legData;
@@ -49,11 +47,13 @@ public class LegPartController : PartBehaviour, ILocomotionPart
         if (_legData == null || _profile == null)
             return;
 
-        if (_context.LocomotionMotor == null)
+        if (_context.MovementCoordinator == null)
             return;
 
-        UpdateCoreYaw(command.LookDirection, deltaTime);
-        UpdateLegYaw(command.MoveDirection, command.HasMoveInput, deltaTime);
+        // 다리 모듈의 방향은 이동 방향이 아니라 카메라 Forward 기준
+        UpdateLegYaw(command.LookDirection, command.HasMoveInput, deltaTime);
+
+        // 실제 이동은 카메라 기준 WASD 이동 방향
         UpdateMovement(command.MoveDirection, command.HasMoveInput, deltaTime);
     }
 
@@ -65,25 +65,6 @@ public class LegPartController : PartBehaviour, ILocomotionPart
         {
             _context.MovementCoordinator.StopAll();
         }
-    }
-
-    private void UpdateCoreYaw(Vector3 lookDirection, float deltaTime)
-    {
-        if (_context.CoreYawRoot == null)
-            return;
-
-        if (lookDirection.sqrMagnitude < 0.001f)
-            return;
-
-        Quaternion targetRotation =
-            Quaternion.LookRotation(lookDirection, Vector3.up) *
-            Quaternion.Euler(0f, _coreForwardYawOffset, 0f);
-
-        _context.CoreYawRoot.rotation = Quaternion.RotateTowards(
-            _context.CoreYawRoot.rotation,
-            targetRotation,
-            _baseCoreYawSpeed * deltaTime
-        );
     }
 
     private void UpdateLegYaw(Vector3 moveDirection, bool hasMoveInput, float deltaTime)

@@ -12,15 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42f49db9aa69f5a4c838e2be92e1ed3b, type: 3}
   m_Name: BoosterPartsDemo
   m_EditorClassIdentifier: Assembly-CSharp::BoosterPartsData
-  _partsName: 
-  _partsPrefab: {fileID: 0}
+  _partsName: BoosterPartsDemo
+  _partsPrefab: {fileID: 8397542037179671392, guid: 76bb3994dee75d842bffe2efec8500de, type: 3}
   _requiredLoad: 0
   _boosterFunction: 0
   _jumpVelocity: 8
   _jumpEnergyCost: 15
   _dashSpeed: 12
-  _dashDuration: 0.2
-  _dashEnergyCost: 20
+  _dashEnergyCostPerSec: 20
   _flightVerticalAcceleration: 25
   _flightHorizontalSpeed: 4
   _flightEnergyCostPerSec: 20

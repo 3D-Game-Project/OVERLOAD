@@ -22,6 +22,7 @@ public class CorePartsController : MonoBehaviour
     [SerializeField] private PlayerInputHandler _inputHandler;
     [SerializeField] private PlayerLocomotionMotor _locomotionMotor;
     [SerializeField] private MovementCoordinator _movementCoordinator;
+    [SerializeField] private CoreMovementController _coreMovementController;
     [SerializeField] private Transform _cameraTransform;
     [SerializeField] private Transform _coreYawRoot;
     [SerializeField] private Transform _legYawRoot;
@@ -35,6 +36,12 @@ public class CorePartsController : MonoBehaviour
     private readonly List<ILocomotionPart> _locomotionParts = new();
     private readonly List<IBoosterPart> _boosterParts = new();
     private readonly List<IAttackPart> _attackParts = new();
+
+    public bool HasLocomotionPart => _locomotionParts.Count > 0;
+    public bool HasBoosterPart => _boosterParts.Count > 0;
+    public bool HasAttackPart => _attackParts.Count > 0;
+    public bool HasAnyPart => _allParts.Count > 0;
+
 
     private void Awake()
     {
@@ -52,6 +59,9 @@ public class CorePartsController : MonoBehaviour
 
         if (_movementCoordinator == null)
             _movementCoordinator = GetComponent<MovementCoordinator>();
+
+        if (_coreMovementController == null)
+            _coreMovementController = GetComponent<CoreMovementController>();
 
         if (_cameraTransform == null && Camera.main != null)
             _cameraTransform = Camera.main.transform;
@@ -282,6 +292,16 @@ public class CorePartsController : MonoBehaviour
         if (_inputHandler != null)
         {
             LocomotionCommand locomotionCommand = CreateLocomotionCommand();
+
+            if (_coreMovementController != null)
+            {
+                _coreMovementController.HandleCoreMovement(
+                    locomotionCommand,
+                    HasLocomotionPart,
+                    HasBoosterPart,
+                    Time.deltaTime
+                );
+            }
 
             if (_locomotionParts.Count > 0)
             {
