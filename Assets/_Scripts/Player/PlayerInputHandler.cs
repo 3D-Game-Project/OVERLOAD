@@ -15,7 +15,16 @@ public class PlayerInputHandler : MonoBehaviour, GameInputAction.IPlayerInputMap
     public bool IsBoostHeld { get; private set; }
 
     public bool InventoryTriggered { get; set; }
-    public bool IsPickupPressed { get; private set; }
+    public bool IsPickupPressed { get; set; }
+
+    public bool MenuTriggered { get; set; }
+    public bool InteractTriggered { get; set; }
+
+    public bool IsFire { get; private set; }
+
+    public bool IsPreview { get; set; } = false;
+
+    public bool ReloadTriggered { get; set; }
 
     private void Awake()
     {
@@ -41,6 +50,8 @@ public class PlayerInputHandler : MonoBehaviour, GameInputAction.IPlayerInputMap
     {
         IsJumpPressed = false;
         IsBoostPressed = false;
+
+        ReloadTriggered = false;
     }
 
     public void OnMove(InputAction.CallbackContext context)
@@ -97,5 +108,29 @@ public class PlayerInputHandler : MonoBehaviour, GameInputAction.IPlayerInputMap
         }
     }
 
+    public void OnMenu(InputAction.CallbackContext context)
+    {
+        if (context.started) MenuTriggered = true;
+    }
+
+    public void OnInteract(InputAction.CallbackContext context)
+    {
+        if (context.started) InteractTriggered = true;
+    }
+
+    public void OnFire(InputAction.CallbackContext context)
+    {
+        if (IsPreview) { IsFire = false; return; }
+
+        if (context.started || context.performed) IsFire = true;
+        else if (context.canceled) IsFire = false;
+    }
+
+    public void OnReload(InputAction.CallbackContext context)
+    {
+        if (IsPreview) { ReloadTriggered = false; return; }
+
+        if (context.started) ReloadTriggered = true;
+    }
 
 }

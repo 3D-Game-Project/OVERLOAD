@@ -15,6 +15,9 @@ public class FireManager : MonoBehaviour
     private Coroutine _reloadCoroutine;
     public AttackPartsData AttackPartsData => _attackPartsData;
 
+    private PlayerInputHandler _playerInputHandler;
+    private bool _isPlayer = false;
+
     // 카메라 세팅 방지
     // 공격파트 정보 수집
     // 발사타입이 Projecttile 일경우 해당 게임오브젝트에 BulletPool 컴포넌트 생성, 프리팹 생성
@@ -36,6 +39,12 @@ public class FireManager : MonoBehaviour
     private void Start()
     {
         _aimProvider = GetComponentInParent<IAimProvider>();
+
+        if (gameObject.transform.root.CompareTag("Player"))
+        {
+            _isPlayer = true;
+            _playerInputHandler = gameObject.transform.root.GetComponent<PlayerInputHandler>();
+        }
     }
 
     // FireManager를 Enemy와 Player 둘 다가 사용할 예정이기 때문에
@@ -44,16 +53,18 @@ public class FireManager : MonoBehaviour
     {
         if (WeaponRuntime == null) return;
 
-        if (gameObject.transform.root.CompareTag("Player"))
+        if (_isPlayer && _playerInputHandler != null) 
         {
-            if (Input.GetMouseButton(0))
+            if (_playerInputHandler.IsFire)
             {
                 Vector3 crosshairTarget = _aimProvider != null ? _aimProvider.GetAimPoint() : Camera.main.transform.position + Camera.main.transform.forward * _attackPartsData.Range;
                 TryFire(crosshairTarget);
             }
 
-            if (Input.GetKeyDown(KeyCode.R))
+            if (_playerInputHandler.ReloadTriggered)
             {
+                _playerInputHandler.ReloadTriggered = false;
+
                 WeaponRuntime.StartReload();
             }
         }

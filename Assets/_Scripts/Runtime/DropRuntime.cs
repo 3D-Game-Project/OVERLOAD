@@ -28,12 +28,12 @@ public class DropRuntime
 
             _dropList.Add(_enemyData.DropParts[i]);
 
-            int randomIndex = Random.Range(1, 11);
+            //int randomIndex = Random.Range(1, 11);
 
-            if (randomIndex >= 9)
-            {
-                _dropList.Add(_enemyData.DropParts[i]);
-            }
+            //if (randomIndex >= 9)
+            //{
+            //    _dropList.Add(_enemyData.DropParts[i]);
+            //}
         }
 
         if(_dropList.Count > 0)

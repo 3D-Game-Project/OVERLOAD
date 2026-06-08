@@ -5,56 +5,23 @@ using UnityEngine;
 public class PlayerInventory : MonoBehaviour
 {
     [Header("Inventory Settings")]
-    public int InventorySize = 16; 
+    public int InventorySize = 25; 
 
     public List<PartsData> PartsList = new List<PartsData>();
 
     public Dictionary<string, int> CurrencyList = new Dictionary<string, int>();
 
-    [Header("UI Reference")]
-    [SerializeField] private GameObject _inventoryPanel; 
 
     public event Action OnInventoryChanged; 
 
     private PlayerInputHandler _inputHandler;
-    private bool _isInventoryOpen = false;
 
     // 시작시 PlayerInputHandler 컴포넌트 참조
     // 재화 초기 설정 수정
     private void Awake()
     {
-        _inputHandler = GetComponent<PlayerInputHandler>();
-
         CurrencyList.Add("Gold", 0);
         CurrencyList.Add("Scrap", 0);
-    }
-
-    // 시작시 인벤토리 패널 비활성화
-    private void Start()
-    {
-        if (_inventoryPanel != null)
-            _inventoryPanel.SetActive(false); 
-    }
-
-    // I키 입력 감지 후 인벤토리 여닫기 처리
-    private void Update()
-    {
-        if (_inputHandler != null && _inputHandler.InventoryTriggered)
-        {
-            Debug.Log("[PlayerInventory] 인벤토리 토글 입력 감지.");
-            _inputHandler.InventoryTriggered = false;
-            ToggleInventory();
-        }
-    }
-
-    // 인벤토리 활성화 조절
-    private void ToggleInventory()
-    {
-        _isInventoryOpen = !_isInventoryOpen;
-        if (_inventoryPanel != null)
-        {
-            _inventoryPanel.SetActive(_isInventoryOpen);
-        }
     }
 
     // 파츠 추가 함수 - PlayerInteractionController의 Pickup시 호출
