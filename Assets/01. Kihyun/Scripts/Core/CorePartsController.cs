@@ -101,6 +101,7 @@ public class CorePartsController : MonoBehaviour
     private void Update()
     {
         HandleMovementParts();
+        HandleAttackParts();
     }
 
     public void AttachPart(PartsData partsData, AttachmentSlot slot)
@@ -380,6 +381,30 @@ public class CorePartsController : MonoBehaviour
             _inputHandler.IsJumpHeld,
             _inputHandler.IsBoostHeld
         );
+    }
+
+    private void HandleAttackParts()
+    {
+        if (_inputHandler == null)
+            return;
+
+        if (_attackParts.Count <= 0)
+            return;
+
+        foreach (IAttackPart attackPart in _attackParts)
+        {
+            attackPart.HandleAttack(_inputHandler.IsFire);
+        }
+
+        if (_inputHandler.ReloadTriggered)
+        {
+            foreach (IAttackPart attackPart in _attackParts)
+            {
+                attackPart.HandleReload(true);
+            }
+
+            _inputHandler.ReloadTriggered = false;
+        }
     }
 
     private Vector3 GetCameraForwardOnPlane()

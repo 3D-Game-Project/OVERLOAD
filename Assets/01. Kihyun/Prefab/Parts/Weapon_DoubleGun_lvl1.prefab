@@ -299,6 +299,7 @@ GameObject:
   - component: {fileID: 9500000}
   - component: {fileID: 3244768947796678241}
   - component: {fileID: 284485945945486163}
+  - component: {fileID: -2434774299569026823}
   m_Layer: 0
   m_Name: Weapon_DoubleGun_lvl1
   m_TagString: Untagged
@@ -358,10 +359,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FireManager
   _attackPartsData: {fileID: 11400000, guid: 2097c39ed1f221c4fa4a6edfc5a50ffd, type: 2}
-  _muzzlePoint: {fileID: 0}
+  _muzzlePoint: {fileID: 400002}
   _targetLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 128
 --- !u!114 &284485945945486163
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -374,3 +375,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db2054639542bd949b9c68bad7b02f15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PartAttachAnchor
+--- !u!114 &-2434774299569026823
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100014}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d10ce24518e34d4c8e87c07558331e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AttackPartController
+  _fireManager: {fileID: 3244768947796678241}
+  _targetLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  _ownerLayer: 6
