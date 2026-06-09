@@ -320,6 +320,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 554437559433896092, guid: 6aecca791f52390498f41939fde7cb77, type: 3}
+      propertyPath: _initialParts.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 554437559433896092, guid: 6aecca791f52390498f41939fde7cb77, type: 3}
+      propertyPath: _initialParts.Array.data[2].slot
+      value: 
+      objectReference: {fileID: 1942565318}
+    - target: {fileID: 554437559433896092, guid: 6aecca791f52390498f41939fde7cb77, type: 3}
+      propertyPath: _initialParts.Array.data[2].partsData
+      value: 
+      objectReference: {fileID: 11400000, guid: 734de3431963e4f46a95aab3db18a455, type: 2}
     - target: {fileID: 4740975415817124192, guid: 6aecca791f52390498f41939fde7cb77, type: 3}
       propertyPath: _groundLayer.m_Bits
       value: 2147483648
@@ -765,6 +777,17 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1634490033}
   m_SourcePrefab: {fileID: 100100000, guid: 2585b66c3ed84a742adffc9eb2101da0, type: 3}
+--- !u!114 &1942565318 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8639076284845980796, guid: 6aecca791f52390498f41939fde7cb77, type: 3}
+  m_PrefabInstance: {fileID: 652863657}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0101ac9f847ef564bbb2d901cd21d304, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AttachmentSlot
 --- !u!1 &1965463035
 GameObject:
   m_ObjectHideFlags: 0
