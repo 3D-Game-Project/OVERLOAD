@@ -277,6 +277,8 @@ public class CorePartsController : MonoBehaviour
 
         partObject.transform.SetParent(slot.AttachPoint, true);
 
+        ApplyVisualMirror(partObject, slot);
+
         IPart part = FindPart(partObject);
 
         if (part == null)
@@ -756,5 +758,26 @@ public class CorePartsController : MonoBehaviour
     {
         if (_coreYawRoot != null) _coreYawRoot.localRotation = Quaternion.identity;
         if (_legYawRoot != null) _legYawRoot.localRotation = Quaternion.identity;
+    }
+
+    private void ApplyVisualMirror(GameObject partObject, AttachmentSlot slot)
+    {
+        if (partObject == null || slot == null)
+            return;
+
+        PartVisualMirror mirrorTarget =
+            partObject.GetComponentInChildren<PartVisualMirror>(true);
+
+        if (mirrorTarget == null)
+            return;
+
+        Vector3 scale = mirrorTarget.transform.localScale;
+
+        if (slot.MirrorVisualX)
+            scale.x = -Mathf.Abs(scale.x);
+        else
+            scale.x = Mathf.Abs(scale.x);
+
+        mirrorTarget.transform.localScale = scale;
     }
 }
