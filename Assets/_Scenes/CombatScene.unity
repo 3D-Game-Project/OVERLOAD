@@ -1170,6 +1170,10 @@ PrefabInstance:
       propertyPath: _partIcon
       value: 
       objectReference: {fileID: 1656335928}
+    - target: {fileID: 4882192720422468939, guid: d138aeecb045e2e42bc04af60544559d, type: 3}
+      propertyPath: _partEquipActionController
+      value: 
+      objectReference: {fileID: 1793439834}
     - target: {fileID: 5020647019981449439, guid: d138aeecb045e2e42bc04af60544559d, type: 3}
       propertyPath: m_Texture
       value: 
@@ -1320,7 +1324,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6210747542698123186, guid: d138aeecb045e2e42bc04af60544559d, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6559960260634226556, guid: d138aeecb045e2e42bc04af60544559d, type: 3}
       propertyPath: m_IsActive
@@ -1777,7 +1781,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8560611295260395016, guid: 6aecca791f52390498f41939fde7cb77, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1793439834}
   m_SourcePrefab: {fileID: 100100000, guid: 6aecca791f52390498f41939fde7cb77, type: 3}
 --- !u!1 &1165283821 stripped
 GameObject:
@@ -2472,6 +2479,40 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6c484c5e4a75474d805e3097458ab4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInventory
+--- !u!114 &1793439825 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 554437559433896092, guid: 6aecca791f52390498f41939fde7cb77, type: 3}
+  m_PrefabInstance: {fileID: 1165283820}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1165283821}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: edf0e52eab86e3f44a4ad935430bfd2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CorePartsController
+--- !u!114 &1793439834
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1165283821}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80f7a885543e3ef448d6181f3d374372, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PartEquipActionController
+  _corePartsController: {fileID: 1793439825}
+  _attachTime: 2
+  _detachTime: 1.5
+  _replaceExtraTime: 0.5
+  _useUnscaledTime: 0
+  _enableTestInput: 1
+  _testPartsData: {fileID: 0}
+  _testSlotId: 
+  _replaceKey: 49
+  _detachKey: 50
+  _attachKey: 51
 --- !u!1 &1897726729 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6986616953109536345, guid: d138aeecb045e2e42bc04af60544559d, type: 3}
@@ -2765,6 +2806,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MechPreviewStudio
   _spawnPoint: {fileID: 117215332}
+  _originPlayerPrefab: {fileID: 0}
 --- !u!4 &2109064867
 Transform:
   m_ObjectHideFlags: 0

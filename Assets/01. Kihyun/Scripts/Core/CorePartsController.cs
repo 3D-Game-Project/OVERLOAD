@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -30,6 +31,7 @@ public class CorePartsController : MonoBehaviour
     [SerializeField] private Transform _cameraTransform;
     [SerializeField] private Transform _coreYawRoot;
     [SerializeField] private Transform _legYawRoot;
+
 
     [Header("Input Settings")]
     [SerializeField] private float _inputDeadZone = 0.05f;
@@ -748,5 +750,11 @@ public class CorePartsController : MonoBehaviour
             return transform.right;
 
         return right.normalized;
+    }
+
+    public void ResetYawRootsForPreview()
+    {
+        if (_coreYawRoot != null) _coreYawRoot.localRotation = Quaternion.identity;
+        if (_legYawRoot != null) _legYawRoot.localRotation = Quaternion.identity;
     }
 }

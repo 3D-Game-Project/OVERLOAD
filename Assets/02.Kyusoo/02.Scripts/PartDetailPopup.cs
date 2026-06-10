@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections.Generic;
 using TMPro;
 
 public class PartDetailPopup : MonoBehaviour
@@ -74,7 +73,7 @@ public class PartDetailPopup : MonoBehaviour
 
     private void OnDisable()
     {
-        if (_partEquipActionController != null)
+        if (_partEquipActionController != null && !_waitingEquipResult)
         {
             _partEquipActionController.OnActionFinished -= HandleEquipActionFinished;
         }
@@ -222,6 +221,11 @@ public class PartDetailPopup : MonoBehaviour
             return;
 
         _waitingEquipResult = false;
+
+        if (_partEquipActionController != null)
+        {
+            _partEquipActionController.OnActionFinished -= HandleEquipActionFinished;
+        }
 
         if (!success)
         {
