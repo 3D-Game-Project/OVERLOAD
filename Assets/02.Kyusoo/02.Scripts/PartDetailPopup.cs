@@ -39,7 +39,8 @@ public class PartDetailPopup : MonoBehaviour
     public void OpenPopup(PartsData part, PlayerInventory inventory)
     {
         if (part == null || inventory == null) return;
-
+        
+        gameObject.SetActive(true);
         if (UnityEngine.EventSystems.EventSystem.current != null)
         {
             UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(null);

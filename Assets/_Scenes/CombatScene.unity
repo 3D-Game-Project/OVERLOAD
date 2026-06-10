@@ -1606,6 +1606,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8753857354238927973, guid: d138aeecb045e2e42bc04af60544559d, type: 3}
+      propertyPath: m_Alpha
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8757391584928533512, guid: d138aeecb045e2e42bc04af60544559d, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -1773,10 +1777,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 8560611295260395016, guid: 6aecca791f52390498f41939fde7cb77, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1793439831}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6aecca791f52390498f41939fde7cb77, type: 3}
 --- !u!1 &1165283821 stripped
 GameObject:
@@ -2255,17 +2256,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1454097723}
   m_CullTransparentMesh: 1
---- !u!114 &1483177360 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5969690502286986177, guid: 6aecca791f52390498f41939fde7cb77, type: 3}
-  m_PrefabInstance: {fileID: 1165283820}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0101ac9f847ef564bbb2d901cd21d304, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AttachmentSlot
 --- !u!1 &1544899941
 GameObject:
   m_ObjectHideFlags: 0

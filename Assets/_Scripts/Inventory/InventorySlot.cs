@@ -21,11 +21,22 @@ public class InventorySlot : MonoBehaviour
 
     private void Awake()
     {
+        if (slotButton == null) slotButton = GetComponent<Button>();
+
         if (inventory == null)
             inventory = FindFirstObjectByType<PlayerInventory>();
 
         if (slotButton != null)
             slotButton.onClick.AddListener(OnSlotClicked);
+    }
+
+    private void OnEnable()
+    {
+        if (slotButton != null)
+        {
+            slotButton.onClick.RemoveListener(OnSlotClicked);
+            slotButton.onClick.AddListener(OnSlotClicked);
+        }
     }
 
     public void SetMasterReferences(MenuController menu, Shop shop, SellPopup sell, PartDetailPopup detail)
@@ -51,7 +62,6 @@ public class InventorySlot : MonoBehaviour
         else
         {
             SetEmptyVisual();
-            Debug.Log("판매처리");
 
         }
     }
@@ -86,6 +96,11 @@ public class InventorySlot : MonoBehaviour
 
     public void OnSlotClicked()
     {
+        if (inventory == null)
+        {
+            inventory = FindFirstObjectByType<PlayerInventory>();
+        }
+
         if (inventory == null) return;
 
         if (EventSystem.current != null)
@@ -93,11 +108,10 @@ public class InventorySlot : MonoBehaviour
             EventSystem.current.SetSelectedGameObject(null);
         }
 
+        if (_menu == null) _menu = FindFirstObjectByType<MenuController>(FindObjectsInactive.Include);
 
         bool isCurrentShopTab = (_menu.CurrentTabIndex == 1);
         bool isCurrentInventoryTab = (_menu.CurrentTabIndex == 2);
-
-        Debug.Log($"[OnSlotClicked] 클릭 집행 ➔ 현재 UI 활성 탭 인덱스: {_menu.CurrentTabIndex} (Shop패널여부: {isCurrentShopTab} / Inv패널여부: {isCurrentInventoryTab})");
 
         if (isCurrentShopTab && _shop != null)
         {
@@ -114,7 +128,6 @@ public class InventorySlot : MonoBehaviour
                 }
                 else
                 {
-                    // 백업용 즉시 판매
                     _shop.SellPart(currentPart, inventory);
                 }
             }
@@ -127,11 +140,17 @@ public class InventorySlot : MonoBehaviour
         {
             if (currentPart != null)
             {
-                PartDetailPopup[] detailPopups = FindObjectsByType<PartDetailPopup>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-
-                foreach (var popup in detailPopups)
+                if (_detailPopup != null)
                 {
-                    popup.OpenPopup(currentPart, inventory);
+                    _detailPopup.OpenPopup(currentPart, inventory);
+                }
+                else
+                {
+                    PartDetailPopup _detailPopup = FindFirstObjectByType<PartDetailPopup>(FindObjectsInactive.Include);
+                    if (_detailPopup != null)
+                    {
+                        _detailPopup.OpenPopup(currentPart, inventory);
+                    }
                 }
             }
             else if (currentItem != null)
