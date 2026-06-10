@@ -2806,7 +2806,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MechPreviewStudio
   _spawnPoint: {fileID: 117215332}
-  _originPlayerPrefab: {fileID: 0}
 --- !u!4 &2109064867
 Transform:
   m_ObjectHideFlags: 0

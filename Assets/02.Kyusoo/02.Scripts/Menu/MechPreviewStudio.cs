@@ -98,7 +98,6 @@ public class MechPreviewStudio : MonoBehaviour
 
                 component.transform.localRotation = Quaternion.identity;
 
-                Debug.Log($"🔥 [GimbolFix] {component.gameObject.name}에 부착된 WeaponGimbolController 마비 및 무기 회전값 (0,0,0) 강제 박제 완료!");
             }
         }
 
