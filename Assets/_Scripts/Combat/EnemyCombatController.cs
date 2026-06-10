@@ -31,6 +31,7 @@ public class EnemyCombatController : MonoBehaviour
     public void TakeDamage(int damage)
     {
         if (UnitRuntime == null) return;
+        Debug.Log("몬스터 피격중");
         UnitRuntime.TakeDamage(damage);
 
     }

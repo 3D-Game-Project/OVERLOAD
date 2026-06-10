@@ -7,9 +7,10 @@ public class EnemyData : UnitData
     [SerializeField] private GameObject _enemyPrefab;
     [SerializeField] private EnemyType _enemyType;
     [SerializeField] private List<PartsData> _dropParts;
-    //[SerializeField] private List<DropItem> _dropItems;
+    [SerializeField] private List<DropItem> _dropItems;
 
     public List<PartsData> DropParts => _dropParts;
+    public List<DropItem > DropItems => _dropItems;
 
     [Header("Movement")]
     public float PatrolSpeed = 4f;

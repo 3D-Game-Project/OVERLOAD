@@ -12,7 +12,6 @@ public class DropRuntime
     // 최종 _dropList에 드랍될 파츠가 존재한다면 해당 파츠들을 Instantiate하여 드랍하는 함수 호출
     public void DropParts(EnemyData _enemyData, Vector3 spawnPosition)
     {
-        Debug.Log($"사망 후 드랍 파츠 확률 함수 실행");
         if (_enemyData == null || _enemyData.DropParts == null)
         {
             Debug.LogError("EnemyData에 DropParts가 존재하지않음.");
@@ -20,27 +19,55 @@ public class DropRuntime
         }
 
         List<PartsData> _dropList = new List<PartsData>();
-        _maxDropCount = Random.Range(1, 3); 
+        _maxDropCount = Random.Range(1, 3);
 
         for (int i = 0; i < _enemyData.DropParts.Count; i++)
         {
             if (_dropList.Count == _maxDropCount) break;
 
             _dropList.Add(_enemyData.DropParts[i]);
-
-            //int randomIndex = Random.Range(1, 11);
-
-            //if (randomIndex >= 9)
-            //{
-            //    _dropList.Add(_enemyData.DropParts[i]);
-            //}
         }
 
-        if(_dropList.Count > 0)
+        if (_dropList.Count > 0)
         {
-            CreateDropParts(_dropList, spawnPosition);
+            CreateDropParts(_dropList, spawnPosition + new Vector3(0f, -3f, 0f));
+        }
+
+
+        if (_enemyData.DropItems != null && _enemyData.DropItems.Count > 0)
+        {
+            foreach (DropItem dropData in _enemyData.DropItems)
+            {
+                if (dropData == null || dropData.ItemPrefab == null) continue;
+
+                float currencyRoll = Random.Range(0f, 100f);
+                if (currencyRoll <= dropData.DropChance)
+                {
+                    SpawnCurrencyObject(dropData, spawnPosition + new Vector3(0f, -3f, 0f));
+                }
+            }
         }
     }
+
+    // 필드에 생성시킬 재화와 생성위치를 받아 프리팹 생성하는 함수
+    private void SpawnCurrencyObject(DropItem dropData, Vector3 centerPosition)
+    {
+        GameObject currencyObj = Object.Instantiate(dropData.ItemPrefab);
+
+        Currency dropCurrency = currencyObj.AddComponent<Currency>();
+        dropCurrency.Initialize(dropData); 
+
+        BoxCollider collider = currencyObj.GetComponent<BoxCollider>();
+        if (collider == null) collider = currencyObj.AddComponent<BoxCollider>();
+        collider.isTrigger = true;
+        collider.size = new Vector3(1.5f, 1.5f, 1.5f);
+
+        Vector3 randomOffset = Random.insideUnitSphere * 2f;
+        randomOffset.y = 0f;
+        currencyObj.transform.position = centerPosition + randomOffset + new Vector3(0, 0.3f, 0);
+
+    }
+
 
     // 필드에 생성시킬 파츠와 생성위치를 받아 프리팹을 생성하는 함수
     // 위치의 경우 몬스터의 위치를 기준으로 1만큼 랜덤한 위치에 생성되도록 처리
@@ -64,7 +91,7 @@ public class DropRuntime
 
             Vector3 randomOffset = Random.insideUnitSphere * 3f;
             randomOffset.y = 0f;
-            dropPart.transform.position = spawnPosition + randomOffset + new Vector3(0, 0.4f, 0);
+            dropPart.transform.position = spawnPosition + randomOffset + new Vector3(0, 0.6f, 0);
         }
     }
 

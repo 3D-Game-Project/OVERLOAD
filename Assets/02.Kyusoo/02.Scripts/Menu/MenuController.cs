@@ -5,6 +5,7 @@ using UnityEngine.UI;
 public class MenuController : MonoBehaviour
 {
     private PlayerInputHandler _inputHandler;
+    private Shop shop;
 
     [Header("최상위 이미지, 패널")]
     [SerializeField] private GameObject backgroundImage;
@@ -43,6 +44,7 @@ public class MenuController : MonoBehaviour
 
         if (previousBtn != null) previousBtn.onClick.AddListener(NavigateToPreviousTab);
         if (nextBtn != null) nextBtn.onClick.AddListener(NavigateToNextTab);
+        if (shop == null) shop = FindFirstObjectByType<Shop>();
     }
 
     private void Start()
@@ -87,7 +89,11 @@ public class MenuController : MonoBehaviour
 
             if (!_isMenuOpen)
             {
-                if (IsShop) OpenMenu(1);
+                if (IsShop)
+                {
+                    shop.AddShopList();
+                    OpenMenu(1);
+                }
             }
             else if (_currentTabIndex == 1)
             {

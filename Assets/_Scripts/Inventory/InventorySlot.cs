@@ -8,6 +8,7 @@ public class InventorySlot : MonoBehaviour
     public Button slotButton;
 
     private PartsData currentPart;
+    private ItemData currentItem;
     private PlayerInventory inventory;
 
 
@@ -24,27 +25,86 @@ public class InventorySlot : MonoBehaviour
     public void UpdateSlot(PartsData part)
     {
         currentPart = part;
+        currentItem = null;
 
         if (part != null)
         {
             itemIcon.gameObject.SetActive(true);
-
-            itemIcon.color = Color.black ;
+            itemIcon.sprite = part.PartsImage;
+            itemIcon.color = Color.white ;
         }
         else
         {
-            Debug.Log("UpdateSlot 호출됨 - 아이템 없음");
-            itemIcon.gameObject.SetActive(true);
+            SetEmptyVisual();
 
+        }
+    }
+
+    public void UpdateSlot(ItemData item)
+    {
+        currentItem = item;
+        currentPart = null;
+
+        if (item != null)
+        {
+            itemIcon.gameObject.SetActive(true);
+            itemIcon.sprite = item.ItemImage;
+            itemIcon.color = Color.white;
+        }
+        else
+        {
+            SetEmptyVisual();
+
+        }
+    }
+
+    private void SetEmptyVisual()
+    {
+        if (itemIcon != null)
+        {
             itemIcon.sprite = null;
-            itemIcon.color = new Color(166f / 255f, 166f / 255f, 166f / 255f, 1f);
-            
+
+            itemIcon.gameObject.SetActive(false);
         }
     }
 
     public void OnSlotClicked()
     {
-        if (inventory == null || currentPart == null) return;
+        if (inventory == null) return;
 
+        MenuController menu = FindFirstObjectByType<MenuController>();
+        Shop shop = FindFirstObjectByType<Shop>();
+
+        if (menu != null && menu.IsShop && shop != null)
+        {
+            if (currentPart != null)
+            {
+                SellPopup sellPopup = FindFirstObjectByType<SellPopup>(FindObjectsInactive.Include);
+
+                if (sellPopup != null)
+                {
+                    sellPopup.OpenPopup(currentPart, shop, inventory);
+                }
+                else
+                {
+                    shop.SellPart(currentPart, inventory);
+                }
+            }
+            else if (currentItem != null)
+            {
+                return;
+            }
+        }
+        else
+        {
+            if (currentPart != null)
+            {
+                //inventory.EquipParts(currentPart);
+            }
+            else if (currentItem != null)
+            {
+                // 추후 아이템 사용 함수
+            }
+        }
     }
 }
