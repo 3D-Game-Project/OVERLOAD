@@ -81,6 +81,7 @@ public class PlayerInventory : MonoBehaviour
             PartsList.Remove(item);
 
             OnInventoryChanged?.Invoke();
+
             return true;
         }
 

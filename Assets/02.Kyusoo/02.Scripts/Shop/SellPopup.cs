@@ -19,7 +19,6 @@ public class SellPopup : MonoBehaviour
         if (_yesButton != null) _yesButton.onClick.AddListener(ExecuteSell);
         if (_noButton != null) _noButton.onClick.AddListener(ClosePopup);
 
-        gameObject.SetActive(false);
     }
 
     // 판매 팝업창 열기

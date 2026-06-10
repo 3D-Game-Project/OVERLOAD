@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.UI;
 
 public class InventorySlot : MonoBehaviour
@@ -21,7 +21,7 @@ public class InventorySlot : MonoBehaviour
             slotButton.onClick.AddListener(OnSlotClicked);
     }
 
-    //PartsData Á¤º¸¿¡ ¸ÂÃç ½½·Ô ºñÁÖ¾ó ¾÷µ¥ÀÌÆ®
+    //PartsData ì •ë³´ì— ë§ì¶° ìŠ¬ë¡¯ ë¹„ì£¼ì–¼ ì—…ë°ì´íŠ¸
     public void UpdateSlot(PartsData part)
     {
         currentPart = part;
@@ -36,6 +36,7 @@ public class InventorySlot : MonoBehaviour
         else
         {
             SetEmptyVisual();
+            Debug.Log("íŒë§¤ì²˜ë¦¬");
 
         }
     }
@@ -75,18 +76,29 @@ public class InventorySlot : MonoBehaviour
         MenuController menu = FindFirstObjectByType<MenuController>();
         Shop shop = FindFirstObjectByType<Shop>();
 
-        if (menu != null && menu.IsShop && shop != null)
+        if (menu == null) return;
+
+        bool isCurrentShopTab = (menu.CurrentTabIndex == 1);
+        bool isCurrentInventoryTab = (menu.CurrentTabIndex == 2);
+
+        Debug.Log($"[OnSlotClicked] í´ë¦­ ì§‘í–‰ â” í˜„ì¬ UI í™œì„± íƒ­ ì¸ë±ìŠ¤: {menu.CurrentTabIndex} (ShopíŒ¨ë„ì—¬ë¶€: {isCurrentShopTab} / InvíŒ¨ë„ì—¬ë¶€: {isCurrentInventoryTab})");
+
+        if (isCurrentShopTab && shop != null)
         {
             if (currentPart != null)
             {
-                SellPopup sellPopup = FindFirstObjectByType<SellPopup>(FindObjectsInactive.Include);
+                SellPopup[] sellPopups = FindObjectsByType<SellPopup>(FindObjectsInactive.Include, FindObjectsSortMode.None);
 
-                if (sellPopup != null)
+                if (sellPopups.Length > 0)
                 {
-                    sellPopup.OpenPopup(currentPart, shop, inventory);
+                    foreach (var popup in sellPopups)
+                    {
+                        popup.OpenPopup(currentPart, shop, inventory);
+                    }
                 }
                 else
                 {
+                    // ë°±ì—…ìš© ì¦‰ì‹œ íŒë§¤
                     shop.SellPart(currentPart, inventory);
                 }
             }
@@ -95,15 +107,20 @@ public class InventorySlot : MonoBehaviour
                 return;
             }
         }
-        else
+        else if (isCurrentInventoryTab)
         {
             if (currentPart != null)
             {
-                //inventory.EquipParts(currentPart);
+                PartDetailPopup[] detailPopups = FindObjectsByType<PartDetailPopup>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+
+                foreach (var popup in detailPopups)
+                {
+                    popup.OpenPopup(currentPart, inventory);
+                }
             }
             else if (currentItem != null)
             {
-                // ÃßÈÄ ¾ÆÀÌÅÛ »ç¿ë ÇÔ¼ö
+                // ì¶”í›„ ì•„ì´í…œ ì‚¬ìš© í•¨ìˆ˜ êµ¬ì—­
             }
         }
     }

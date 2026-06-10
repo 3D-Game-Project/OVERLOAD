@@ -89,7 +89,7 @@ public class PlayerInventoryUI : MonoBehaviour
     }
 
     // 파츠 드랍 및 장착에 따른 인벤토리 슬롯 변경
-    private void RefreshUI()
+    public void RefreshUI()
     {
         if (_inventory == null) return;
 

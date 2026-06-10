@@ -37,6 +37,9 @@ public class MenuController : MonoBehaviour
 
     public bool IsShop { get; set; } = false;
 
+    public int CurrentTabIndex => _currentTabIndex;
+    public bool IsMenuOpen => _isMenuOpen;
+
     // 버튼 연결 및 패널에 순서 매핑
     private void Awake()
     {
@@ -137,6 +140,18 @@ public class MenuController : MonoBehaviour
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
+        SellPopup[] sellPopups = FindObjectsByType<SellPopup>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        foreach (var popup in sellPopups)
+        {
+            popup.gameObject.SetActive(false);
+        }
+
+        PartDetailPopup[] detailPopups = FindObjectsByType<PartDetailPopup>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        foreach (var popup in detailPopups)
+        {
+            popup.gameObject.SetActive(false);
+        }
 
         if (MechPreviewStudio.Instance != null)
         {
