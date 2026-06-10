@@ -1,3 +1,4 @@
+ï»¿using System;
 using UnityEngine;
 
 public class MechPreviewStudio : MonoBehaviour
@@ -7,12 +8,14 @@ public class MechPreviewStudio : MonoBehaviour
     [SerializeField] private Transform _spawnPoint; 
 
     private GameObject _previewInstance;
+    private PartEquipActionController _liveActionController;
 
     private void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
+            Debug.Log(Instance);
         }
         else
         {
@@ -20,9 +23,55 @@ public class MechPreviewStudio : MonoBehaviour
         }
     }
 
-    // Á¤¸é ºä ¸ğµ¨ ¼¼ÆÃ¿¡ ÇÊ¿äÇÑ ÀÛ¾÷Ã³¸®
-    // 1. ¹ßÆÇ À§Ä¡(_spawnPoint)¿¡ ÇÃ·¹ÀÌ¾î ·Îº¿À» º¹»çº»À¸·Î »ı¼º
-    // 2. º¹»çº» ·Îº¿ÀÌ PlayerInputHandler¿¡ ÀÇÇØ ¿òÁ÷ÀÌ°Å³ª °ø°İÃ³¸®ÇÏ´Â°É Â÷´Ü
+    private void Start()
+    {
+        GameObject playerRootObj = GameObject.Find("PlayerRoot");
+        if (playerRootObj != null)
+        {
+            _liveActionController = playerRootObj.GetComponent<PartEquipActionController>();
+            if (_liveActionController == null) _liveActionController = playerRootObj.GetComponentInChildren<PartEquipActionController>(true);
+
+            if (_liveActionController != null)
+            {
+                // ì§„ì§œ í”Œë ˆì´ì–´ì˜ ì¥ì°© íƒ€ì´ë¨¸ ì½”ë£¨í‹´ì´ "ì„±ê³µì ìœ¼ë¡œ ì¢…ë£Œ" ë˜ì—ˆì„ ë•Œë§Œ ìˆ˜ì‹ í•˜ë„ë¡ ì•ˆì „ ë°”ì¸ë”©!
+                _liveActionController.OnActionFinished -= HandleLiveEquipFinished;
+                _liveActionController.OnActionFinished += HandleLiveEquipFinished;
+            }
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (_liveActionController != null)
+        {
+            _liveActionController.OnActionFinished -= HandleLiveEquipFinished;
+        }
+    }
+
+    // íŒŒì¸  ì¡°ë¦½ ì½”ë£¨í‹´ì´ ëë‚˜ ì„±ê³µ(true)ì„ ë°˜í™˜í•  ë•Œë§Œ ìƒˆë¡œê³ ì¹¨ì„ ìˆ˜í–‰.
+    private void HandleLiveEquipFinished(bool success)
+    {
+        if (success)
+        {
+            RefreshPreview();
+        }
+    }
+
+    public void RefreshPreview()
+    {
+        Debug.Log("RefreshPreview");
+        GameObject playerRootObj = GameObject.Find("PlayerRoot");
+        Debug.Log(playerRootObj + "ë°œê²¬");
+        if (playerRootObj != null)
+        {
+            SetupPreviewModel(playerRootObj); 
+        }
+    }
+
+    // ì •ë©´ ë·° ëª¨ë¸ ì„¸íŒ…ì— í•„ìš”í•œ ì‘ì—…ì²˜ë¦¬
+    // 1. ë°œíŒ ìœ„ì¹˜(_spawnPoint)ì— í”Œë ˆì´ì–´ ë¡œë´‡ì„ ë³µì‚¬ë³¸ìœ¼ë¡œ ìƒì„±
+    // 2. ë³µì‚¬ë³¸ ë¡œë´‡ì´ PlayerInputHandlerì— ì˜í•´ ì›€ì§ì´ê±°ë‚˜ ê³µê²©ì²˜ë¦¬í•˜ëŠ”ê±¸ ì°¨ë‹¨
+    // dummyCore.enabled = falseë¥¼ í†µí•´ CorePartsì˜ Start()ê°€ ë™ì‘ë˜ì§€ ëª»í•˜ë„ë¡ ì œì–´
     public void SetupPreviewModel(GameObject playerPrefab)
     {
         CleanUpPreview();
@@ -31,6 +80,36 @@ public class MechPreviewStudio : MonoBehaviour
 
         _previewInstance = Instantiate(playerPrefab, _spawnPoint.position, _spawnPoint.rotation * Quaternion.Euler(0f, 180f, 0f), transform);
 
+        if (_previewInstance.TryGetComponent(out CorePartsController corePartsComp))
+        {
+            corePartsComp.ResetYawRootsForPreview();
+            corePartsComp.enabled = false;
+        }
+
+        MonoBehaviour[] allComponents = _previewInstance.GetComponentsInChildren<MonoBehaviour>(true);
+
+        foreach (var component in allComponents)
+        {
+            if (component == null) continue;
+
+            if (component.GetType().Name == "WeaponGimbalController")
+            {
+                component.enabled = false;
+
+                component.transform.localRotation = Quaternion.identity;
+
+                Debug.Log($"ğŸ”¥ [GimbolFix] {component.gameObject.name}ì— ë¶€ì°©ëœ WeaponGimbolController ë§ˆë¹„ ë° ë¬´ê¸° íšŒì „ê°’ (0,0,0) ê°•ì œ ë°•ì œ ì™„ë£Œ!");
+            }
+        }
+
+        Animator[] animators = _previewInstance.GetComponentsInChildren<Animator>(true);
+        foreach (var anim in animators)
+        {
+            if (anim != null) anim.enabled = false;
+        }
+
+        if (_previewInstance.TryGetComponent(out CorePartsController dummyCore)) dummyCore.enabled = false;
+        if (_previewInstance.TryGetComponent(out PartEquipActionController dummyAction)) dummyAction.enabled = false;
 
         if (_previewInstance.TryGetComponent(out Rigidbody rb))
         {
@@ -53,8 +132,8 @@ public class MechPreviewStudio : MonoBehaviour
 
     }
 
-    // ¹æ¾îÄÚµå
-    // ÀÌÀü¿¡ »ı¼ºÇÏ¿´´ø ¸ğµ¨ÀÌ Á¸ÀçÇÑ´Ù¸é Á¦°Å Ã³¸®
+    // ë°©ì–´ì½”ë“œ
+    // ì´ì „ì— ìƒì„±í•˜ì˜€ë˜ ëª¨ë¸ì´ ì¡´ì¬í•œë‹¤ë©´ ì œê±° ì²˜ë¦¬
     public void CleanUpPreview()
     {
         if (_previewInstance != null)

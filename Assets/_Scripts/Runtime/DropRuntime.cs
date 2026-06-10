@@ -85,7 +85,7 @@ public class DropRuntime
             {
                 collider.isTrigger = true;
                 collider.center = new Vector3(-0.3f, 0, 0.6f);
-                collider.size = new Vector3(1f, 1f, 3f);
+                collider.size = new Vector3(2f, 2f, 6f);
             }
             dropPart.transform.localScale = Vector3.one * 0.5f;
 
