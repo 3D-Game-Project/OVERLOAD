@@ -34,13 +34,16 @@ public class PartDetailPopup : MonoBehaviour
             int slotIndex = i; 
             _attachSlotButtons[i].onClick.AddListener(() => OnAttachSlotClicked(slotIndex));
         }
-
-        gameObject.SetActive(false);
     }
 
     public void OpenPopup(PartsData part, PlayerInventory inventory)
     {
         if (part == null || inventory == null) return;
+
+        if (UnityEngine.EventSystems.EventSystem.current != null)
+        {
+            UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(null);
+        }
 
         _selectedPart = part;
         _inventory = inventory;

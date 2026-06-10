@@ -15,7 +15,7 @@ MonoBehaviour:
   _partsName: sniper_4
   _partsPrefab: {fileID: 100000, guid: 3538d90459ea1874eb51016e012ee011, type: 3}
   _requiredLoad: 0
-  _partsImage: {fileID: -1235295402, guid: bb40e6e721af06c43a1432b43558f9ea, type: 3}
+  _partsImage: {fileID: 1843457960, guid: 90c7d3cbce0c87342ad4e169693f8974, type: 3}
   _maxDurability: 0
   _price: 50
   _description: 'Level 4 Sniper, Dmg: 60 / Range : 15'

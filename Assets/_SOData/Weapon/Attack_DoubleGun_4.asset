@@ -15,7 +15,7 @@ MonoBehaviour:
   _partsName: double_gun_4
   _partsPrefab: {fileID: 100014, guid: 25cc7b515a2ef4b45a97e4ed635f6821, type: 3}
   _requiredLoad: 0
-  _partsImage: {fileID: 1694531002, guid: bb40e6e721af06c43a1432b43558f9ea, type: 3}
+  _partsImage: {fileID: -1564296211, guid: 90c7d3cbce0c87342ad4e169693f8974, type: 3}
   _maxDurability: 0
   _price: 50
   _description: 'Level 4 Double Gun. Dmg: 20 / Range : 10'

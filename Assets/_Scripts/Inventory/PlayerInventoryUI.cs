@@ -12,20 +12,22 @@ public class PlayerInventoryUI : MonoBehaviour
     private List<InventorySlot> _partsUISlots = new List<InventorySlot>();
     private List<InventorySlot> _consumablesUISlots = new List<InventorySlot>();
 
+    [Header("최초 1회만 찾도록 정보 가져오기")]
+    private MenuController _cachedMenu;
+    private Shop _cachedShop;
+    private SellPopup _cachedSellPopup;
+    private PartDetailPopup _cachedDetailPopup;
+
     private void Awake()
     {
         _inventory = FindFirstObjectByType<PlayerInventory>();
-    }
 
-    // 시작시 인벤토리 데이터와 UI 슬롯을 연결하여 초기화
-    private void Start()
-    {
-        if (_inventory != null)
-        {
-            GenerateSlots();
-            RefreshUI();
-        }
+        _cachedMenu = FindFirstObjectByType<MenuController>(FindObjectsInactive.Include);
+        _cachedShop = FindFirstObjectByType<Shop>(FindObjectsInactive.Include);
+        _cachedSellPopup = FindFirstObjectByType<SellPopup>(FindObjectsInactive.Include);
+        _cachedDetailPopup = FindFirstObjectByType<PartDetailPopup>(FindObjectsInactive.Include);
     }
+    
 
     private void OnEnable()
     {
@@ -34,6 +36,7 @@ public class PlayerInventoryUI : MonoBehaviour
 
         if (_inventory != null)
         {
+            _inventory.OnInventoryChanged -= RefreshUI;
             _inventory.OnInventoryChanged += RefreshUI;
 
             if (_partsUISlots.Count == 0 || _consumablesUISlots.Count == 0)
@@ -96,6 +99,8 @@ public class PlayerInventoryUI : MonoBehaviour
         for (int i = 0; i < _partsUISlots.Count; i++)
         {
             if (_partsUISlots[i] == null) continue;
+
+            _partsUISlots[i].SetMasterReferences(_cachedMenu, _cachedShop, _cachedSellPopup, _cachedDetailPopup);
 
             if (i < _inventory.PartsList.Count)
                 _partsUISlots[i].UpdateSlot(_inventory.PartsList[i]);

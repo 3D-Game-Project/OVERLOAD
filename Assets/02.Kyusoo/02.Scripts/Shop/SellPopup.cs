@@ -26,6 +26,11 @@ public class SellPopup : MonoBehaviour
     {
         if (part == null || shop == null || inventory == null) return;
 
+        if (UnityEngine.EventSystems.EventSystem.current != null)
+        {
+            UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(null);
+        }
+
         _tempPart = part;
         _shop = shop;
         _inventory = inventory;
