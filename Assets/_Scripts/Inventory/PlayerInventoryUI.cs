@@ -112,6 +112,8 @@ public class PlayerInventoryUI : MonoBehaviour
         {
             if (_consumablesUISlots[i] == null) continue;
 
+            _consumablesUISlots[i].SetMasterReferences(_cachedMenu, _cachedShop, _cachedSellPopup, _cachedDetailPopup);
+
             if (i < _inventory.ConsumablesList.Count)
                 _consumablesUISlots[i].UpdateSlot(_inventory.ConsumablesList[i]);
             else
