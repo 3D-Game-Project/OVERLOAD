@@ -170,7 +170,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c22e0d0f6a4343744b6bdf28060ea8f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FireManager
-  _attackPartsData: {fileID: 11400000, guid: 8913ad12cf143314dadfa7749cb504c3, type: 2}
+  _attackPartsData: {fileID: 11400000, guid: 65c4772dc115e1c4a8219dc2f5c6212b, type: 2}
   _muzzlePoint: {fileID: 400002}
   _targetLayer:
     serializedVersion: 2

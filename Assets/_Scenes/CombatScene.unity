@@ -3994,6 +3994,7 @@ GameObject:
   - component: {fileID: 7359947506864632910}
   - component: {fileID: 7359947506864632909}
   - component: {fileID: 7359947506864632908}
+  - component: {fileID: 7359947506864632913}
   m_Layer: 7
   m_Name: Enemy
   m_TagString: Enemy
@@ -4803,6 +4804,35 @@ MonoBehaviour:
   _gravity: -20
   _groundedForce: -2
   _maxFallSpeed: -25
+--- !u!114 &7359947506864632913
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5147286599947455069}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f8404f12fa067b4493ea4a2ae724800, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerBodyShapeController
+  _characterController: {fileID: 6015972765359053115}
+  _visualRoot: {fileID: 3928263859599887469}
+  _heightPadding: 0.05
+  _minHeight: 0.5
+  _autoRadius: 0
+  _fixedRadius: 0.45
+  _radiusPadding: 0.05
+  _minRadius: 0.2
+  _maxRadius: 1
+  _useVisualCenterXZ: 0
+  _snapToGroundAfterApply: 1
+  _groundLayer:
+    serializedVersion: 2
+    m_Bits: 2147483648
+  _groundOffset: 0.03
+  _snapRayStartHeight: 3
+  _snapRayDistance: 10
 --- !u!4 &7604792770664102640
 Transform:
   m_ObjectHideFlags: 0
