@@ -5,6 +5,7 @@ public class AttachmentSlot : MonoBehaviour
     [Header("Slot Info")]
     [SerializeField] private string _slotId;
     [SerializeField] private PartsType[] _allowedPartsTypes;
+    [SerializeField] private bool _mirrorVisualX;
 
     [Header("Attach Point")]
     [SerializeField] private Transform _attachPoint;
@@ -13,6 +14,8 @@ public class AttachmentSlot : MonoBehaviour
 
     public string SlotId => _slotId;
     public Transform AttachPoint => _attachPoint != null ? _attachPoint : transform;
+    public bool MirrorVisualX => _mirrorVisualX;
+
     public GameObject AttachedObject => _attachedObject;
     public bool HasPart => _attachPoint != null;
 

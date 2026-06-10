@@ -301,6 +301,7 @@ GameObject:
   - component: {fileID: 284485945945486163}
   - component: {fileID: -2434774299569026823}
   - component: {fileID: 8505980967469422954}
+  - component: {fileID: 3112421724580358316}
   m_Layer: 0
   m_Name: Weapon_DoubleGun_lvl1
   m_TagString: Untagged
@@ -408,3 +409,15 @@ MonoBehaviour:
   maxHorizontalAngle: 45
   maxVerticalAngle: 60
   rotationSpeed: 360
+--- !u!114 &3112421724580358316
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100014}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d62b6242fff73a0448b948f8688e1084, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PartVisualMirror
