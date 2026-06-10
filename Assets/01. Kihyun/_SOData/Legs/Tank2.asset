@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e29c905744c8acb4b8991a8175c732aa, type: 3}
+  m_Name: Tank2
+  m_EditorClassIdentifier: Assembly-CSharp::LegPartsData
+  _partsName: Tank2
+  _partsPrefab: {fileID: 100010, guid: 726a588522dc7384cb4ac3be6c762089, type: 3}
+  _requiredLoad: 0
+  _partsImage: {fileID: 0}
+  _maxDurability: 0
+  _price: 0
+  _description: 
+  _legTypeProfile: {fileID: 11400000, guid: 2dacd288b3403e4489fcb8270ef6d424, type: 2}
+  _moveSpeed: 5
+  _acceleration: 8
+  _decceleration: 20
+  _dashEnergyCost: 0

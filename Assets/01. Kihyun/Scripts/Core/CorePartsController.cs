@@ -36,6 +36,9 @@ public class CorePartsController : MonoBehaviour
     [Header("Input Settings")]
     [SerializeField] private float _inputDeadZone = 0.05f;
 
+    [Header("Control Option")]
+    [SerializeField] private bool _processPlayerInput = true;
+
     private CorePartContext _context;
 
     private readonly List<IPart> _allParts = new();
@@ -106,6 +109,9 @@ public class CorePartsController : MonoBehaviour
 
     private void Update()
     {
+        if (!_processPlayerInput)
+            return;
+
         HandleMovementParts();
         HandleAttackParts();
     }

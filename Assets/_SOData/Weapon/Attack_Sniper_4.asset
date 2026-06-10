@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Attack_Sniper_4
   m_EditorClassIdentifier: Assembly-CSharp::AttackPartsData
   _partsName: sniper_4
-  _partsPrefab: {fileID: 100000, guid: 3538d90459ea1874eb51016e012ee011, type: 3}
+  _partsPrefab: {fileID: 100000, guid: 140643c1c68fe554e93881edf238dd9a, type: 3}
   _requiredLoad: 0
   _partsImage: {fileID: 1843457960, guid: 90c7d3cbce0c87342ad4e169693f8974, type: 3}
   _maxDurability: 0
