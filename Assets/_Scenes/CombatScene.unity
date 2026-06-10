@@ -1189,7 +1189,7 @@ PrefabInstance:
     - target: {fileID: 4240419180315657097, guid: d138aeecb045e2e42bc04af60544559d, type: 3}
       propertyPath: playerPrefab
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1165283821}
     - target: {fileID: 4240419180315657097, guid: d138aeecb045e2e42bc04af60544559d, type: 3}
       propertyPath: 'tabNames.Array.data[0]'
       value: Character
@@ -1659,6 +1659,18 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 554437559433896092, guid: 6aecca791f52390498f41939fde7cb77, type: 3}
+      propertyPath: _initialParts.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 554437559433896092, guid: 6aecca791f52390498f41939fde7cb77, type: 3}
+      propertyPath: _initialParts.Array.data[2].slot
+      value: 
+      objectReference: {fileID: 1483177360}
+    - target: {fileID: 554437559433896092, guid: 6aecca791f52390498f41939fde7cb77, type: 3}
+      propertyPath: _initialParts.Array.data[2].partsData
+      value: 
+      objectReference: {fileID: 11400000, guid: 734de3431963e4f46a95aab3db18a455, type: 2}
     - target: {fileID: 3182175586330983424, guid: 6aecca791f52390498f41939fde7cb77, type: 3}
       propertyPath: m_Layer
       value: 6
@@ -1726,7 +1738,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8560611295260395016, guid: 6aecca791f52390498f41939fde7cb77, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1793439831}
   m_SourcePrefab: {fileID: 100100000, guid: 6aecca791f52390498f41939fde7cb77, type: 3}
 --- !u!1 &1165283821 stripped
 GameObject:
@@ -2228,6 +2243,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1454097723}
   m_CullTransparentMesh: 1
+--- !u!114 &1483177360 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5969690502286986177, guid: 6aecca791f52390498f41939fde7cb77, type: 3}
+  m_PrefabInstance: {fileID: 1165283820}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0101ac9f847ef564bbb2d901cd21d304, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AttachmentSlot
 --- !u!1 &1544899941
 GameObject:
   m_ObjectHideFlags: 0
@@ -2422,6 +2448,40 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8150573258261205674, guid: 6aecca791f52390498f41939fde7cb77, type: 3}
   m_PrefabInstance: {fileID: 1165283820}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1793439822 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 554437559433896092, guid: 6aecca791f52390498f41939fde7cb77, type: 3}
+  m_PrefabInstance: {fileID: 1165283820}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1165283821}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: edf0e52eab86e3f44a4ad935430bfd2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CorePartsController
+--- !u!114 &1793439831
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1165283821}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80f7a885543e3ef448d6181f3d374372, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PartEquipActionController
+  _corePartsController: {fileID: 1793439822}
+  _attachTime: 2
+  _detachTime: 1.5
+  _replaceExtraTime: 0.5
+  _useUnscaledTime: 0
+  _enableTestInput: 1
+  _testPartsData: {fileID: 11400000, guid: 65c4772dc115e1c4a8219dc2f5c6212b, type: 2}
+  _testSlotId: LeftHardPoint
+  _replaceKey: 49
+  _detachKey: 50
+  _attachKey: 51
 --- !u!1 &1974520819
 GameObject:
   m_ObjectHideFlags: 0

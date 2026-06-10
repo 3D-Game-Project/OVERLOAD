@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1b1fcedf4d30334f861d12febf4455f, type: 3}
+  m_Name: Attack_Shotgun_1
+  m_EditorClassIdentifier: Assembly-CSharp::AttackPartsData
+  _partsName: shotgun_1
+  _partsPrefab: {fileID: 100004, guid: 1da8cf5ce147c1d40857ba26e4637a1e, type: 3}
+  _requiredLoad: 0
+  _partsImage: {fileID: 0}
+  _maxDurability: 0
+  _fireType: 0
+  _damage: 15
+  _range: 5
+  _fireCooldown: 1
+  _maxMagazineSize: 0
+  _bulletPrefab: {fileID: 100000, guid: 7e2d264e03fb2fb4fb2b1e559515830a, type: 3}
+  _firePowerCost: 0
