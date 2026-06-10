@@ -13,12 +13,16 @@ MonoBehaviour:
   m_Name: Attack_DoubleGun_5
   m_EditorClassIdentifier: Assembly-CSharp::AttackPartsData
   _partsName: double_gun_5
-  _partsPrefab: {fileID: 100014, guid: 2e4a28d7408c2514eb630a271fe9dba1, type: 3}
-  _requirePower: 50
-  _partsType: 0
+  _partsPrefab: {fileID: 100014, guid: d124076fbbd1dc44aafb4cc4d7009ebe, type: 3}
+  _requiredLoad: 0
+  _partsImage: {fileID: 0}
+  _maxDurability: 0
+  _price: 0
+  _description: 
   _fireType: 0
   _damage: 25
   _range: 10
   _fireCooldown: 0.5
   _maxMagazineSize: 10
   _bulletPrefab: {fileID: 100000, guid: 7e2d264e03fb2fb4fb2b1e559515830a, type: 3}
+  _firePowerCost: 0

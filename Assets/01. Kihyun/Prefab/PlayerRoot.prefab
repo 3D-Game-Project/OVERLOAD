@@ -110,6 +110,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AttachmentSlot
   _slotId: LeftHardPoint
   _allowedPartsTypes: 000000000300000004000000
+  _mirrorVisualX: 0
   _attachPoint: {fileID: 0}
 --- !u!1 &2566321123205295473
 GameObject:
@@ -157,6 +158,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AttachmentSlot
   _slotId: Backpack
   _allowedPartsTypes: 02000000040000000000000003000000
+  _mirrorVisualX: 0
   _attachPoint: {fileID: 0}
 --- !u!1 &3182175586330983424
 GameObject:
@@ -268,6 +270,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AttachmentSlot
   _slotId: RightHardPoint
   _allowedPartsTypes: 000000000300000004000000
+  _mirrorVisualX: 0
   _attachPoint: {fileID: 0}
 --- !u!1 &7820543539088342527
 GameObject:
@@ -405,6 +408,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AttachmentSlot
   _slotId: TopHardPoint
   _allowedPartsTypes: 000000000300000004000000
+  _mirrorVisualX: 0
   _attachPoint: {fileID: 0}
 --- !u!1 &8199366753889574709
 GameObject:
@@ -452,6 +456,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AttachmentSlot
   _slotId: LegModule
   _allowedPartsTypes: 01000000
+  _mirrorVisualX: 0
   _attachPoint: {fileID: 0}
 --- !u!1 &8444806058669881678
 GameObject:
@@ -515,6 +520,7 @@ GameObject:
   - component: {fileID: -792087593370038472}
   - component: {fileID: 1477607579669403041}
   - component: {fileID: 5798723119147244317}
+  - component: {fileID: 1033345605488257751}
   m_Layer: 6
   m_Name: PlayerRoot
   m_TagString: Player
@@ -531,7 +537,7 @@ Transform:
   m_GameObject: {fileID: 8560611295260395016}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.712811, y: -0.00000018508547, z: 0.905222}
+  m_LocalPosition: {x: 0, y: 1.75, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -702,6 +708,7 @@ MonoBehaviour:
     slot: {fileID: 7678468017460743679}
   - partsData: {fileID: 11400000, guid: 69f87b8627a102c4d81027017bf203f6, type: 2}
     slot: {fileID: 5054499571026004626}
+  _attachmentSlots: []
   _coreLoadController: {fileID: 6882837048745345502}
   _coreEnergyController: {fileID: 8292241741423163496}
   _inputHandler: {fileID: 3411894980335098731}
@@ -788,7 +795,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInventory
   InventorySize: 25
+  ConsumableSize: 5
   PartsList: []
+  ConsumablesList: []
 --- !u!114 &-792087593370038472
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -821,7 +830,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e5d051d7ca4d1041a2efb105c52c090, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerDefaultAttack
-  _damage: 5
+  _damage: 100
   _range: 8
   _cooldown: 0.5
   _magazineSize: 5
@@ -829,7 +838,7 @@ MonoBehaviour:
   _muzzlePoint: {fileID: 4324938924187655902}
   _targetLayer:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 128
   _bulletPrefab: {fileID: 100000, guid: 20e1981553f6e8f458ca183d29ea7bcc, type: 3}
 --- !u!114 &5798723119147244317
 MonoBehaviour:
@@ -848,3 +857,26 @@ MonoBehaviour:
   targetAndObstacleLayer:
     serializedVersion: 2
     m_Bits: 128
+--- !u!114 &1033345605488257751
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8560611295260395016}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80f7a885543e3ef448d6181f3d374372, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PartEquipActionController
+  _corePartsController: {fileID: 554437559433896092}
+  _attachTime: 2
+  _detachTime: 1.5
+  _replaceExtraTime: 0.5
+  _useUnscaledTime: 0
+  _enableTestInput: 1
+  _testPartsData: {fileID: 0}
+  _testSlotId: 
+  _replaceKey: 49
+  _detachKey: 50
+  _attachKey: 51

@@ -13,12 +13,16 @@ MonoBehaviour:
   m_Name: Attack_Launcher_1
   m_EditorClassIdentifier: Assembly-CSharp::AttackPartsData
   _partsName: launcher_!
-  _partsPrefab: {fileID: 100000, guid: e995d756b9163ac45bc8cdcb7a13be6e, type: 3}
-  _requirePower: 20
-  _partsType: 0
+  _partsPrefab: {fileID: 100000, guid: 5296a080ee8263344a45680c85dca50e, type: 3}
+  _requiredLoad: 0
+  _partsImage: {fileID: 0}
+  _maxDurability: 0
+  _price: 0
+  _description: 
   _fireType: 0
   _damage: 15
   _range: 10
   _fireCooldown: 2
   _maxMagazineSize: 3
   _bulletPrefab: {fileID: 100000, guid: 7e2d264e03fb2fb4fb2b1e559515830a, type: 3}
+  _firePowerCost: 0

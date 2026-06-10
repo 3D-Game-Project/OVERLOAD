@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Attack_DoubleGun_4
   m_EditorClassIdentifier: Assembly-CSharp::AttackPartsData
   _partsName: double_gun_4
-  _partsPrefab: {fileID: 100014, guid: 25cc7b515a2ef4b45a97e4ed635f6821, type: 3}
+  _partsPrefab: {fileID: 100014, guid: b2298d5aa5c20b6439b7ce1d33b39cdb, type: 3}
   _requiredLoad: 0
   _partsImage: {fileID: -1564296211, guid: 90c7d3cbce0c87342ad4e169693f8974, type: 3}
   _maxDurability: 0

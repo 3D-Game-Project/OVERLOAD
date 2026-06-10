@@ -12,13 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1b1fcedf4d30334f861d12febf4455f, type: 3}
   m_Name: Attack_Sniper_5
   m_EditorClassIdentifier: Assembly-CSharp::AttackPartsData
-  _partsName: sniper_4
-  _partsPrefab: {fileID: 100000, guid: 3538d90459ea1874eb51016e012ee011, type: 3}
-  _requirePower: 75
-  _partsType: 0
+  _partsName: sniper_5
+  _partsPrefab: {fileID: 100000, guid: 9e22c5b8b259718468c05b451ab49f8a, type: 3}
+  _requiredLoad: 0
+  _partsImage: {fileID: 0}
+  _maxDurability: 0
+  _price: 0
+  _description: 
   _fireType: 1
   _damage: 75
   _range: 15
   _fireCooldown: 4
   _maxMagazineSize: 0
   _bulletPrefab: {fileID: 0}
+  _firePowerCost: 0

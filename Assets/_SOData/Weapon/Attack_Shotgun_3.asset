@@ -13,12 +13,16 @@ MonoBehaviour:
   m_Name: Attack_Shotgun_3
   m_EditorClassIdentifier: Assembly-CSharp::AttackPartsData
   _partsName: shotgun_3
-  _partsPrefab: {fileID: 100004, guid: bc9fe7700df300e4ba3e63d113238d75, type: 3}
-  _requirePower: 40
-  _partsType: 0
+  _partsPrefab: {fileID: 100004, guid: f1bd53db0b4b24e48b4b741e1bdc6578, type: 3}
+  _requiredLoad: 0
+  _partsImage: {fileID: 0}
+  _maxDurability: 0
+  _price: 0
+  _description: 
   _fireType: 1
   _damage: 35
   _range: 5
   _fireCooldown: 1
   _maxMagazineSize: 0
   _bulletPrefab: {fileID: 100000, guid: 7e2d264e03fb2fb4fb2b1e559515830a, type: 3}
+  _firePowerCost: 0
