@@ -4,8 +4,10 @@ public class PlayerInteractController : MonoBehaviour
 {
     private PlayerInputHandler _inputHandler;
     private PlayerInventory _inventory;
+    private Shop _shop;
 
     private PartsData _targetParts;
+    private Currency _targetCurrency;
 
     private GameObject _target;
 
@@ -15,11 +17,12 @@ public class PlayerInteractController : MonoBehaviour
     {
         _inputHandler = GetComponent<PlayerInputHandler>();
         _inventory = GetComponent<PlayerInventory>();
+        _shop = FindFirstObjectByType<Shop>();
     }
 
     private void Update()
     {
-        if (_inputHandler.IsPickupPressed && _targetParts != null)
+        if (_inputHandler.IsPickupPressed && (_targetParts != null || _targetCurrency != null))
         {
             _inputHandler.IsPickupPressed = false;
 
@@ -40,6 +43,14 @@ public class PlayerInteractController : MonoBehaviour
                 _target = other.gameObject;
             }
         }
+
+        Currency currency = other.GetComponent<Currency>();
+        if (currency != null)
+        {
+            _targetCurrency = currency;
+            _targetParts = null;
+            _target = other.gameObject;
+        }
     }
 
     // 아이템의 범위에서 벗어났을 때, 타겟을 초기화하여 더 이상 상호작용할 수 없도록 설정
@@ -48,10 +59,12 @@ public class PlayerInteractController : MonoBehaviour
         if (other != null)
         {
             FireManager weapon = other.GetComponent<FireManager>();
+            Currency currency = other.GetComponent<Currency>();
 
-            if (weapon != null && other.gameObject == _target)
+            if ((weapon != null || currency != null) && other.gameObject == _target)
             {
                 _targetParts = null;
+                _targetCurrency = null;
                 _target = null;
             }
         }
@@ -62,11 +75,33 @@ public class PlayerInteractController : MonoBehaviour
     // 현재는 그 이후 동작처리인 아이템 삭제만 진행
     private void PickupParts()
     {
-        if (_target == null || _targetParts == null) return;
+        if (_target == null || _inventory == null) return;
 
-        if (_inventory != null && _targetParts != null)
+        if (_targetParts != null)
         {
-            _inventory.AddItem(_targetParts);
+            _inventory.AddPart(_targetParts);
+            if (_shop != null) _shop.CheckExistParts(_targetParts);
+        }
+
+        else if (_targetCurrency != null)
+        {
+            string type = _targetCurrency.Data.CurrencyType.ToString();
+            int finalAmount = 0;
+
+            if (type == "Scrap")
+            {
+                finalAmount = Random.Range(10, 21); 
+            }
+            else if (type == "Gear")
+            {
+                finalAmount = 10;
+            }
+
+            if (_inventory.CurrencyList.ContainsKey(type))
+            {
+                _inventory.CurrencyList[type] += finalAmount;
+                _inventory.AddPart(null); 
+            }
         }
         Destroy(_target.gameObject);
 

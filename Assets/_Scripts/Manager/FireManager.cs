@@ -7,16 +7,13 @@ public class FireManager : MonoBehaviour
     [SerializeField] private Transform _muzzlePoint;
     [SerializeField] private LayerMask _targetLayer;
 
-    public WeaponRuntime WeaponRuntime { get; set; }
-    private IAimProvider _aimProvider;
+    public WeaponRuntime WeaponRuntime { get; private set; }
 
     private BulletPool _bulletPool;
-
     private Coroutine _reloadCoroutine;
-    public AttackPartsData AttackPartsData => _attackPartsData;
+    private bool _isReloadEventSubscribed;
 
-    private PlayerInputHandler _playerInputHandler;
-    private bool _isPlayer = false;
+    public AttackPartsData AttackPartsData => _attackPartsData;
 
     // 카메라 세팅 방지
     // 공격파트 정보 수집
@@ -24,31 +21,32 @@ public class FireManager : MonoBehaviour
     // ==> 무기 프리팹마다 BulletPool 스크립트 부착시 발생되는 누락현상 방지와 오브젝트풀링을 통한 총알 사전 생성을 통해 프레임 드랍 방지
     private void Awake()
     {
+        EnsureMuzzlePoint();
+
         if (_attackPartsData != null)
         {
-            WeaponRuntime = new WeaponRuntime(_attackPartsData);
-
-            if (_attackPartsData.FireType == FireType.Projectile && _attackPartsData.BulletPrefab != null)
-            {
-                _bulletPool = gameObject.AddComponent<BulletPool>();
-                _bulletPool.Initialize(_attackPartsData.BulletPrefab, _attackPartsData.MaxMagazineSize);
-            }
+            RebuildWeaponRuntime();
+            RebuildBulletPool();
         }
     }
 
-    private void Start()
+    private void OnEnable()
     {
-        _aimProvider = GetComponentInParent<IAimProvider>();
+        SubscribeReloadEvent();
+    }
 
-        if (gameObject.transform.root.CompareTag("Player"))
-        {
-            _isPlayer = true;
-            _playerInputHandler = gameObject.transform.root.GetComponent<PlayerInputHandler>();
-        }
+    private void OnDisable()
+    {
+        UnsubscribeReloadEvent();
     }
 
     // FireManager를 Enemy와 Player 둘 다가 사용할 예정이기 때문에
-    // CompareTag를 통해 플레이어인 경우에만 마우스 클릭으로 발사 및 리로드 처리
+    // 기존에는 CompareTag를 통해 플레이어인 경우에만 마우스 클릭으로 발사 및 리로드 처리
+    // 현재 구조에서는 FireManager가 직접 입력을 읽지 않음
+    // 플레이어 입력은 CorePartsController / AttackPartController 쪽에서 처리하고,
+    // FireManager는 외부에서 TryFire()를 호출받아 실제 발사만 담당
+    // 즉, 기존 Update 입력 처리 로직은 제거
+    /*
     private void Update()
     {
         if (WeaponRuntime == null) return;
@@ -69,40 +67,54 @@ public class FireManager : MonoBehaviour
             }
         }
     }
+    */
 
-    private void OnEnable()
+    // 우리 CorePartsController / AttackPartController용 초기화 함수
+    // 외부에서 AttackPartsData까지 넘겨받아 무기 상태를 새로 설정
+    public void InitializeWeapon(
+        AttackPartsData attackPartsData,
+        LayerMask targetLayer,
+        int ownerLayer)
     {
-        if (WeaponRuntime != null)
-        {
-            WeaponRuntime.OnReloadStarted += ReloadStarted;
-        }
-    }
+        _attackPartsData = attackPartsData;
 
-    private void OnDisable()
-    {
-        if (WeaponRuntime != null)
-        {
-            WeaponRuntime.OnReloadStarted -= ReloadStarted;
-        }
+        SetWeaponOwner(targetLayer, ownerLayer);
     }
 
     public void TryFire(Vector3 targetPoint)
     {
+        if (_attackPartsData == null)
+            return;
+
+        if (WeaponRuntime == null)
+            return;
+
+        if (_muzzlePoint == null)
+            return;
+
         if (WeaponRuntime.TryFire())
         {
             //RotateToPlayer(targetPoint);
-
 
             switch (_attackPartsData.FireType)
             {
                 case FireType.Projectile:
                     CreateBullet(targetPoint);
                     break;
+
                 case FireType.Hitscan:
                     FireHitscan(targetPoint);
                     break;
             }
         }
+    }
+
+    public void StartReload()
+    {
+        if (WeaponRuntime == null)
+            return;
+
+        WeaponRuntime.StartReload();
     }
 
     // 총알 생성 (ProjectTile은 해당 방향으로 발사되도록 처리해야하기 때문에)
@@ -112,19 +124,25 @@ public class FireManager : MonoBehaviour
     // 마지막 조건문은 생성되는 총알의 데미지, 사거리 정보를 추가
     private void CreateBullet(Vector3 targetPoint)
     {
-        if (_bulletPool == null) return;
+        if (_bulletPool == null)
+            return;
 
         Vector3 fireDirection = (targetPoint - _muzzlePoint.position).normalized;
 
         GameObject bulletObj = _bulletPool.GetBullet();
-        bulletObj.transform.position = _muzzlePoint.position;
 
+        bulletObj.transform.position = _muzzlePoint.position;
         bulletObj.transform.rotation = Quaternion.LookRotation(fireDirection);
         bulletObj.SetActive(true);
 
         if (bulletObj.TryGetComponent(out Bullet bullet))
         {
-            bullet.Setup(_attackPartsData.Damage, _attackPartsData.Range, _bulletPool, _targetLayer);
+            bullet.Setup(
+                _attackPartsData.Damage,
+                _attackPartsData.Range,
+                _bulletPool,
+                _targetLayer
+            );
         }
     }
 
@@ -134,15 +152,23 @@ public class FireManager : MonoBehaviour
     private void FireHitscan(Vector3 targetPoint)
     {
         Debug.Log($"HitScan 호출됨");
-        Vector3 _fireDirection = (targetPoint - _muzzlePoint.position).normalized;
 
-        if (Physics.Raycast(_muzzlePoint.position, _fireDirection, out RaycastHit _hit, _attackPartsData.Range, _targetLayer))
+        Vector3 fireDirection = (targetPoint - _muzzlePoint.position).normalized;
+
+        if (Physics.Raycast(
+                _muzzlePoint.position,
+                fireDirection,
+                out RaycastHit hit,
+                _attackPartsData.Range,
+                _targetLayer))
         {
+            Debug.Log($"FindHitScan {hit.collider.name}");
 
-            Debug.Log($"FindHitScan {_hit.collider.name}");
+            EnemyCombatController enemy =
+                hit.collider.GetComponentInParent<EnemyCombatController>();
 
-            EnemyCombatController enemy = _hit.collider.GetComponentInParent<EnemyCombatController>();
-            PlayerCombatController player = _hit.collider.GetComponentInParent<PlayerCombatController>();
+            PlayerCombatController player =
+                hit.collider.GetComponentInParent<PlayerCombatController>();
 
             if (enemy != null)
             {
@@ -150,12 +176,11 @@ public class FireManager : MonoBehaviour
             }
             else if (player != null)
             {
-                Debug.DrawLine(_muzzlePoint.position, _hit.point, Color.black, 0.5f);
+                Debug.DrawLine(_muzzlePoint.position, hit.point, Color.black, 0.5f);
                 Debug.Log($"<color=red>[Hitscan Hit] 플레이어 타격 성공!</color> 데미지: {_attackPartsData.Damage} | 컴포넌트 오브젝트: {player.gameObject.name}");
 
                 player.TakeDamage(_attackPartsData.Damage);
             }
-
         }
     }
 
@@ -165,42 +190,86 @@ public class FireManager : MonoBehaviour
     // 무기 교체 타이밍에 맞춰 기존에 생성되어 있던 탄환 오브젝트 풀을 완전 청소(Destroy)한 뒤, 새 무기 스펙 탄창 수량에 맞게 재구축
     public void SetWeaponOwner(LayerMask targetLayer, int ownerLayer)
     {
-        if (_muzzlePoint == null)
-        {
-            _muzzlePoint = FindChildMuzzle(transform, "MuzzlePoint");
-
-            if (_muzzlePoint != null)
-            {
-                Debug.Log($"muzzlePoint 찾기 성공.");
-            }
-            else
-            {
-                _muzzlePoint = transform;
-            }
-        }
-
         _targetLayer = targetLayer;
-        gameObject.layer = ownerLayer;
 
-        foreach (Transform child in transform)
+        EnsureMuzzlePoint();
+        SetLayerRecursively(transform, ownerLayer);
+
+        if (_attackPartsData == null)
         {
-            child.gameObject.layer = ownerLayer;
+            Debug.LogWarning($"{gameObject.name}에 AttackPartsData가 없습니다.");
+            return;
         }
 
-        _aimProvider = GetComponentInParent<IAimProvider>();
+        RebuildWeaponRuntime();
+        RebuildBulletPool();
+    }
 
-        if (_attackPartsData != null)
+    private void RebuildWeaponRuntime()
+    {
+        if (_attackPartsData == null)
+            return;
+
+        StopReloadCoroutine();
+        UnsubscribeReloadEvent();
+
+        WeaponRuntime = new WeaponRuntime(_attackPartsData);
+        _isReloadEventSubscribed = false;
+
+        if (isActiveAndEnabled)
         {
-            WeaponRuntime = new WeaponRuntime(_attackPartsData);
-
-            if (_attackPartsData.FireType == FireType.Projectile && _attackPartsData.BulletPrefab != null)
-            {
-                if (TryGetComponent(out BulletPool oldPool)) Destroy(oldPool);
-
-                _bulletPool = gameObject.AddComponent<BulletPool>();
-                _bulletPool.Initialize(_attackPartsData.BulletPrefab, _attackPartsData.MaxMagazineSize);
-            }
+            SubscribeReloadEvent();
         }
+    }
+
+    private void RebuildBulletPool()
+    {
+        if (_bulletPool != null)
+        {
+            Destroy(_bulletPool);
+            _bulletPool = null;
+        }
+
+        if (_attackPartsData == null)
+            return;
+
+        if (_attackPartsData.FireType != FireType.Projectile)
+            return;
+
+        if (_attackPartsData.BulletPrefab == null)
+            return;
+
+        int poolSize = Mathf.Max(1, _attackPartsData.MaxMagazineSize);
+
+        _bulletPool = gameObject.AddComponent<BulletPool>();
+        _bulletPool.Initialize(
+            _attackPartsData.BulletPrefab,
+            poolSize
+        );
+    }
+
+    private void SubscribeReloadEvent()
+    {
+        if (WeaponRuntime == null)
+            return;
+
+        if (_isReloadEventSubscribed)
+            return;
+
+        WeaponRuntime.OnReloadStarted += ReloadStarted;
+        _isReloadEventSubscribed = true;
+    }
+
+    private void UnsubscribeReloadEvent()
+    {
+        if (WeaponRuntime == null)
+            return;
+
+        if (!_isReloadEventSubscribed)
+            return;
+
+        WeaponRuntime.OnReloadStarted -= ReloadStarted;
+        _isReloadEventSubscribed = false;
     }
 
     // 총구 위치 자동 탐색
@@ -213,16 +282,52 @@ public class FireManager : MonoBehaviour
                 return child;
 
             Transform found = FindChildMuzzle(child, targetName);
+
             if (found != null)
                 return found;
         }
+
         return null;
+    }
+
+    private void EnsureMuzzlePoint()
+    {
+        if (_muzzlePoint != null)
+            return;
+
+        _muzzlePoint = FindChildMuzzle(transform, "MuzzlePoint");
+
+        if (_muzzlePoint != null)
+        {
+            Debug.Log($"muzzlePoint 찾기 성공.");
+            return;
+        }
+
+        Debug.LogWarning(
+            $"{gameObject.name}에 MuzzlePoint가 없어 transform을 총구로 사용합니다."
+        );
+
+        _muzzlePoint = transform;
+    }
+
+    private void SetLayerRecursively(Transform target, int layer)
+    {
+        target.gameObject.layer = layer;
+
+        foreach (Transform child in target)
+        {
+            SetLayerRecursively(child, layer);
+        }
     }
 
     // 무기 재장전시 동작되는 코루틴
     private void ReloadStarted()
     {
-        if (_reloadCoroutine != null) StopCoroutine(_reloadCoroutine);
+        if (_reloadCoroutine != null)
+        {
+            StopCoroutine(_reloadCoroutine);
+        }
+
         _reloadCoroutine = StartCoroutine(ReloadCoroutine());
     }
 
@@ -231,7 +336,20 @@ public class FireManager : MonoBehaviour
     {
         yield return new WaitForSeconds(2f);
 
-        WeaponRuntime.CompleteReload();
+        if (WeaponRuntime != null)
+        {
+            WeaponRuntime.CompleteReload();
+        }
+
+        _reloadCoroutine = null;
+    }
+
+    private void StopReloadCoroutine()
+    {
+        if (_reloadCoroutine == null)
+            return;
+
+        StopCoroutine(_reloadCoroutine);
         _reloadCoroutine = null;
     }
 

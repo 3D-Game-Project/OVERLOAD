@@ -5,24 +5,29 @@ public class PlayerInventoryUI : MonoBehaviour
 {
     [SerializeField] private PlayerInventory _inventory;
     [SerializeField] private GameObject _slotPrefab;
-    [SerializeField] private Transform _slotParent;
 
-    private List<InventorySlot> _uiSlots = new List<InventorySlot>();
+    [SerializeField] private Transform _partsSlotParent;
+    [SerializeField] private Transform _consumablesSlotParent;
+
+    private List<InventorySlot> _partsUISlots = new List<InventorySlot>();
+    private List<InventorySlot> _consumablesUISlots = new List<InventorySlot>();
+
+    [Header("최초 1회만 찾도록 정보 가져오기")]
+    private MenuController _cachedMenu;
+    private Shop _cachedShop;
+    private SellPopup _cachedSellPopup;
+    private PartDetailPopup _cachedDetailPopup;
 
     private void Awake()
     {
         _inventory = FindFirstObjectByType<PlayerInventory>();
-    }
 
-    // 시작시 인벤토리 데이터와 UI 슬롯을 연결하여 초기화
-    private void Start()
-    {
-        if (_inventory != null)
-        {
-            GenerateSlots();
-            RefreshUI();
-        }
+        _cachedMenu = FindFirstObjectByType<MenuController>(FindObjectsInactive.Include);
+        _cachedShop = FindFirstObjectByType<Shop>(FindObjectsInactive.Include);
+        _cachedSellPopup = FindFirstObjectByType<SellPopup>(FindObjectsInactive.Include);
+        _cachedDetailPopup = FindFirstObjectByType<PartDetailPopup>(FindObjectsInactive.Include);
     }
+    
 
     private void OnEnable()
     {
@@ -31,9 +36,10 @@ public class PlayerInventoryUI : MonoBehaviour
 
         if (_inventory != null)
         {
+            _inventory.OnInventoryChanged -= RefreshUI;
             _inventory.OnInventoryChanged += RefreshUI;
 
-            if (_uiSlots.Count == 0)
+            if (_partsUISlots.Count == 0 || _consumablesUISlots.Count == 0)
             {
                 GenerateSlots();
             }
@@ -54,40 +60,62 @@ public class PlayerInventoryUI : MonoBehaviour
         }
     }
 
-    // 5x5 Grid 형태 슬롯 생성
+    // 5x4 Grid 형태 슬롯 생성
     private void GenerateSlots()
     {
         if (_inventory == null) return;
 
-        foreach (Transform child in _slotParent)
+        foreach (Transform child in _partsSlotParent)
         {
             Destroy(child.gameObject);
         }
-        _uiSlots.Clear();
+        _partsUISlots.Clear();
 
         for (int i = 0; i < _inventory.InventorySize; i++)
         {
-            GameObject slotObj = Instantiate(_slotPrefab, _slotParent);
-            InventorySlot slot = slotObj.GetComponent<InventorySlot>();
-            _uiSlots.Add(slot);
+            GameObject slotObj = Instantiate(_slotPrefab, _partsSlotParent);
+            _partsUISlots.Add(slotObj.GetComponent<InventorySlot>());
+        }
+
+        foreach (Transform child in _consumablesSlotParent) 
+        {
+            Destroy(child.gameObject);
+        }
+        
+        _consumablesUISlots.Clear();
+
+        for (int i = 0; i < _inventory.ConsumableSize; i++)
+        {
+            GameObject slotObj = Instantiate(_slotPrefab, _consumablesSlotParent);
+            _consumablesUISlots.Add(slotObj.GetComponent<InventorySlot>());
         }
     }
 
     // 파츠 드랍 및 장착에 따른 인벤토리 슬롯 변경
-    private void RefreshUI()
+    public void RefreshUI()
     {
-        if (_inventory == null || _inventory.PartsList == null) return;
+        if (_inventory == null) return;
 
-        for (int i = 0; i < _uiSlots.Count; i++)
+        for (int i = 0; i < _partsUISlots.Count; i++)
         {
-            if (_uiSlots[i] == null) continue;
+            if (_partsUISlots[i] == null) continue;
+
+            _partsUISlots[i].SetMasterReferences(_cachedMenu, _cachedShop, _cachedSellPopup, _cachedDetailPopup);
 
             if (i < _inventory.PartsList.Count)
-                _uiSlots[i].UpdateSlot(_inventory.PartsList[i]);
+                _partsUISlots[i].UpdateSlot(_inventory.PartsList[i]);
             else
-            {
-                _uiSlots[i].UpdateSlot(null);
-            }
+                _partsUISlots[i].UpdateSlot((PartsData)null);
+        }
+
+        for (int i = 0; i < _consumablesUISlots.Count; i++)
+        {
+            if (_consumablesUISlots[i] == null) continue;
+
+            if (i < _inventory.ConsumablesList.Count)
+                _consumablesUISlots[i].UpdateSlot(_inventory.ConsumablesList[i]);
+            else
+                _consumablesUISlots[i].UpdateSlot((ItemData)null);
         }
     }
 }

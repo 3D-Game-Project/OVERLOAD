@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9717e83cdb76590429dd735a07747784, type: 3}
+  m_Name: Item_Repair_Kit
+  m_EditorClassIdentifier: Assembly-CSharp::ItemData
+  _itemName: Repait_Kit
+  _itemType: 0
+  _description: Can restore the durability of installed equipment using a repair
+    kit.
+  _price: 100
+  _itemImage: {fileID: 21300000, guid: e59711057320b804caf9cdf8d0d4042c, type: 3}
