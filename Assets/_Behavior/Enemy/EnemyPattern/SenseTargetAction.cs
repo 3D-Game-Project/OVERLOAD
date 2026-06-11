@@ -204,6 +204,7 @@ public partial class SenseTargetAction : Action
 
                             Vector3 targetAimPoint = baseAimPoint + randomOffset;
 
+                            Debug.Log($"SenseTargetAction, {targetAimPoint}");
                             bridge.FireAllWeapons(targetAimPoint);
                         }
 

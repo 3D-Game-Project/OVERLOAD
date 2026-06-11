@@ -100,16 +100,18 @@ public class EnemyBehaviorBridge : MonoBehaviour
     // targetPoint를 기준으로 기체에 부착된 모든 무기파츠에 사격명령처리
     public void FireAllWeapons(Vector3 targetPoint)
     {
-        Transform rootTransform = gameObject.transform.root;
+        Transform weaponBase = transform;
 
-        Vector3 lookDirection = targetPoint - rootTransform.position;
-
+        Vector3 lookDirection = targetPoint - weaponBase.position;
+        lookDirection.y = 0;
 
         if (lookDirection != Vector3.zero)
         {
-            float angle = Vector3.Angle(rootTransform.forward, lookDirection);
+            weaponBase.rotation = Quaternion.LookRotation(lookDirection);
 
-            if(angle <= 10f)
+            float angle = Vector3.Angle(weaponBase.forward, lookDirection);
+
+            if (angle <= 15f)
             {
                 foreach (var weapon in _equippedWeapons)
                 {

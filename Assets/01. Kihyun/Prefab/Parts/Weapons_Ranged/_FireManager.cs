@@ -124,6 +124,10 @@ public class FireManager : MonoBehaviour
     // 마지막 조건문은 생성되는 총알의 데미지, 사거리 정보를 추가
     private void CreateBullet(Vector3 targetPoint)
     {
+        if(gameObject.layer == 7)
+        {
+            Debug.Log("몬스터가 CreateBullet을 시도함");
+        }
         if (_bulletPool == null)
             return;
 
