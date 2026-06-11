@@ -30,7 +30,7 @@ public class DropRuntime
 
         if (_dropList.Count > 0)
         {
-            CreateDropParts(_dropList, spawnPosition + new Vector3(0f, -3f, 0f));
+            CreateDropParts(_dropList, spawnPosition + new Vector3(0f, -2f, 0f));
         }
 
 
@@ -43,7 +43,7 @@ public class DropRuntime
                 float currencyRoll = Random.Range(0f, 100f);
                 if (currencyRoll <= dropData.DropChance)
                 {
-                    SpawnCurrencyObject(dropData, spawnPosition + new Vector3(0f, -3f, 0f));
+                    SpawnCurrencyObject(dropData, spawnPosition + new Vector3(0f, -4f, 0f));
                 }
             }
         }
@@ -64,7 +64,7 @@ public class DropRuntime
 
         Vector3 randomOffset = Random.insideUnitSphere * 2f;
         randomOffset.y = 0f;
-        currencyObj.transform.position = centerPosition + randomOffset + new Vector3(0, 0.3f, 0);
+        currencyObj.transform.position = centerPosition + randomOffset + new Vector3(0, 2f, 0);
 
     }
 
