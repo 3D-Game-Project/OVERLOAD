@@ -35,6 +35,9 @@ public class MenuController : MonoBehaviour
     private int _currentTabIndex = 0;
     private bool _isMenuOpen = false;
 
+    // 팝업끄기용으로 추가
+    private SlotOptionPopupUI _slotOptionPopup;
+
     public bool IsShop { get; set; } = false;
 
     public int CurrentTabIndex => _currentTabIndex;
@@ -48,6 +51,8 @@ public class MenuController : MonoBehaviour
         if (previousBtn != null) previousBtn.onClick.AddListener(NavigateToPreviousTab);
         if (nextBtn != null) nextBtn.onClick.AddListener(NavigateToNextTab);
         if (shop == null) shop = FindFirstObjectByType<Shop>();
+
+        _slotOptionPopup = FindFirstObjectByType<SlotOptionPopupUI>(FindObjectsInactive.Include);
     }
 
     private void Start()
@@ -80,6 +85,12 @@ public class MenuController : MonoBehaviour
         if (_inputHandler.MenuTriggered)
         {
             _inputHandler.MenuTriggered = false;
+
+            if (_isMenuOpen && _slotOptionPopup != null && _slotOptionPopup.gameObject.activeSelf)
+            {
+                _slotOptionPopup.Close();
+                return;
+            }
 
             if (!_isMenuOpen) OpenMenu(3); 
             else CloseMenu(); 
@@ -160,6 +171,11 @@ public class MenuController : MonoBehaviour
         foreach (var popup in sellPopups)
         {
             popup.gameObject.SetActive(false);
+        }
+
+        if (_slotOptionPopup != null)
+        {
+            _slotOptionPopup.Close();
         }
 
         PartDetailPopup[] detailPopups = FindObjectsByType<PartDetailPopup>(FindObjectsInactive.Include, FindObjectsSortMode.None);

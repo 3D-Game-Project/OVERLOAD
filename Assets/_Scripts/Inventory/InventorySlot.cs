@@ -17,6 +17,7 @@ public class InventorySlot : MonoBehaviour
     private Shop _shop;
     private SellPopup _sellPopup;
     private PartDetailPopup _detailPopup;
+    private SlotOptionPopupUI _slotOptionPopup;
 
 
     private void Awake()
@@ -39,12 +40,18 @@ public class InventorySlot : MonoBehaviour
         }
     }
 
-    public void SetMasterReferences(MenuController menu, Shop shop, SellPopup sell, PartDetailPopup detail)
+    public void SetMasterReferences(
+        MenuController menu,
+        Shop shop,
+        SellPopup sell,
+        PartDetailPopup detail,
+        SlotOptionPopupUI slotOptionPopup)
     {
         _menu = menu;
         _shop = shop;
         _sellPopup = sell;
         _detailPopup = detail;
+        _slotOptionPopup = slotOptionPopup;
     }
 
     //PartsData 정보에 맞춰 슬롯 비주얼 업데이트
@@ -140,22 +147,21 @@ public class InventorySlot : MonoBehaviour
         {
             if (currentPart != null)
             {
-                if (_detailPopup != null)
+                if (_slotOptionPopup == null)
+                    _slotOptionPopup = FindFirstObjectByType<SlotOptionPopupUI>(FindObjectsInactive.Include);
+
+                if (_slotOptionPopup != null)
                 {
-                    _detailPopup.OpenPopup(currentPart, inventory);
+                    _slotOptionPopup.Open(this, currentPart, inventory);
                 }
                 else
                 {
-                    PartDetailPopup _detailPopup = FindFirstObjectByType<PartDetailPopup>(FindObjectsInactive.Include);
-                    if (_detailPopup != null)
-                    {
-                        _detailPopup.OpenPopup(currentPart, inventory);
-                    }
+                    Debug.LogWarning("SlotOptionPopupUI를 찾을 수 없습니다.");
                 }
             }
             else if (currentItem != null)
             {
-                // 추후 아이템 사용 함수 구역
+                // 추후 소비 아이템 사용 함수 구역
             }
         }
     }
