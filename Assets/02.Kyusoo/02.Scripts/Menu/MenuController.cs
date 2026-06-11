@@ -1,4 +1,4 @@
-using TMPro;
+ï»¿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,26 +7,26 @@ public class MenuController : MonoBehaviour
     private PlayerInputHandler _inputHandler;
     private Shop shop;
 
-    [Header("ÃÖ»óÀ§ ÀÌ¹ÌÁö, ÆĞ³Î")]
+    [Header("ìµœìƒìœ„ ì´ë¯¸ì§€, íŒ¨ë„")]
     [SerializeField] private GameObject backgroundImage;
     [SerializeField] private GameObject mainInterfacePanel;
 
-    [Header("¸Ş´º: ½ºÅÈ, »óÁ¡, ÀÎº¥, ½Ã½ºÅÛ¼ø¼­ °íÁ¤")]
+    [Header("ë©”ë‰´: ìŠ¤íƒ¯, ìƒì , ì¸ë²¤, ì‹œìŠ¤í…œìˆœì„œ ê³ ì •")]
     [SerializeField] private GameObject statusPanel;
     [SerializeField] private GameObject shopPanel;
     [SerializeField] private GameObject inventoryPanel;
     [SerializeField] private GameObject systemSettings;
 
-    [Header("»ó´Ü ³×ºñ°ÔÀÌ¼Ç ¹öÆ°")]
+    [Header("ìƒë‹¨ ë„¤ë¹„ê²Œì´ì…˜ ë²„íŠ¼")]
     [SerializeField] private Button previousBtn;
     [SerializeField] private Button nextBtn;
 
-    [Header("Zelda Style 3°³ ÅÇ ÅØ½ºÆ® ÂüÁ¶")]
+    [Header("Zelda Style 3ê°œ íƒ­ í…ìŠ¤íŠ¸ ì°¸ì¡°")]
     [SerializeField] private TextMeshProUGUI _leftTabText;    
     [SerializeField] private TextMeshProUGUI _currentTabText;  
     [SerializeField] private TextMeshProUGUI _rightTabText;   
 
-    [Header("ÅÇ ÀÌ¸§ Á¤ÀÇ (¼ø¼­ ÀÏÄ¡ ÇÊ¼ö)")]
+    [Header("íƒ­ ì´ë¦„ ì •ì˜ (ìˆœì„œ ì¼ì¹˜ í•„ìˆ˜)")]
     [SerializeField] private string[] tabNames = { "Character", "Shop", "Inventory", "Settings" };
 
     [SerializeField] private GameObject playerPrefab;
@@ -40,7 +40,7 @@ public class MenuController : MonoBehaviour
     public int CurrentTabIndex => _currentTabIndex;
     public bool IsMenuOpen => _isMenuOpen;
 
-    // ¹öÆ° ¿¬°á ¹× ÆĞ³Î¿¡ ¼ø¼­ ¸ÅÇÎ
+    // ë²„íŠ¼ ì—°ê²° ë° íŒ¨ë„ì— ìˆœì„œ ë§¤í•‘
     private void Awake()
     {
         _tabPanels = new GameObject[] { statusPanel, shopPanel, inventoryPanel, systemSettings };
@@ -63,10 +63,10 @@ public class MenuController : MonoBehaviour
         HandleKeyInputs();
     }
 
-    // Å° ÀÔ·Â¿¡ µû¶ó ¸Ş´º ÀÎÅÍÆäÀÌ½º ¿­±â ¹× ÃÖ¿ì¼± Ç¥½ÃµÇ¾î¾ßÇÏ´Â ÆĞ³Î Ã³¸®
+    // í‚¤ ì…ë ¥ì— ë”°ë¼ ë©”ë‰´ ì¸í„°í˜ì´ìŠ¤ ì—´ê¸° ë° ìµœìš°ì„  í‘œì‹œë˜ì–´ì•¼í•˜ëŠ” íŒ¨ë„ ì²˜ë¦¬
     private void HandleKeyInputs()
     {
-        // ÀÎº¥Åä¸®
+        // ì¸ë²¤í† ë¦¬
         if (_inputHandler.InventoryTriggered)
         {
             _inputHandler.InventoryTriggered = false; 
@@ -76,7 +76,7 @@ public class MenuController : MonoBehaviour
             else SwitchTab(2); 
         }
 
-        // ½Ã½ºÅÛ ¼³Á¤
+        // ì‹œìŠ¤í…œ ì„¤ì •
         if (_inputHandler.MenuTriggered)
         {
             _inputHandler.MenuTriggered = false;
@@ -85,7 +85,7 @@ public class MenuController : MonoBehaviour
             else CloseMenu(); 
         }
 
-        // »óÁ¡
+        // ìƒì 
         if (_inputHandler.InteractTriggered)
         {
             _inputHandler.InteractTriggered = false;
@@ -109,14 +109,17 @@ public class MenuController : MonoBehaviour
         }
     }
 
-    // ¸Ş´º ¿­±â
-    // ÀÌ¹ÌÁö¿Í ÆĞ³Î È°¼ºÈ­½ÃÅ°±â
-    // ÆĞ³Î È°¼ºÈ­¿Í µ¿½Ã¿¡ Ä³¸¯ÅÍ Á¤¸é ÇÁ¸®ºä»ı¼º
+    // ë©”ë‰´ ì—´ê¸°
+    // ì´ë¯¸ì§€ì™€ íŒ¨ë„ í™œì„±í™”ì‹œí‚¤ê¸°
+    // íŒ¨ë„ í™œì„±í™”ì™€ ë™ì‹œì— ìºë¦­í„° ì •ë©´ í”„ë¦¬ë·°ìƒì„±
     public void OpenMenu(int targetTabIdx)
     {
         _isMenuOpen = true;
         if (backgroundImage != null) backgroundImage.SetActive(true);
         if (mainInterfacePanel != null) mainInterfacePanel.SetActive(true);
+
+        GameObject playerRootObj = GameObject.Find("Crosshair");
+        if (playerRootObj != null) playerRootObj.SetActive(false);
 
         Cursor.lockState = CursorLockMode.None; 
         Cursor.visible = true;
@@ -129,14 +132,26 @@ public class MenuController : MonoBehaviour
         SwitchTab(targetTabIdx);
     }
 
-    // ¸Ş´º ´İ±â
-    // ÀÌ¹ÌÁö, ÆĞ³Î ºñÈ°¼ºÈ­½ÃÅ°±â
-    // Ä³¸¯ÅÍ Á¤¸éºä Á¦°ÅÃ³¸®
+    // ë©”ë‰´ ë‹«ê¸°
+    // ì´ë¯¸ì§€, íŒ¨ë„ ë¹„í™œì„±í™”ì‹œí‚¤ê¸°
+    // ìºë¦­í„° ì •ë©´ë·° ì œê±°ì²˜ë¦¬
     public void CloseMenu()
     {
         _isMenuOpen = false;
         if (backgroundImage != null) backgroundImage.SetActive(false);
         if (mainInterfacePanel != null) mainInterfacePanel.SetActive(false);
+
+        GameObject canvasObj = GameObject.Find("Canvas"); 
+
+        if (canvasObj != null)
+        {
+            Transform crosshairTransform = canvasObj.transform.Find("Crosshair");
+
+            if (crosshairTransform != null)
+            {
+                crosshairTransform.gameObject.SetActive(true);
+            }
+        }
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -159,8 +174,8 @@ public class MenuController : MonoBehaviour
         }
     }
 
-    // ÅÇ ÀüÈ¯Ã³¸®
-    // ÀÎµ¦½º¿¡ ¸Â´Â ÆĞ³Î¸¸ ÄÑ°í ³ª¸ÓÁö ²ô±â
+    // íƒ­ ì „í™˜ì²˜ë¦¬
+    // ì¸ë±ìŠ¤ì— ë§ëŠ” íŒ¨ë„ë§Œ ì¼œê³  ë‚˜ë¨¸ì§€ ë„ê¸°
     private void SwitchTab(int index)
     {
         _currentTabIndex = index;
@@ -175,9 +190,9 @@ public class MenuController : MonoBehaviour
         UpdateTabNavigationTexts();
     }
 
-    // ÅÇÀüÈ¯ (´ÙÀ½ÅÇ)
-    // ÀÎµ¦½º Áõ°¡½ÃÅ°°í, ¹è¿­ ±æÀÌ·Î ³ª´« ³ª¸ÓÁö·Î ¼øÈ¯ÇÏµµ·ÏÃ³¸®ÇÏ¿© ¸¶Áö¸·ÀÎ ½Ã½ºÅÛ ¼³Á¤¿¡¼­ ´Ù½Ã ½ºÅÈÀ¸·Î ³Ñ¾î°¡µµ·Ï Ã³¸®
-    // »óÁ¡ÀÌ È°¼ºÈ­µÇÁö¾Ê´Â´Ù¸é »óÁ¡ÅÇÀº ½ºÅµµÇµµ·Ï Ã³¸®
+    // íƒ­ì „í™˜ (ë‹¤ìŒíƒ­)
+    // ì¸ë±ìŠ¤ ì¦ê°€ì‹œí‚¤ê³ , ë°°ì—´ ê¸¸ì´ë¡œ ë‚˜ëˆˆ ë‚˜ë¨¸ì§€ë¡œ ìˆœí™˜í•˜ë„ë¡ì²˜ë¦¬í•˜ì—¬ ë§ˆì§€ë§‰ì¸ ì‹œìŠ¤í…œ ì„¤ì •ì—ì„œ ë‹¤ì‹œ ìŠ¤íƒ¯ìœ¼ë¡œ ë„˜ì–´ê°€ë„ë¡ ì²˜ë¦¬
+    // ìƒì ì´ í™œì„±í™”ë˜ì§€ì•ŠëŠ”ë‹¤ë©´ ìƒì íƒ­ì€ ìŠ¤í‚µë˜ë„ë¡ ì²˜ë¦¬
     private void NavigateToNextTab()
     {
         int nextIdx = (_currentTabIndex + 1) % _tabPanels.Length;
@@ -190,9 +205,9 @@ public class MenuController : MonoBehaviour
         SwitchTab(nextIdx);
     }
 
-    // ÅÇÀüÈ¯ (ÀÌÀüÅÇ)
-    // ÀÎµ¦½º °¨¼Ò½ÃÅ°°í, ¹è¿­ ±æÀÌ·Î ³ª´« ³ª¸ÓÁö·Î ¼øÈ¯ÇÏµµ·ÏÃ³¸®ÇÏ¿© Ã¹¹øÂ°ÀÎ ½ºÅÈ¿¡¼­ ´Ù½Ã ½Ã½ºÅÛ ¼³Á¤À¸·Î ³Ñ¾î°¡µµ·Ï Ã³¸®
-    // »óÁ¡ÀÌ È°¼ºÈ­µÇÁö¾Ê´Â´Ù¸é »óÁ¡ÅÇÀº ½ºÅµµÇµµ·Ï Ã³¸®
+    // íƒ­ì „í™˜ (ì´ì „íƒ­)
+    // ì¸ë±ìŠ¤ ê°ì†Œì‹œí‚¤ê³ , ë°°ì—´ ê¸¸ì´ë¡œ ë‚˜ëˆˆ ë‚˜ë¨¸ì§€ë¡œ ìˆœí™˜í•˜ë„ë¡ì²˜ë¦¬í•˜ì—¬ ì²«ë²ˆì§¸ì¸ ìŠ¤íƒ¯ì—ì„œ ë‹¤ì‹œ ì‹œìŠ¤í…œ ì„¤ì •ìœ¼ë¡œ ë„˜ì–´ê°€ë„ë¡ ì²˜ë¦¬
+    // ìƒì ì´ í™œì„±í™”ë˜ì§€ì•ŠëŠ”ë‹¤ë©´ ìƒì íƒ­ì€ ìŠ¤í‚µë˜ë„ë¡ ì²˜ë¦¬
     private void NavigateToPreviousTab()
     {
         int prevIdx = (_currentTabIndex - 1 + _tabPanels.Length) % _tabPanels.Length;
@@ -205,14 +220,14 @@ public class MenuController : MonoBehaviour
         SwitchTab(prevIdx);
     }
 
-    // ÇöÀç ÅÇ¿¡ µû¸¥ ÅØ½ºÆ® º¯°æ ÇÔ¼ö
+    // í˜„ì¬ íƒ­ì— ë”°ë¥¸ í…ìŠ¤íŠ¸ ë³€ê²½ í•¨ìˆ˜
     private void UpdateTabNavigationTexts()
     {
         if (tabNames == null || tabNames.Length == 0) return;
 
         if (_currentTabText != null) _currentTabText.text = tabNames[_currentTabIndex];
 
-        // [ÁÂÃø] ÀÌÀü ÅÇ ÀÎµ¦½º °è»ê (»óÁ¡ Á¶°ÇºÎ ½ºÅµ ¹İ¿µ)
+        // [ì¢Œì¸¡] ì´ì „ íƒ­ ì¸ë±ìŠ¤ ê³„ì‚° (ìƒì  ì¡°ê±´ë¶€ ìŠ¤í‚µ ë°˜ì˜)
         int previousIdx = (_currentTabIndex - 1 + _tabPanels.Length) % _tabPanels.Length;
         if (previousIdx == 1 && !IsShop)
         {
@@ -220,7 +235,7 @@ public class MenuController : MonoBehaviour
         }
         if (_leftTabText != null) _leftTabText.text = tabNames[previousIdx];
 
-        // [¿ìÃø] ´ÙÀ½ ÅÇ ÀÎµ¦½º °è»ê (»óÁ¡ Á¶°ÇºÎ ½ºÅµ ¹İ¿µ)
+        // [ìš°ì¸¡] ë‹¤ìŒ íƒ­ ì¸ë±ìŠ¤ ê³„ì‚° (ìƒì  ì¡°ê±´ë¶€ ìŠ¤í‚µ ë°˜ì˜)
         int nextIdx = (_currentTabIndex + 1) % _tabPanels.Length;
         if (nextIdx == 1 && !IsShop)
         {
