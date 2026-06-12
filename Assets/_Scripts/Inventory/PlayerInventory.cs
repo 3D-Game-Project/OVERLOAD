@@ -87,4 +87,9 @@ public class PlayerInventory : MonoBehaviour
 
         return false;
     }
+
+    public void NotifyInventoryChanged()
+    {
+        OnInventoryChanged?.Invoke();
+    }
 }

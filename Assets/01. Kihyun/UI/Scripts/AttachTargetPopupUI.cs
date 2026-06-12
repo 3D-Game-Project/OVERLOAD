@@ -10,6 +10,7 @@ public class AttachTargetPopupUI : MonoBehaviour
 
     [Header("References")]
     [SerializeField] private CorePartsController _corePartsController;
+    [SerializeField] private SlotOptionPopupUI _slotOptionPopup;
 
     [Header("Slot Button UI")]
     [SerializeField] private Transform _slotButtonParent;
@@ -141,7 +142,7 @@ public class AttachTargetPopupUI : MonoBehaviour
         }
 
         List<AttachmentSlot> compatibleSlots =
-            _corePartsController.GetCompatibleSlots(_currentPart, true);
+            _corePartsController.GetCompatibleSlots(_currentPart, false);
 
         if (compatibleSlots.Count == 0)
         {
@@ -214,17 +215,53 @@ public class AttachTargetPopupUI : MonoBehaviour
 
     private void TryAttachToSlot(AttachmentSlot targetSlot)
     {
-        bool success = _corePartsController.AttachPart(_currentPart, targetSlot);
-
-        if (success)
+        if (_corePartsController == null)
         {
-            Debug.Log($"[AttachTargetPopup] {_currentPart.name} 장착 완료 → {targetSlot.SlotId}");
+            Debug.LogWarning("[AttachTargetPopup] CorePartsController가 없습니다.");
+            return;
+        }
 
-            Close();
+        if (_currentPart == null)
+        {
+            Debug.LogWarning("[AttachTargetPopup] 선택된 파츠가 없습니다.");
+            return;
+        }
+
+        if (targetSlot == null)
+        {
+            Debug.LogWarning("[AttachTargetPopup] 선택된 슬롯이 없습니다.");
+            return;
+        }
+
+        bool success;
+
+        if (targetSlot.HasPart)
+        {
+            Debug.Log($"[AttachTargetPopup] 교체 시도: {_currentPart.name} → {targetSlot.SlotId}");
+            success = _corePartsController.ReplacePart(_currentPart, targetSlot);
         }
         else
         {
-            Debug.LogWarning($"[AttachTargetPopup] {_currentPart.name} 장착 실패 → {targetSlot.SlotId}");
+            Debug.Log($"[AttachTargetPopup] 장착 시도: {_currentPart.name} → {targetSlot.SlotId}");
+            success = _corePartsController.AttachPart(_currentPart, targetSlot);
+        }
+
+        if (success)
+        {
+            Debug.Log($"[AttachTargetPopup] 장착/교체 완료: {_currentPart.name} → {targetSlot.SlotId}");
+
+            _inventory?.NotifyInventoryChanged();
+            MechPreviewStudio.Instance.RefreshPreview();
+
+            if (_slotOptionPopup != null)
+                _slotOptionPopup.Close();
+
+            else
+                Close();
+        }
+        else
+        {
+            Debug.LogWarning($"[AttachTargetPopup] 장착/교체 실패: {_currentPart.name} → {targetSlot.SlotId}");
         }
     }
 }

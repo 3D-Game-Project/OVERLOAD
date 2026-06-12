@@ -360,7 +360,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c22e0d0f6a4343744b6bdf28060ea8f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FireManager
-  _attackPartsData: {fileID: 11400000, guid: 734de3431963e4f46a95aab3db18a455, type: 2}
+  _attackPartsData: {fileID: 11400000, guid: e0cfa015c8f335c46aa0efb3a65b2b26, type: 2}
   _muzzlePoint: {fileID: 400002}
   _targetLayer:
     serializedVersion: 2
