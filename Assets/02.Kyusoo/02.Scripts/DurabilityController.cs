@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using System.Collections.Generic;
 
 public class DurabilityController : MonoBehaviour
@@ -7,6 +7,8 @@ public class DurabilityController : MonoBehaviour
     [SerializeField] private float _currentDurability;
     [SerializeField] private float _maxDurability = 300f;
     [SerializeField] private PartsData _partsData;
+    [SerializeField] private UnitData _unitData;
+    [SerializeField] private string _attachedSlotId;
 
     private List<PartsData> _destroyedPartList = new List<PartsData>();
 
@@ -20,19 +22,17 @@ public class DurabilityController : MonoBehaviour
 
     private void Awake()
     {
-        int playerLayer = 6;
-        int enemyLayer = 7;
-
-        if(gameObject.layer == playerLayer || gameObject.layer == enemyLayer)
+        
+        if(GetComponent<CharacterController>() != null)
         {
-            if(GetComponent<CharacterController>() != null)
-            {
-                _durabilityType = DurabilityType.Core;
-            }
-            else if(GetComponent<Collider>() != null)
-            {
-                _durabilityType = DurabilityType.Part;
-            }
+            Debug.Log("CharacterController í™•ì¸.");
+            _durabilityType = DurabilityType.Core;
+
+        }
+        else if(GetComponent<Collider>() != null)
+        {
+            Debug.Log("Collider í™•ì¸.");
+            _durabilityType = DurabilityType.Part;
         }
     }
 
@@ -74,10 +74,10 @@ public class DurabilityController : MonoBehaviour
     public void TakeDamage(float attackDamage)
     {
         if (_isDestroyed) return;
+        float finalDamage = attackDamage;
 
-        float finalDamage = 0f;
-
-        float armorDefense = GetArmorPartsFromSameLayer();
+        float armorDefense = 0f;
+        //float armorDefense = GetArmorPartsFromSameLayer();
 
         if (armorDefense > 0) 
         {
@@ -95,9 +95,9 @@ public class DurabilityController : MonoBehaviour
         }
     }
 
-    // ³»±¸µµ°¡ 0À¸·Î °¨¼ÒµÇ¾úÀ» ¶§, ÄÚ¾î, ÆÄÃ÷º° ÆÄ±« ºĞ±âÃ³¸®
-    // ÄÚ¾î´Â ¾Ö´Ï¸ŞÀÌ¼Ç, µå¶ø ÈÄ Destroy
-    // ÆÄÃ÷´Â ÆÄ±«µÇ´Â º»ÀÎÀÇ µ¥ÀÌÅÍ¸¦ »óÀ§·Î Àü´ŞÇÏ¿© ¸®½ºÆ®¿¡ Ãß°¡
+    // ë‚´êµ¬ë„ê°€ 0ìœ¼ë¡œ ê°ì†Œë˜ì—ˆì„ ë•Œ, ì½”ì–´, íŒŒì¸ ë³„ íŒŒê´´ ë¶„ê¸°ì²˜ë¦¬
+    // ì½”ì–´ëŠ” ì• ë‹ˆë©”ì´ì…˜, ë“œë í›„ Destroy
+    // íŒŒì¸ ëŠ” íŒŒê´´ë˜ëŠ” ë³¸ì¸ì˜ ë°ì´í„°ë¥¼ ìƒìœ„ë¡œ ì „ë‹¬í•˜ì—¬ ë¦¬ìŠ¤íŠ¸ì— ì¶”ê°€
     private void DestroyPart()
     {
         if (_currentDurability > 0f) return;
@@ -106,10 +106,15 @@ public class DurabilityController : MonoBehaviour
 
         if(_durabilityType == DurabilityType.Core)
         {
-            // ¾Ö´Ï¸ŞÀÌ¼Ç Ã³¸®
+            // ì• ë‹ˆë©”ì´ì…˜ ì²˜ë¦¬
 
-            // DropRuntime.DropPartÈ£Ãâ
+            // DropRuntime.DropPartí˜¸ì¶œ
+            if(_unitData is EnemyData enemyData)
+            {
+                DropRuntime dropRuntime = new DropRuntime();
 
+                dropRuntime.DropParts(enemyData, transform.position, _destroyedPartList);
+            }
             Destroy(gameObject, 0.5f);
         }
         else
@@ -126,7 +131,7 @@ public class DurabilityController : MonoBehaviour
 
     }
 
-    // °°Àº ºÎÀ§¿¡ ºÎÂøµÇ´Â ArmorÅ¸ÀÔÀ» Layer·Î °¡Á®¿À´Â ¹æ½Ä
+    // ê°™ì€ ë¶€ìœ„ì— ë¶€ì°©ë˜ëŠ” Armoríƒ€ì…ì„ Layerë¡œ ê°€ì ¸ì˜¤ëŠ” ë°©ì‹
     private float GetArmorPartsFromSameLayer()
     {
         CorePartsController coreParts = GetComponentInParent<CorePartsController>();
@@ -136,17 +141,18 @@ public class DurabilityController : MonoBehaviour
         AttachmentSlot[] attachedSlots = coreParts.GetComponentsInChildren<AttachmentSlot>();
 
         foreach (AttachmentSlot slot in attachedSlots) 
-        { 
-            if(slot != null && slot.HasPart && slot.AttachedObject != null)
-            {
-                MonoBehaviour[] behaviours = slot.AttachedObject.GetComponentsInChildren<MonoBehaviour>(true);
+        {
+            if (slot == null || slot.SlotId != _attachedSlotId) continue;
 
-                foreach (var behaviour in behaviours)
+            if(slot.HasPart && slot.AttachedObject != null)
+            {
+                MonoBehaviour[] scripts = slot.AttachedObject.GetComponentsInChildren<MonoBehaviour>();
+
+                foreach(MonoBehaviour script in scripts)
                 {
-                    if (behaviour is IPart part && part.Data != null && part.Data.PartsType == PartsType.Armor)
+                    if(script is IPart part && part.Data != null && part.Data.PartsType == PartsType.Armor)
                     {
-                        // ArmorPartsData¸¦ ¸¸µé°Ô µÇ¸é ÀÌÈÄ¿¡ ÀÌ ºÎºĞ Ãß°¡
-                        //if (part.Data is ArmorPartsData armorData)
+                        //if(part.Data is ArmorPartsData armorData)
                         //{
                         //    return armorData.Defense; 
                         //}
@@ -157,7 +163,7 @@ public class DurabilityController : MonoBehaviour
         return 0f;
     }
 
-    // ºÎÀ§ ÆÄ±«½Ã ÄÄÆ÷³ÍÆ®µé false·Î Á¦¾îÇÏ¿© ¹ß»ıÇÒ ¼ö ÀÖ´Â ¹®Á¦µé(´ëÇ¥ÀûÀ¸·Î »ç°İ)Â÷´Ü
+    // ë¶€ìœ„ íŒŒê´´ì‹œ ì»´í¬ë„ŒíŠ¸ë“¤ falseë¡œ ì œì–´í•˜ì—¬ ë°œìƒí•  ìˆ˜ ìˆëŠ” ë¬¸ì œë“¤(ëŒ€í‘œì ìœ¼ë¡œ ì‚¬ê²©)ì°¨ë‹¨
     private void ControllComponent()
     {
         if ((TryGetComponent(out Collider col))) col.enabled = false;
@@ -173,7 +179,7 @@ public class DurabilityController : MonoBehaviour
         }
     }
 
-    // ÄÚ¾î°¡ ¾Æ´Ñ ÆÄÃ÷°¡ ÆÄ±«µÉ ¶§, ÆÄ±«µÈ Á¤º¸¸¦ ÄÚ¾î¿¡°Ô Àü´ŞÇÏ¿© ³ªÁß¿¡ µå¶ø¸®½ºÆ®¿¡¼­ Á¦°Å½ÃÅ°´Â ¿ëµµ
+    // ì½”ì–´ê°€ ì•„ë‹Œ íŒŒì¸ ê°€ íŒŒê´´ë  ë•Œ, íŒŒê´´ëœ ì •ë³´ë¥¼ ì½”ì–´ì—ê²Œ ì „ë‹¬í•˜ì—¬ ë‚˜ì¤‘ì— ë“œëë¦¬ìŠ¤íŠ¸ì—ì„œ ì œê±°ì‹œí‚¤ëŠ” ìš©ë„
     public void AddDestroyedPartToList(PartsData part)
     {
         if(_durabilityType == DurabilityType.Core && !_destroyedPartList.Contains(part))
@@ -182,7 +188,7 @@ public class DurabilityController : MonoBehaviour
         }
     }
 
-    // ÃÖ»óÀ§ ºÎ¸ğ ¿ÀºêÁ§Æ® °èÃø¿¡¼­ ÄÚ¾î Å¸ÀÔÀÇ DurabilityController¸¦ ÃßÀûÇÏ´Â ÇÔ¼ö
+    // ìµœìƒìœ„ ë¶€ëª¨ ì˜¤ë¸Œì íŠ¸ ê³„ì¸¡ì—ì„œ ì½”ì–´ íƒ€ì…ì˜ DurabilityControllerë¥¼ ì¶”ì í•˜ëŠ” í•¨ìˆ˜
     private DurabilityController GetRootCoreController()
     {
         DurabilityController[] controllers = GetComponentsInParent<DurabilityController>(true);
@@ -196,5 +202,11 @@ public class DurabilityController : MonoBehaviour
         }
 
         return null;
+    }
+
+    public void SetAssociatedSlotId(string slotId)
+    {
+        Debug.Log($"SetAssociatedSlotId, {slotId}");
+        _attachedSlotId = slotId;
     }
 }

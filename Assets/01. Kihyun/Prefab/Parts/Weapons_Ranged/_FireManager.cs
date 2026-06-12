@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using UnityEngine;
 
 public class FireManager : MonoBehaviour
@@ -15,10 +15,10 @@ public class FireManager : MonoBehaviour
 
     public AttackPartsData AttackPartsData => _attackPartsData;
 
-    // Ä«¸Ş¶ó ¼¼ÆÃ ¹æÁö
-    // °ø°İÆÄÆ® Á¤º¸ ¼öÁı
-    // ¹ß»çÅ¸ÀÔÀÌ Projecttile ÀÏ°æ¿ì ÇØ´ç °ÔÀÓ¿ÀºêÁ§Æ®¿¡ BulletPool ÄÄÆ÷³ÍÆ® »ı¼º, ÇÁ¸®ÆÕ »ı¼º
-    // ==> ¹«±â ÇÁ¸®ÆÕ¸¶´Ù BulletPool ½ºÅ©¸³Æ® ºÎÂø½Ã ¹ß»ıµÇ´Â ´©¶ôÇö»ó ¹æÁö¿Í ¿ÀºêÁ§Æ®Ç®¸µÀ» ÅëÇÑ ÃÑ¾Ë »çÀü »ı¼ºÀ» ÅëÇØ ÇÁ·¹ÀÓ µå¶ø ¹æÁö
+    // ì¹´ë©”ë¼ ì„¸íŒ… ë°©ì§€
+    // ê³µê²©íŒŒíŠ¸ ì •ë³´ ìˆ˜ì§‘
+    // ë°œì‚¬íƒ€ì…ì´ Projecttile ì¼ê²½ìš° í•´ë‹¹ ê²Œì„ì˜¤ë¸Œì íŠ¸ì— BulletPool ì»´í¬ë„ŒíŠ¸ ìƒì„±, í”„ë¦¬íŒ¹ ìƒì„±
+    // ==> ë¬´ê¸° í”„ë¦¬íŒ¹ë§ˆë‹¤ BulletPool ìŠ¤í¬ë¦½íŠ¸ ë¶€ì°©ì‹œ ë°œìƒë˜ëŠ” ëˆ„ë½í˜„ìƒ ë°©ì§€ì™€ ì˜¤ë¸Œì íŠ¸í’€ë§ì„ í†µí•œ ì´ì•Œ ì‚¬ì „ ìƒì„±ì„ í†µí•´ í”„ë ˆì„ ë“œë ë°©ì§€
     private void Awake()
     {
         EnsureMuzzlePoint();
@@ -40,12 +40,12 @@ public class FireManager : MonoBehaviour
         UnsubscribeReloadEvent();
     }
 
-    // FireManager¸¦ Enemy¿Í Player µÑ ´Ù°¡ »ç¿ëÇÒ ¿¹Á¤ÀÌ±â ¶§¹®¿¡
-    // ±âÁ¸¿¡´Â CompareTag¸¦ ÅëÇØ ÇÃ·¹ÀÌ¾îÀÎ °æ¿ì¿¡¸¸ ¸¶¿ì½º Å¬¸¯À¸·Î ¹ß»ç ¹× ¸®·Îµå Ã³¸®
-    // ÇöÀç ±¸Á¶¿¡¼­´Â FireManager°¡ Á÷Á¢ ÀÔ·ÂÀ» ÀĞÁö ¾ÊÀ½
-    // ÇÃ·¹ÀÌ¾î ÀÔ·ÂÀº CorePartsController / AttackPartController ÂÊ¿¡¼­ Ã³¸®ÇÏ°í,
-    // FireManager´Â ¿ÜºÎ¿¡¼­ TryFire()¸¦ È£Ãâ¹Ş¾Æ ½ÇÁ¦ ¹ß»ç¸¸ ´ã´ç
-    // Áï, ±âÁ¸ Update ÀÔ·Â Ã³¸® ·ÎÁ÷Àº Á¦°Å
+    // FireManagerë¥¼ Enemyì™€ Player ë‘˜ ë‹¤ê°€ ì‚¬ìš©í•  ì˜ˆì •ì´ê¸° ë•Œë¬¸ì—
+    // ê¸°ì¡´ì—ëŠ” CompareTagë¥¼ í†µí•´ í”Œë ˆì´ì–´ì¸ ê²½ìš°ì—ë§Œ ë§ˆìš°ìŠ¤ í´ë¦­ìœ¼ë¡œ ë°œì‚¬ ë° ë¦¬ë¡œë“œ ì²˜ë¦¬
+    // í˜„ì¬ êµ¬ì¡°ì—ì„œëŠ” FireManagerê°€ ì§ì ‘ ì…ë ¥ì„ ì½ì§€ ì•ŠìŒ
+    // í”Œë ˆì´ì–´ ì…ë ¥ì€ CorePartsController / AttackPartController ìª½ì—ì„œ ì²˜ë¦¬í•˜ê³ ,
+    // FireManagerëŠ” ì™¸ë¶€ì—ì„œ TryFire()ë¥¼ í˜¸ì¶œë°›ì•„ ì‹¤ì œ ë°œì‚¬ë§Œ ë‹´ë‹¹
+    // ì¦‰, ê¸°ì¡´ Update ì…ë ¥ ì²˜ë¦¬ ë¡œì§ì€ ì œê±°
     /*
     private void Update()
     {
@@ -69,8 +69,8 @@ public class FireManager : MonoBehaviour
     }
     */
 
-    // ¿ì¸® CorePartsController / AttackPartController¿ë ÃÊ±âÈ­ ÇÔ¼ö
-    // ¿ÜºÎ¿¡¼­ AttackPartsData±îÁö ³Ñ°Ü¹Ş¾Æ ¹«±â »óÅÂ¸¦ »õ·Î ¼³Á¤
+    // ìš°ë¦¬ CorePartsController / AttackPartControllerìš© ì´ˆê¸°í™” í•¨ìˆ˜
+    // ì™¸ë¶€ì—ì„œ AttackPartsDataê¹Œì§€ ë„˜ê²¨ë°›ì•„ ë¬´ê¸° ìƒíƒœë¥¼ ìƒˆë¡œ ì„¤ì •
     public void InitializeWeapon(
         AttackPartsData attackPartsData,
         LayerMask targetLayer,
@@ -117,17 +117,13 @@ public class FireManager : MonoBehaviour
         WeaponRuntime.StartReload();
     }
 
-    // ÃÑ¾Ë »ı¼º (ProjectTileÀº ÇØ´ç ¹æÇâÀ¸·Î ¹ß»çµÇµµ·Ï Ã³¸®ÇØ¾ßÇÏ±â ¶§¹®¿¡)
-    // TargetÀÇ À§Ä¡¿Í ÃÑ±¸ÀÇ À§Ä¡·Î »ç°İÇÒ ¹æÇâ °è»ê
-    // ÃÑ¾Ë »ı¼ºÀº »çÀü¿¡ ¿ÀºêÁ§Æ® Ç®¸µÀ» ÅëÇØ »ı¼ºÇÑ ÃÑ¾Ë °¡Á®¿À±â
-    // ÃÑ¾ËÀÇ Á¶ÁØ¹æÇâÀº ¹ß»ç¹æÇâÀ» ±âÁØÀ¸·Î Á¤¸éÀ¸·Î ³ª°¡µµ·Ï Áï°¢ÀûÀÎ °¢µµ Á¶Á¤(À§ È¤Àº ¾Æ·¡ÀÇ ÀûÀ» Á¶ÁØÇÒ ¶§ ÃÑ¾ËÀÌ ²©¿©³ª°¡°ÔÇÏÁö ¾Êµµ·Ï)
-    // ¸¶Áö¸· Á¶°Ç¹®Àº »ı¼ºµÇ´Â ÃÑ¾ËÀÇ µ¥¹ÌÁö, »ç°Å¸® Á¤º¸¸¦ Ãß°¡
+    // ì´ì•Œ ìƒì„± (ProjectTileì€ í•´ë‹¹ ë°©í–¥ìœ¼ë¡œ ë°œì‚¬ë˜ë„ë¡ ì²˜ë¦¬í•´ì•¼í•˜ê¸° ë•Œë¬¸ì—)
+    // Targetì˜ ìœ„ì¹˜ì™€ ì´êµ¬ì˜ ìœ„ì¹˜ë¡œ ì‚¬ê²©í•  ë°©í–¥ ê³„ì‚°
+    // ì´ì•Œ ìƒì„±ì€ ì‚¬ì „ì— ì˜¤ë¸Œì íŠ¸ í’€ë§ì„ í†µí•´ ìƒì„±í•œ ì´ì•Œ ê°€ì ¸ì˜¤ê¸°
+    // ì´ì•Œì˜ ì¡°ì¤€ë°©í–¥ì€ ë°œì‚¬ë°©í–¥ì„ ê¸°ì¤€ìœ¼ë¡œ ì •ë©´ìœ¼ë¡œ ë‚˜ê°€ë„ë¡ ì¦‰ê°ì ì¸ ê°ë„ ì¡°ì •(ìœ„ í˜¹ì€ ì•„ë˜ì˜ ì ì„ ì¡°ì¤€í•  ë•Œ ì´ì•Œì´ êº½ì—¬ë‚˜ê°€ê²Œí•˜ì§€ ì•Šë„ë¡)
+    // ë§ˆì§€ë§‰ ì¡°ê±´ë¬¸ì€ ìƒì„±ë˜ëŠ” ì´ì•Œì˜ ë°ë¯¸ì§€, ì‚¬ê±°ë¦¬ ì •ë³´ë¥¼ ì¶”ê°€
     private void CreateBullet(Vector3 targetPoint)
     {
-        if(gameObject.layer == 7)
-        {
-            Debug.Log("¸ó½ºÅÍ°¡ CreateBulletÀ» ½ÃµµÇÔ");
-        }
         if (_bulletPool == null)
             return;
 
@@ -150,12 +146,12 @@ public class FireManager : MonoBehaviour
         }
     }
 
-    // È÷Æ®½ºÄµÅ¸ÀÔÀÇ ¹«±â Àü¿ë ¹ß»ç ·ÎÁ÷
-    // ¹ß»ç¹æÇâ ¼³Á¤ ÈÄ, Ray¸¦ ½÷¼­ È÷Æ®µÈ Á¤º¸ ÆÇº°
-    // Enemy, Player¸ğµÎ FireManager¸¦ »ç¿ëÇÒ ¿¹Á¤ÀÌ±â ¶§¹®¿¡ °¢°¢ÀÇ ÇÇ°İ ÇÔ¼ö È£Ãâ
+    // íˆíŠ¸ìŠ¤ìº”íƒ€ì…ì˜ ë¬´ê¸° ì „ìš© ë°œì‚¬ ë¡œì§
+    // ë°œì‚¬ë°©í–¥ ì„¤ì • í›„, Rayë¥¼ ì´ì„œ íˆíŠ¸ëœ ì •ë³´ íŒë³„
+    // Enemy, Playerëª¨ë‘ FireManagerë¥¼ ì‚¬ìš©í•  ì˜ˆì •ì´ê¸° ë•Œë¬¸ì— ê°ê°ì˜ í”¼ê²© í•¨ìˆ˜ í˜¸ì¶œ
     private void FireHitscan(Vector3 targetPoint)
     {
-        Debug.Log($"HitScan È£ÃâµÊ");
+        Debug.Log($"HitScan í˜¸ì¶œë¨");
 
         Vector3 fireDirection = (targetPoint - _muzzlePoint.position).normalized;
 
@@ -168,30 +164,23 @@ public class FireManager : MonoBehaviour
         {
             Debug.Log($"FindHitScan {hit.collider.name}");
 
-            EnemyCombatController enemy =
-                hit.collider.GetComponentInParent<EnemyCombatController>();
+            DurabilityController hitDurability = hit.collider.GetComponentInParent<DurabilityController>();
 
-            PlayerCombatController player =
-                hit.collider.GetComponentInParent<PlayerCombatController>();
-
-            if (enemy != null)
-            {
-                enemy.TakeDamage(_attackPartsData.Damage);
-            }
-            else if (player != null)
-            {
-                Debug.DrawLine(_muzzlePoint.position, hit.point, Color.black, 0.5f);
-                Debug.Log($"<color=red>[Hitscan Hit] ÇÃ·¹ÀÌ¾î Å¸°İ ¼º°ø!</color> µ¥¹ÌÁö: {_attackPartsData.Damage} | ÄÄÆ÷³ÍÆ® ¿ÀºêÁ§Æ®: {player.gameObject.name}");
-
-                player.TakeDamage(_attackPartsData.Damage);
-            }
+            if (hitDurability != null)
+        {
+            // ğŸ¯ ë§ì€ ë¶€ìœ„ê°€ ì˜¤ë¥¸íŒ”ì´ë©´ ì˜¤ë¥¸íŒ” ìŠ¤í¬ë¦½íŠ¸ì˜ TakeDamageê°€ ì‹¤í–‰ë˜ì–´
+            // ì•Œì•„ì„œ ì˜¤ë¥¸íŒ” ë‚´êµ¬ë„ê°€ ê¹ì´ê³ , ì˜¤ë¥¸íŒ” ë°©ì–´êµ¬ë¥¼ ì¶”ì í•˜ê²Œ ë©ë‹ˆë‹¤!
+            hitDurability.TakeDamage(_attackPartsData.Damage);
+            
+            Debug.Log($"Hitscan ë¶€ìœ„ ì´ë¦„: {hit.collider.gameObject.name} / íƒ€ì…: {hitDurability.DurabilityType}");
+        }
         }
     }
 
-    // µ¿Àû ÀåÂø ½Ã ¹«±â ÆÄÃ÷ÀÇ ¼ÒÀ¯ÀÚ Á¤º¸(·¹ÀÌ¾î ¹× Å¸°Ù) ¹× µ¥ÀÌÅÍ ·±Å¸ÀÓ ÃÊ±âÈ­
-    // ÀÎ½ºÆåÅÍ¿¡ ÃÑ±¸ Á¤º¸°¡ ´©¶ôµÇ¾úÀ» ½Ã ÀÚ½Ä ¿ÀºêÁ§Æ® Æ®¸®¸¦ ÀÚµ¿ Å½»öÇÏ¿© º¸Á¤ Ã³¸®
-    // ¼ÒÀ¯ÀÚ(Player/Enemy)±âÁØ  ·¹ÀÌ¾î ¼³Á¤
-    // ¹«±â ±³Ã¼ Å¸ÀÌ¹Ö¿¡ ¸ÂÃç ±âÁ¸¿¡ »ı¼ºµÇ¾î ÀÖ´ø ÅºÈ¯ ¿ÀºêÁ§Æ® Ç®À» ¿ÏÀü Ã»¼Ò(Destroy)ÇÑ µÚ, »õ ¹«±â ½ºÆå ÅºÃ¢ ¼ö·®¿¡ ¸Â°Ô Àç±¸Ãà
+    // ë™ì  ì¥ì°© ì‹œ ë¬´ê¸° íŒŒì¸ ì˜ ì†Œìœ ì ì •ë³´(ë ˆì´ì–´ ë° íƒ€ê²Ÿ) ë° ë°ì´í„° ëŸ°íƒ€ì„ ì´ˆê¸°í™”
+    // ì¸ìŠ¤í™í„°ì— ì´êµ¬ ì •ë³´ê°€ ëˆ„ë½ë˜ì—ˆì„ ì‹œ ìì‹ ì˜¤ë¸Œì íŠ¸ íŠ¸ë¦¬ë¥¼ ìë™ íƒìƒ‰í•˜ì—¬ ë³´ì • ì²˜ë¦¬
+    // ì†Œìœ ì(Player/Enemy)ê¸°ì¤€  ë ˆì´ì–´ ì„¤ì •
+    // ë¬´ê¸° êµì²´ íƒ€ì´ë°ì— ë§ì¶° ê¸°ì¡´ì— ìƒì„±ë˜ì–´ ìˆë˜ íƒ„í™˜ ì˜¤ë¸Œì íŠ¸ í’€ì„ ì™„ì „ ì²­ì†Œ(Destroy)í•œ ë’¤, ìƒˆ ë¬´ê¸° ìŠ¤í™ íƒ„ì°½ ìˆ˜ëŸ‰ì— ë§ê²Œ ì¬êµ¬ì¶•
     public void SetWeaponOwner(LayerMask targetLayer, int ownerLayer)
     {
         _targetLayer = targetLayer;
@@ -201,7 +190,7 @@ public class FireManager : MonoBehaviour
 
         if (_attackPartsData == null)
         {
-            Debug.LogWarning($"{gameObject.name}¿¡ AttackPartsData°¡ ¾ø½À´Ï´Ù.");
+            Debug.LogWarning($"{gameObject.name}ì— AttackPartsDataê°€ ì—†ìŠµë‹ˆë‹¤.");
             return;
         }
 
@@ -276,8 +265,8 @@ public class FireManager : MonoBehaviour
         _isReloadEventSubscribed = false;
     }
 
-    // ÃÑ±¸ À§Ä¡ ÀÚµ¿ Å½»ö
-    // ÇÏÀÌ¾î¶óÅ° ÇÏÀ§ ±¸Á¶ ±âÁØ Àç±Í ÇÔ¼ö ÇüÅÂ·Î ¼øÈ¸ÇÏ¿© MuzzlePoint ¹®ÀÚ¿­·Î Ã£¾Æ¼­ ¿¬°á
+    // ì´êµ¬ ìœ„ì¹˜ ìë™ íƒìƒ‰
+    // í•˜ì´ì–´ë¼í‚¤ í•˜ìœ„ êµ¬ì¡° ê¸°ì¤€ ì¬ê·€ í•¨ìˆ˜ í˜•íƒœë¡œ ìˆœíšŒí•˜ì—¬ MuzzlePoint ë¬¸ìì—´ë¡œ ì°¾ì•„ì„œ ì—°ê²°
     private Transform FindChildMuzzle(Transform parent, string targetName)
     {
         foreach (Transform child in parent)
@@ -303,12 +292,12 @@ public class FireManager : MonoBehaviour
 
         if (_muzzlePoint != null)
         {
-            Debug.Log($"muzzlePoint Ã£±â ¼º°ø.");
+            Debug.Log($"muzzlePoint ì°¾ê¸° ì„±ê³µ.");
             return;
         }
 
         Debug.LogWarning(
-            $"{gameObject.name}¿¡ MuzzlePoint°¡ ¾ø¾î transformÀ» ÃÑ±¸·Î »ç¿ëÇÕ´Ï´Ù."
+            $"{gameObject.name}ì— MuzzlePointê°€ ì—†ì–´ transformì„ ì´êµ¬ë¡œ ì‚¬ìš©í•©ë‹ˆë‹¤."
         );
 
         _muzzlePoint = transform;
@@ -324,7 +313,7 @@ public class FireManager : MonoBehaviour
         }
     }
 
-    // ¹«±â ÀçÀåÀü½Ã µ¿ÀÛµÇ´Â ÄÚ·çÆ¾
+    // ë¬´ê¸° ì¬ì¥ì „ì‹œ ë™ì‘ë˜ëŠ” ì½”ë£¨í‹´
     private void ReloadStarted()
     {
         if (_reloadCoroutine != null)
@@ -335,7 +324,7 @@ public class FireManager : MonoBehaviour
         _reloadCoroutine = StartCoroutine(ReloadCoroutine());
     }
 
-    // 2ÃÊ ´ë±â ÈÄ Reload¿Ï·áµÇ¾ú´Ù°í ¾Ë¸®±â
+    // 2ì´ˆ ëŒ€ê¸° í›„ Reloadì™„ë£Œë˜ì—ˆë‹¤ê³  ì•Œë¦¬ê¸°
     private IEnumerator ReloadCoroutine()
     {
         yield return new WaitForSeconds(2f);
@@ -357,8 +346,8 @@ public class FireManager : MonoBehaviour
         _reloadCoroutine = null;
     }
 
-    // ¸ó½ºÅÍ ±âÁØ ÇÃ·¹ÀÌ¾î°¡ ÈÄ¹æ¿¡ ÀÖ¾îµµ ÃÑ¾ËÀÌ µÚ·Î ¹ß»çµÇÁö ¾Êµµ·Ï ÇÃ·¹ÀÌ¾î ¹æÇâÀ¸·Î È¸Àü½ÃÅ°´Â ÇÔ¼ö
-    // lookDirection.y = 0f;¸¦ ÅëÇØ ¸ó½ºÅÍ°¡ »óÇÏ·Î È¸ÀüÇÏÁö¾Êµµ·Ï Ã³¸®
+    // ëª¬ìŠ¤í„° ê¸°ì¤€ í”Œë ˆì´ì–´ê°€ í›„ë°©ì— ìˆì–´ë„ ì´ì•Œì´ ë’¤ë¡œ ë°œì‚¬ë˜ì§€ ì•Šë„ë¡ í”Œë ˆì´ì–´ ë°©í–¥ìœ¼ë¡œ íšŒì „ì‹œí‚¤ëŠ” í•¨ìˆ˜
+    // lookDirection.y = 0f;ë¥¼ í†µí•´ ëª¬ìŠ¤í„°ê°€ ìƒí•˜ë¡œ íšŒì „í•˜ì§€ì•Šë„ë¡ ì²˜ë¦¬
     //private void RotateToPlayer(Vector3 targetPoint)
     //{
     //    if (gameObject.transform.root == null || !gameObject.transform.root.CompareTag("Enemy")) return;

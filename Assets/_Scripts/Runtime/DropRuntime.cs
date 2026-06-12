@@ -1,36 +1,49 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using System.Collections.Generic;
 
 public class DropRuntime
 {
     private int _maxDropCount;
 
-    // »ç¸Á½Ã ÆÄÃ÷ µå¶øÀ» °áÁ¤ÇÏ´Â ÇÔ¼ö
-    // EnemyDataÀÇ DropParts ¸®½ºÆ®¿¡¼­ °¢ ÆÄÃ÷º°·Î 20%ÀÇ µå¶øÈ®·üÀ» Àû¿ë.
-    // ¿©·¯ ÆÄÃ÷Áß _maxDropCount°³¼ö¸¸Å­ ÀÌ¹Ì µå¶ø¸®½ºÆ®¿¡ Æ÷ÇÔµÇ¾ú´Ù¸é ³ª¸ÓÁö´Â ÀÚµ¿ µå¶øµÇÁö¾Ê°Ô Ã³¸®
-    // Ãß°¡·Î randomIndex¿¡ ÆÄÃ÷ÀÇ ·¹¾î¸®Æ¼¸¦ °í·ÁÇÏ¿© Switch¹®À» È°¿ëÇÏ¿© µå¶ø È®·üÀ» Á¶Á¤ÇÏ´Â °ÍÀ» °í·Á
-    // ÃÖÁ¾ _dropList¿¡ µå¶øµÉ ÆÄÃ÷°¡ Á¸ÀçÇÑ´Ù¸é ÇØ´ç ÆÄÃ÷µéÀ» InstantiateÇÏ¿© µå¶øÇÏ´Â ÇÔ¼ö È£Ãâ
-    public void DropParts(EnemyData _enemyData, Vector3 spawnPosition)
+    // ì‚¬ë§ì‹œ íŒŒì¸  ë“œëì„ ê²°ì •í•˜ëŠ” í•¨ìˆ˜
+    // EnemyDataì˜ DropParts ë¦¬ìŠ¤íŠ¸ì—ì„œ ê° íŒŒì¸ ë³„ë¡œ 20%ì˜ ë“œëí™•ë¥ ì„ ì ìš©.
+    // ì—¬ëŸ¬ íŒŒì¸ ì¤‘ _maxDropCountê°œìˆ˜ë§Œí¼ ì´ë¯¸ ë“œëë¦¬ìŠ¤íŠ¸ì— í¬í•¨ë˜ì—ˆë‹¤ë©´ ë‚˜ë¨¸ì§€ëŠ” ìë™ ë“œëë˜ì§€ì•Šê²Œ ì²˜ë¦¬
+    // ì¶”ê°€ë¡œ randomIndexì— íŒŒì¸ ì˜ ë ˆì–´ë¦¬í‹°ë¥¼ ê³ ë ¤í•˜ì—¬ Switchë¬¸ì„ í™œìš©í•˜ì—¬ ë“œë í™•ë¥ ì„ ì¡°ì •í•˜ëŠ” ê²ƒì„ ê³ ë ¤
+    // ìµœì¢… _dropListì— ë“œëë  íŒŒì¸ ê°€ ì¡´ì¬í•œë‹¤ë©´ í•´ë‹¹ íŒŒì¸ ë“¤ì„ Instantiateí•˜ì—¬ ë“œëí•˜ëŠ” í•¨ìˆ˜ í˜¸ì¶œ
+    public void DropParts(EnemyData _enemyData, Vector3 spawnPosition, List<PartsData> destroyedParts)
     {
         if (_enemyData == null || _enemyData.DropParts == null)
         {
-            Debug.LogError("EnemyData¿¡ DropParts°¡ Á¸ÀçÇÏÁö¾ÊÀ½.");
+            Debug.LogError("EnemyDataì— DropPartsê°€ ì¡´ì¬í•˜ì§€ì•ŠìŒ.");
             return;
+        }
+
+        List<PartsData> availablePool = new List<PartsData>(_enemyData.DropParts);
+
+        if (destroyedParts != null && destroyedParts.Count > 0)
+        {
+            foreach (PartsData brokenPart in destroyedParts)
+            {
+                if (availablePool.Contains(brokenPart))
+                {
+                    availablePool.Remove(brokenPart);
+                }
+            }
         }
 
         List<PartsData> _dropList = new List<PartsData>();
         _maxDropCount = Random.Range(1, 3);
 
-        for (int i = 0; i < _enemyData.DropParts.Count; i++)
+        for (int i = 0; i < availablePool.Count; i++)
         {
             if (_dropList.Count == _maxDropCount) break;
 
-            _dropList.Add(_enemyData.DropParts[i]);
+            _dropList.Add(availablePool[i]);
         }
 
         if (_dropList.Count > 0)
         {
-            CreateDropParts(_dropList, spawnPosition + new Vector3(0f, 2f, 0f));
+            CreateDropParts(_dropList, spawnPosition);
         }
 
 
@@ -43,19 +56,36 @@ public class DropRuntime
                 float currencyRoll = Random.Range(0f, 100f);
                 if (currencyRoll <= dropData.DropChance)
                 {
-                    SpawnCurrencyObject(dropData, spawnPosition + new Vector3(0f, 0f, 0f));
+                    CreateDropCurrency(dropData, spawnPosition);
                 }
             }
         }
     }
 
-    // ÇÊµå¿¡ »ı¼º½ÃÅ³ ÀçÈ­¿Í »ı¼ºÀ§Ä¡¸¦ ¹Ş¾Æ ÇÁ¸®ÆÕ »ı¼ºÇÏ´Â ÇÔ¼ö
-    private void SpawnCurrencyObject(DropItem dropData, Vector3 centerPosition)
-    { 
+    // Ground layerê°€ ë¶™ì€ ë°”ë‹¥ìœ„ì¹˜í™•ì¸í•˜ê¸°
+    private Vector3 GetSpawnDropPos(Vector3 targetPosition)
+    {
+        Vector3 rayStart = targetPosition + new Vector3(0f, 3f, 0f);
+        float rayDistance = 20f; 
+
+        int groundLayerMask = LayerMask.GetMask("Ground");
+
+        if (Physics.Raycast(rayStart, Vector3.down, out RaycastHit hit, rayDistance, groundLayerMask))
+        {
+            return hit.point;
+        }
+
+        return targetPosition;
+    }
+
+
+    // í•„ë“œì— ìƒì„±ì‹œí‚¬ ì¬í™”ì™€ ìƒì„±ìœ„ì¹˜ë¥¼ ë°›ì•„ í”„ë¦¬íŒ¹ ìƒì„±í•˜ëŠ” í•¨ìˆ˜
+    private void CreateDropCurrency(DropItem dropData, Vector3 centerPosition)
+    {
         GameObject currencyObj = Object.Instantiate(dropData.ItemPrefab);
 
         Currency dropCurrency = currencyObj.AddComponent<Currency>();
-        dropCurrency.Initialize(dropData); 
+        dropCurrency.Initialize(dropData);
 
         BoxCollider collider = currencyObj.GetComponent<BoxCollider>();
         if (collider == null) collider = currencyObj.AddComponent<BoxCollider>();
@@ -64,21 +94,24 @@ public class DropRuntime
 
         currencyObj.transform.localScale = Vector3.one * 1.5f;
 
-        Vector3 randomOffset = Random.insideUnitSphere * 2f;
+        Vector3 randomOffset = Random.insideUnitSphere * 5f;
         randomOffset.y = 0f;
-        currencyObj.transform.position = centerPosition + randomOffset + new Vector3(0, 2f, 0);
+        Vector3 scatterPosition = centerPosition + randomOffset;
 
+        Vector3 finalGroundPos = GetSpawnDropPos(scatterPosition);
+
+        currencyObj.transform.position = finalGroundPos + new Vector3(0f, 0.4f, 0f);
     }
 
 
-    // ÇÊµå¿¡ »ı¼º½ÃÅ³ ÆÄÃ÷¿Í »ı¼ºÀ§Ä¡¸¦ ¹Ş¾Æ ÇÁ¸®ÆÕÀ» »ı¼ºÇÏ´Â ÇÔ¼ö
-    // À§Ä¡ÀÇ °æ¿ì ¸ó½ºÅÍÀÇ À§Ä¡¸¦ ±âÁØÀ¸·Î 1¸¸Å­ ·£´ıÇÑ À§Ä¡¿¡ »ı¼ºµÇµµ·Ï Ã³¸®
-    // Collider¸¦ Àû¿ëÇÏ´Â ÀÌÀ¯´Â µå¶øÃ³¸®¸¦ ÁøÇàÇÒ ¶§, OnTriggerEnter¸¦ ÁøÇàÇÏ±â À§ÇØ Ãß°¡
-    // ColliderÀÇ ÃÖÃÊ Å©±â°¡ ÀÛÀº°ÍÀ» °í·ÁÇÏ¿© size center¸¦ Á¶Á¤
+    // í•„ë“œì— ìƒì„±ì‹œí‚¬ íŒŒì¸ ì™€ ìƒì„±ìœ„ì¹˜ë¥¼ ë°›ì•„ í”„ë¦¬íŒ¹ì„ ìƒì„±í•˜ëŠ” í•¨ìˆ˜
+    // ìœ„ì¹˜ì˜ ê²½ìš° ëª¬ìŠ¤í„°ì˜ ìœ„ì¹˜ë¥¼ ê¸°ì¤€ìœ¼ë¡œ 1ë§Œí¼ ëœë¤í•œ ìœ„ì¹˜ì— ìƒì„±ë˜ë„ë¡ ì²˜ë¦¬
+    // Colliderë¥¼ ì ìš©í•˜ëŠ” ì´ìœ ëŠ” ë“œëì²˜ë¦¬ë¥¼ ì§„í–‰í•  ë•Œ, OnTriggerEnterë¥¼ ì§„í–‰í•˜ê¸° ìœ„í•´ ì¶”ê°€
+    // Colliderì˜ ìµœì´ˆ í¬ê¸°ê°€ ì‘ì€ê²ƒì„ ê³ ë ¤í•˜ì—¬ size centerë¥¼ ì¡°ì •
     private void CreateDropParts(List<PartsData> _dropList, Vector3 spawnPosition)
     {
-        Debug.Log($"µå¶ø ÆÄÃ÷ ¾ÆÀÌÅÛ »ı¼º");
-        for(int i = 0; i < _dropList.Count; i++)
+        Debug.Log($"ë“œë íŒŒì¸  ì•„ì´í…œ ìƒì„±");
+        for (int i = 0; i < _dropList.Count; i++)
         {
             GameObject dropPart = Object.Instantiate(_dropList[i].PartsPrefab);
             dropPart.AddComponent<BoxCollider>();
@@ -87,14 +120,17 @@ public class DropRuntime
             {
                 collider.isTrigger = true;
                 collider.center = new Vector3(-0.3f, 0, 0.6f);
-                collider.size = new Vector3(2f, 2f, 6f);
+                collider.size = new Vector3(1f, 1f, 3f);
             }
             dropPart.transform.localScale = Vector3.one;
 
-            Vector3 randomOffset = Random.insideUnitSphere * 3f;
+            Vector3 randomOffset = Random.insideUnitSphere * 5f;
             randomOffset.y = 0f;
-            dropPart.transform.position = spawnPosition + randomOffset + new Vector3(0, 0.6f, 0);
+            Vector3 scatterPosition = spawnPosition + randomOffset;
+
+            Vector3 finalGroundPos = GetSpawnDropPos(scatterPosition);
+
+            dropPart.transform.position = finalGroundPos + new Vector3(0f, 0.6f, 0f);
         }
     }
-
 }
