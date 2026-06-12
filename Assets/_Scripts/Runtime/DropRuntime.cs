@@ -30,7 +30,7 @@ public class DropRuntime
 
         if (_dropList.Count > 0)
         {
-            CreateDropParts(_dropList, spawnPosition + new Vector3(0f, -2f, 0f));
+            CreateDropParts(_dropList, spawnPosition + new Vector3(0f, 2f, 0f));
         }
 
 
@@ -43,7 +43,7 @@ public class DropRuntime
                 float currencyRoll = Random.Range(0f, 100f);
                 if (currencyRoll <= dropData.DropChance)
                 {
-                    SpawnCurrencyObject(dropData, spawnPosition + new Vector3(0f, -4f, 0f));
+                    SpawnCurrencyObject(dropData, spawnPosition + new Vector3(0f, 0f, 0f));
                 }
             }
         }
@@ -61,6 +61,8 @@ public class DropRuntime
         if (collider == null) collider = currencyObj.AddComponent<BoxCollider>();
         collider.isTrigger = true;
         collider.size = new Vector3(1.5f, 1.5f, 1.5f);
+
+        currencyObj.transform.localScale = Vector3.one * 1.5f;
 
         Vector3 randomOffset = Random.insideUnitSphere * 2f;
         randomOffset.y = 0f;
@@ -87,7 +89,7 @@ public class DropRuntime
                 collider.center = new Vector3(-0.3f, 0, 0.6f);
                 collider.size = new Vector3(2f, 2f, 6f);
             }
-            dropPart.transform.localScale = Vector3.one * 0.5f;
+            dropPart.transform.localScale = Vector3.one;
 
             Vector3 randomOffset = Random.insideUnitSphere * 3f;
             randomOffset.y = 0f;
