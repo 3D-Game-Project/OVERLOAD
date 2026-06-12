@@ -51,7 +51,7 @@ public class DropRuntime
 
     // 필드에 생성시킬 재화와 생성위치를 받아 프리팹 생성하는 함수
     private void SpawnCurrencyObject(DropItem dropData, Vector3 centerPosition)
-    {
+    { 
         GameObject currencyObj = Object.Instantiate(dropData.ItemPrefab);
 
         Currency dropCurrency = currencyObj.AddComponent<Currency>();
