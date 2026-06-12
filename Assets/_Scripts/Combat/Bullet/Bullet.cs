@@ -25,11 +25,37 @@ public class Bullet : MonoBehaviour
         _isReturned = false;
     }
 
-    // 총알의 위치를 속도에 맞춰 총알의 앞방향으로 실시간 이동처리
-    // 이동된거리와 총구 사이의 거리가 총의 사거리보다 커지면 총알제거.
     private void Update()
     {
-        transform.Translate(Vector3.forward * _speed * Time.deltaTime);
+        if (_isReturned) return;
+
+        float moveDistance = _speed * Time.deltaTime;
+
+        if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, moveDistance))
+        {
+            int hitLayer = hit.collider.gameObject.layer;
+
+            if ((_targetLayer.value & (1 << hitLayer)) != 0)
+            {
+                DurabilityController targetDurability = hit.collider.GetComponentInParent<DurabilityController>();
+
+                if (targetDurability != null)
+                {
+                    targetDurability.TakeDamage(_damage);
+                }
+
+                ReturnToPool();
+                return;
+            }
+
+            if (hitLayer != LayerMask.NameToLayer("Player"))
+            {
+                ReturnToPool();
+                return;
+            }
+        }
+
+        transform.Translate(Vector3.forward * moveDistance);
 
         if (Vector3.Distance(_startPosition, transform.position) >= _maxRange)
         {
@@ -42,32 +68,7 @@ public class Bullet : MonoBehaviour
     // Layer를 지정하지 않은 곳에 부딪히는 경우 총알 제거
     private void OnTriggerEnter(Collider other)
     {
-        if ((_targetLayer.value & (1 << other.gameObject.layer)) != 0)
-        {
-            if (other.TryGetComponent(out EnemyCombatController enemy))
-            {
-                Debug.Log("TakeDamage 호출");
-                enemy.TakeDamage(_damage);
-            }
-            else if (other.TryGetComponent(out PlayerCombatController player))
-            {
-                player.TakeDamage(_damage);
-            }
-
-            ReturnToPool();
-            return;
-        }
-
-        if (other.gameObject.layer == LayerMask.NameToLayer("Default"))
-        {
-            if (other.GetComponentInParent<EnemyCombatController>() != null ||
-                other.GetComponentInParent<PlayerCombatController>() != null)
-            {
-                return; 
-            }
-
-            ReturnToPool();
-        }
+      
     }
 
     // 총알 회수 함수

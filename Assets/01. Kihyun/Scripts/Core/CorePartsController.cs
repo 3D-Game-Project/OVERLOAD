@@ -310,6 +310,14 @@ public class CorePartsController : MonoBehaviour
 
         ApplyVisualMirror(partObject, slot);
 
+        // 규수: 부착한 파츠의 SlotId를 자동으로 DurabilityController에 추가하기 위해서 추가
+        DurabilityController[] durabilities = partObject.GetComponentsInChildren<DurabilityController>(true);
+        foreach (var durability in durabilities)
+        {
+            durability.SetAssociatedSlotId(slot.SlotId);
+            Debug.Log($"💉 [SlotID 주입 성공!] {partObject.name}에 {slot.SlotId} 등록 완료.");
+        }
+
         IPart part = FindPart(partObject);
 
         if (part == null)

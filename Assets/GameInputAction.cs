@@ -244,7 +244,7 @@ public partial class @GameInputAction: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""6726e311-03d2-41de-8886-758637503b36"",
-                    ""path"": ""<Keyboard>/z"",
+                    ""path"": ""<Keyboard>/q"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -255,7 +255,7 @@ public partial class @GameInputAction: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""ec234f74-0fd5-428e-96f5-2c7344b52062"",
-                    ""path"": ""<Keyboard>/i"",
+                    ""path"": ""<Keyboard>/e"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -288,7 +288,7 @@ public partial class @GameInputAction: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""a3a3c918-1f09-4247-9f6b-fbbc05fae8e1"",
-                    ""path"": ""<Keyboard>/g"",
+                    ""path"": ""<Keyboard>/f"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",

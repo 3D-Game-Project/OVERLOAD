@@ -219,7 +219,7 @@ public class AttachTargetPopupUI : MonoBehaviour
         if (success)
         {
             Debug.Log($"[AttachTargetPopup] {_currentPart.name} 장착 완료 → {targetSlot.SlotId}");
-
+            MechPreviewStudio.Instance.RefreshPreview();
             Close();
         }
         else

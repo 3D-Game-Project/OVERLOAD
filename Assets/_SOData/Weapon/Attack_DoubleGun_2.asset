@@ -16,8 +16,8 @@ MonoBehaviour:
   _partsPrefab: {fileID: 100014, guid: 4b13fcf15332c604d8c7d0bcaab928d7, type: 3}
   _requiredLoad: 0
   _partsImage: {fileID: 0}
-  _maxDurability: 0
-  _price: 0
+  _maxDurability: 100
+  _price: 50
   _description: 
   _fireType: 0
   _damage: 10
