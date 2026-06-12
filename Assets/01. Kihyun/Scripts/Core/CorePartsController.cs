@@ -228,6 +228,31 @@ public class CorePartsController : MonoBehaviour
         return foundSlot;
     }
 
+    public List<AttachmentSlot> GetCompatibleSlots(PartsData partsData, bool onlyEmptySlot = true)
+    {
+        List<AttachmentSlot> result = new List<AttachmentSlot>();
+
+        if (partsData == null)
+            return result;
+
+        foreach(AttachmentSlot slot in _attachmentSlots)
+        {
+            if (slot == null)
+                continue;
+
+            if (onlyEmptySlot && slot.HasPart)
+                continue;
+
+            if (!slot.CanAttach(partsData))
+                continue;
+
+            result.Add(slot);
+        }
+
+        return result;
+    }
+
+
     private bool AttachPartInternal(
         PartsData partsData,
         AttachmentSlot slot,

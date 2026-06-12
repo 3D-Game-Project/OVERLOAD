@@ -17,6 +17,7 @@ public class PlayerInventoryUI : MonoBehaviour
     private Shop _cachedShop;
     private SellPopup _cachedSellPopup;
     private PartDetailPopup _cachedDetailPopup;
+    private SlotOptionPopupUI _cachedSlotOptionPopup;
 
     private void Awake()
     {
@@ -26,6 +27,7 @@ public class PlayerInventoryUI : MonoBehaviour
         _cachedShop = FindFirstObjectByType<Shop>(FindObjectsInactive.Include);
         _cachedSellPopup = FindFirstObjectByType<SellPopup>(FindObjectsInactive.Include);
         _cachedDetailPopup = FindFirstObjectByType<PartDetailPopup>(FindObjectsInactive.Include);
+        _cachedSlotOptionPopup = FindFirstObjectByType<SlotOptionPopupUI>(FindObjectsInactive.Include);
     }
     
 
@@ -57,6 +59,11 @@ public class PlayerInventoryUI : MonoBehaviour
         if (_inventory != null)
         {
             _inventory.OnInventoryChanged -= RefreshUI;
+        }
+
+        if (_cachedSlotOptionPopup != null)
+        {
+            _cachedSlotOptionPopup.Close();
         }
     }
 
@@ -100,7 +107,7 @@ public class PlayerInventoryUI : MonoBehaviour
         {
             if (_partsUISlots[i] == null) continue;
 
-            _partsUISlots[i].SetMasterReferences(_cachedMenu, _cachedShop, _cachedSellPopup, _cachedDetailPopup);
+            _partsUISlots[i].SetMasterReferences(_cachedMenu, _cachedShop, _cachedSellPopup, _cachedDetailPopup, _cachedSlotOptionPopup);
 
             if (i < _inventory.PartsList.Count)
                 _partsUISlots[i].UpdateSlot(_inventory.PartsList[i]);
@@ -112,7 +119,7 @@ public class PlayerInventoryUI : MonoBehaviour
         {
             if (_consumablesUISlots[i] == null) continue;
 
-            _consumablesUISlots[i].SetMasterReferences(_cachedMenu, _cachedShop, _cachedSellPopup, _cachedDetailPopup);
+            _consumablesUISlots[i].SetMasterReferences(_cachedMenu, _cachedShop, _cachedSellPopup, _cachedDetailPopup, _cachedSlotOptionPopup);
 
             if (i < _inventory.ConsumablesList.Count)
                 _consumablesUISlots[i].UpdateSlot(_inventory.ConsumablesList[i]);
