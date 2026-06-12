@@ -33,7 +33,7 @@ public class PlayerInteractController : MonoBehaviour
     // 아이템에 플레이어 몸이 닿았을 때, 해당 아이템이 공격 파츠인지 확인하고, 공격 파츠라면 타겟으로 설정
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log($"Trigger Enter: {other.gameObject.name}");
+        
         if(other != null)
         {
             FireManager weapon = other.GetComponent<FireManager>();

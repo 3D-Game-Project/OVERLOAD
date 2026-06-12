@@ -302,6 +302,8 @@ GameObject:
   - component: {fileID: 3140013689231058118}
   - component: {fileID: -5445402345425617738}
   - component: {fileID: -4702799149399624567}
+  - component: {fileID: 8101546975737968752}
+  - component: {fileID: 6838142173471946850}
   m_Layer: 0
   m_Name: Weapon_DoubleGun_lvl2
   m_TagString: Untagged
@@ -364,7 +366,7 @@ MonoBehaviour:
   _muzzlePoint: {fileID: 400002}
   _targetLayer:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 0
 --- !u!114 &-7471297192521287740
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -392,7 +394,7 @@ MonoBehaviour:
   _fireManager: {fileID: -2246436101185848158}
   _targetLayer:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 0
   _ownerLayer: 0
 --- !u!114 &-5445402345425617738
 MonoBehaviour:
@@ -421,3 +423,42 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d62b6242fff73a0448b948f8688e1084, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PartVisualMirror
+--- !u!114 &8101546975737968752
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100014}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5e78ad0209321740b7bb5e0d6bd4b08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DurabilityController
+  _durabilityType: 0
+  _currentDurability: 0
+  _maxDurability: 300
+  _partsData: {fileID: 11400000, guid: 49236d3d62f8a2b4686170eb125fdcfc, type: 2}
+  _unitData: {fileID: 0}
+  _attachedSlotId: 
+--- !u!65 &6838142173471946850
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100014}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1.3, z: 2.5}
+  m_Center: {x: -0.3, y: 0, z: 0.5}

@@ -17,8 +17,8 @@ MonoBehaviour:
   _requiredLoad: 0
   _partsImage: {fileID: 1042982441, guid: 90c7d3cbce0c87342ad4e169693f8974, type: 3}
   _maxDurability: 0
-  _price: 50
-  _description: 
+  _price: 0
+  _description: double gun description
   _fireType: 0
   _damage: 5
   _range: 10

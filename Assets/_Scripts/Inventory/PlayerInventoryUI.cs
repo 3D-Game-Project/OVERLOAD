@@ -9,6 +9,8 @@ public class PlayerInventoryUI : MonoBehaviour
     [SerializeField] private Transform _partsSlotParent;
     [SerializeField] private Transform _consumablesSlotParent;
 
+    [SerializeField] private CorePartsController _corePartsController;
+
     private List<InventorySlot> _partsUISlots = new List<InventorySlot>();
     private List<InventorySlot> _consumablesUISlots = new List<InventorySlot>();
 
@@ -18,9 +20,13 @@ public class PlayerInventoryUI : MonoBehaviour
     private SellPopup _cachedSellPopup;
     private PartDetailPopup _cachedDetailPopup;
     private SlotOptionPopupUI _cachedSlotOptionPopup;
+    private PartHoverInfoPopupUI _cachedHoverInfoPopup;
 
     private void Awake()
     {
+        if (_corePartsController == null)
+            _corePartsController = FindFirstObjectByType<CorePartsController>();
+
         _inventory = FindFirstObjectByType<PlayerInventory>();
 
         _cachedMenu = FindFirstObjectByType<MenuController>(FindObjectsInactive.Include);
@@ -28,6 +34,7 @@ public class PlayerInventoryUI : MonoBehaviour
         _cachedSellPopup = FindFirstObjectByType<SellPopup>(FindObjectsInactive.Include);
         _cachedDetailPopup = FindFirstObjectByType<PartDetailPopup>(FindObjectsInactive.Include);
         _cachedSlotOptionPopup = FindFirstObjectByType<SlotOptionPopupUI>(FindObjectsInactive.Include);
+        _cachedHoverInfoPopup = FindFirstObjectByType<PartHoverInfoPopupUI>(FindObjectsInactive.Include);
     }
     
 
@@ -107,7 +114,14 @@ public class PlayerInventoryUI : MonoBehaviour
         {
             if (_partsUISlots[i] == null) continue;
 
-            _partsUISlots[i].SetMasterReferences(_cachedMenu, _cachedShop, _cachedSellPopup, _cachedDetailPopup, _cachedSlotOptionPopup);
+            _partsUISlots[i].SetMasterReferences(
+                _cachedMenu,
+                _cachedShop, 
+                _cachedSellPopup, 
+                _cachedDetailPopup, 
+                _cachedSlotOptionPopup, 
+                _corePartsController, 
+                _cachedHoverInfoPopup);
 
             if (i < _inventory.PartsList.Count)
                 _partsUISlots[i].UpdateSlot(_inventory.PartsList[i]);
@@ -119,7 +133,13 @@ public class PlayerInventoryUI : MonoBehaviour
         {
             if (_consumablesUISlots[i] == null) continue;
 
-            _consumablesUISlots[i].SetMasterReferences(_cachedMenu, _cachedShop, _cachedSellPopup, _cachedDetailPopup, _cachedSlotOptionPopup);
+            _consumablesUISlots[i].SetMasterReferences(_cachedMenu, 
+                _cachedShop, 
+                _cachedSellPopup, 
+                _cachedDetailPopup, 
+                _cachedSlotOptionPopup, 
+                _corePartsController,
+                _cachedHoverInfoPopup);
 
             if (i < _inventory.ConsumablesList.Count)
                 _consumablesUISlots[i].UpdateSlot(_inventory.ConsumablesList[i]);

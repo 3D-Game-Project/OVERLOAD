@@ -340,7 +340,6 @@ public class PartEquipActionController : MonoBehaviour
                     _currentSlot
                 );
         }
-
         return false;
     }
 

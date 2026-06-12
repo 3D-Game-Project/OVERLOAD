@@ -55,6 +55,6 @@ public class EnemyCombatController : MonoBehaviour
 
         DropRuntime dropRuntime = new DropRuntime();
         Debug.Log($"사망 후 드랍처리");
-        dropRuntime.DropParts(UnitRuntime.UnitData as EnemyData, transform.position);
+        dropRuntime.DropParts(UnitRuntime.UnitData as EnemyData, transform.position, null);
     }
 }
