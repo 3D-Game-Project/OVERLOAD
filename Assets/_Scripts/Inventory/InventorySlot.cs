@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class InventorySlot : MonoBehaviour
+public class InventorySlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [Header("UI References")]
     public Image itemIcon;
@@ -19,6 +19,14 @@ public class InventorySlot : MonoBehaviour
     private PartDetailPopup _detailPopup;
     private SlotOptionPopupUI _slotOptionPopup;
 
+    [Header("Slot Highlight")]
+    [SerializeField] private Image _slotBackground;
+    [SerializeField] private Color _normalColor = Color.white;
+    [SerializeField] private Color _equippedColor = new Color(0.35f, 0.75f, 1f, 1f);
+
+    private CorePartsController _corePartsController;
+    private PartHoverInfoPopupUI _hoverInfoPopup;
+
 
     private void Awake()
     {
@@ -29,6 +37,12 @@ public class InventorySlot : MonoBehaviour
 
         if (slotButton != null)
             slotButton.onClick.AddListener(OnSlotClicked);
+
+        if (_slotBackground == null)
+            _slotBackground = GetComponent<Image>();
+
+        if (_corePartsController == null)
+            _corePartsController = FindFirstObjectByType<CorePartsController>();
     }
 
     private void OnEnable()
@@ -45,13 +59,19 @@ public class InventorySlot : MonoBehaviour
         Shop shop,
         SellPopup sell,
         PartDetailPopup detail,
-        SlotOptionPopupUI slotOptionPopup)
+        SlotOptionPopupUI slotOptionPopup,
+        CorePartsController corePartsController,
+        PartHoverInfoPopupUI hoverInfoPopup)
     {
         _menu = menu;
         _shop = shop;
         _sellPopup = sell;
         _detailPopup = detail;
         _slotOptionPopup = slotOptionPopup;
+        _corePartsController = corePartsController;
+        _hoverInfoPopup = hoverInfoPopup;
+
+        RefreshEquippedHighlight();
     }
 
     //PartsData 정보에 맞춰 슬롯 비주얼 업데이트
@@ -71,6 +91,8 @@ public class InventorySlot : MonoBehaviour
             SetEmptyVisual();
 
         }
+
+        RefreshEquippedHighlight();
     }
 
     public void UpdateSlot(ItemData item)
@@ -87,8 +109,9 @@ public class InventorySlot : MonoBehaviour
         else
         {
             SetEmptyVisual();
-
         }
+
+        RefreshEquippedHighlight();
     }
 
     private void SetEmptyVisual()
@@ -99,6 +122,9 @@ public class InventorySlot : MonoBehaviour
 
             itemIcon.gameObject.SetActive(false);
         }
+
+        if (_slotBackground != null)
+            _slotBackground.color = _normalColor;
     }
 
     public void OnSlotClicked()
@@ -152,6 +178,11 @@ public class InventorySlot : MonoBehaviour
 
                 if (_slotOptionPopup != null)
                 {
+                    if (_hoverInfoPopup != null)
+                    {
+                        _hoverInfoPopup.ShowPinned(currentPart);
+                    }
+
                     _slotOptionPopup.Open(this, currentPart, inventory);
                 }
                 else
@@ -164,5 +195,40 @@ public class InventorySlot : MonoBehaviour
                 // 추후 소비 아이템 사용 함수 구역
             }
         }
+    }
+
+    private void RefreshEquippedHighlight()
+    {
+        if (_slotBackground == null)
+            return;
+
+        if (currentPart == null || _corePartsController == null)
+        {
+            _slotBackground.color = _normalColor;
+            return;
+        }
+
+        bool isEquipped = _corePartsController.IsEquipped(currentPart);
+
+        _slotBackground.color = isEquipped ? _equippedColor : _normalColor;
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (currentPart == null)
+            return;
+
+        if (_hoverInfoPopup == null)
+            return;
+
+        _hoverInfoPopup.ShowTemporary(currentPart);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        if (_hoverInfoPopup == null)
+            return;
+
+        _hoverInfoPopup.HideIfNotPinned();
     }
 }

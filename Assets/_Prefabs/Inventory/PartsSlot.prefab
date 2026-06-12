@@ -167,6 +167,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::InventorySlot
   itemIcon: {fileID: 2522586626069219946}
   slotButton: {fileID: 2680665220087646500}
+  _slotBackground: {fileID: 2260923342646197010}
+  _normalColor: {r: 1, g: 1, b: 1, a: 1}
+  _equippedColor: {r: 0.35, g: 0.75, b: 1, a: 1}
 --- !u!1 &7620936604809773734
 GameObject:
   m_ObjectHideFlags: 0
@@ -262,7 +265,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
+  m_Transition: 0
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}

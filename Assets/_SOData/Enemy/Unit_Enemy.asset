@@ -17,8 +17,8 @@ MonoBehaviour:
   _enemyPrefab: {fileID: 5311241036037250776, guid: 46cef883db62a234a915028368888d70, type: 3}
   _enemyType: 0
   _dropParts:
-  - {fileID: 11400000, guid: 734de3431963e4f46a95aab3db18a455, type: 2}
-  - {fileID: 11400000, guid: 65c4772dc115e1c4a8219dc2f5c6212b, type: 2}
+  - {fileID: 11400000, guid: e0cfa015c8f335c46aa0efb3a65b2b26, type: 2}
+  - {fileID: 11400000, guid: ac0ba39b489b70e48829233f67609af3, type: 2}
   _dropItems:
   - {fileID: 11400000, guid: 1f059418359e0f1458f67b516041e93b, type: 2}
   - {fileID: 11400000, guid: 78e66c6eaeedc2b49b6283d18659ccbe, type: 2}

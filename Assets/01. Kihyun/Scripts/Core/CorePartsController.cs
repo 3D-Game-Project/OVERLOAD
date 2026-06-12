@@ -32,7 +32,6 @@ public class CorePartsController : MonoBehaviour
     [SerializeField] private Transform _coreYawRoot;
     [SerializeField] private Transform _legYawRoot;
 
-
     [Header("Input Settings")]
     [SerializeField] private float _inputDeadZone = 0.05f;
 
@@ -45,6 +44,8 @@ public class CorePartsController : MonoBehaviour
     private readonly List<ILocomotionPart> _locomotionParts = new();
     private readonly List<IBoosterPart> _boosterParts = new();
     private readonly List<IAttackPart> _attackParts = new();
+
+    private readonly Dictionary<PartsData, AttachmentSlot> _equippedSlotByPartData = new();
 
     public bool HasLocomotionPart => _locomotionParts.Count > 0;
     public bool HasBoosterPart => _boosterParts.Count > 0;
@@ -141,7 +142,7 @@ public class CorePartsController : MonoBehaviour
             $"AttachedObject: {(targetSlot.AttachedObject != null ? targetSlot.AttachedObject.name : "None")}"
         );
 
-        if (!targetSlot.CanAttach(newPartsData))
+        if (!targetSlot.AllowsPartType(newPartsData))
         {
             Debug.LogWarning($"{targetSlot.SlotId} 슬롯에는 {newPartsData.PartsType} 파츠를 장착할 수 없습니다.");
             return false;
@@ -228,6 +229,70 @@ public class CorePartsController : MonoBehaviour
         return foundSlot;
     }
 
+    // 파츠가 장착됐는지 확인
+    public bool IsEquipped(PartsData partsData)
+    {
+        return FindEquippedSlot(partsData) != null;
+    }
+
+    public AttachmentSlot FindEquippedSlot(PartsData partsData)
+    {
+        if (partsData == null)
+            return null;
+
+        if (_equippedSlotByPartData.TryGetValue(partsData, out AttachmentSlot slot))
+        {
+            if (slot != null && slot.HasPart)
+                return slot;
+
+            _equippedSlotByPartData.Remove(partsData);
+        }
+
+        return null;
+    }
+
+    // 파츠가 장착된 슬롯을 찾아서 해제
+    public bool DetachPart(PartsData partsData)
+    {
+        AttachmentSlot equippedSlot = FindEquippedSlot(partsData);
+
+        if (equippedSlot == null)
+        {
+            Debug.LogWarning($"{partsData.name} 파츠는 현재 장착되어 있지 않습니다.");
+            return false;
+        }
+
+        return DetachPart(equippedSlot);
+    }
+
+    private void RegisterEquippedPartData(PartsData partsData, AttachmentSlot slot)
+    {
+        if (partsData == null || slot == null)
+            return;
+
+        _equippedSlotByPartData[partsData] = slot;
+    }
+
+    private void UnregisterEquippedPartDataBySlot(AttachmentSlot slot)
+    {
+        if (slot == null)
+            return;
+
+        PartsData removeTarget = null;
+
+        foreach (var pair in _equippedSlotByPartData)
+        {
+            if (pair.Value == slot)
+            {
+                removeTarget = pair.Key;
+                break;
+            }
+        }
+
+        if (removeTarget != null)
+            _equippedSlotByPartData.Remove(removeTarget);
+    }
+
     public List<AttachmentSlot> GetCompatibleSlots(PartsData partsData, bool onlyEmptySlot = true)
     {
         List<AttachmentSlot> result = new List<AttachmentSlot>();
@@ -243,8 +308,16 @@ public class CorePartsController : MonoBehaviour
             if (onlyEmptySlot && slot.HasPart)
                 continue;
 
-            if (!slot.CanAttach(partsData))
-                continue;
+            if (onlyEmptySlot)
+            {
+                if (!slot.CanAttach(partsData))
+                    continue;
+            }
+            else
+            {
+                if (!slot.AllowsPartType(partsData))
+                    continue;
+            }
 
             result.Add(slot);
         }
@@ -323,6 +396,7 @@ public class CorePartsController : MonoBehaviour
         part.OnAttached(slot);
 
         slot.SetAttachedObject(partObject);
+        RegisterEquippedPartData(partsData, slot);
 
         if (_coreLoadController != null)
         {
@@ -335,6 +409,7 @@ public class CorePartsController : MonoBehaviour
         if (rebuildBodyShape)
         {
             _bodyShapeController?.RebuildShapeFromVisuals();
+            MechPreviewStudio.Instance.RefreshPreview();
         }
 
         Debug.Log($"{partsData.PartsName} 파츠 장착 완료");
@@ -369,6 +444,8 @@ public class CorePartsController : MonoBehaviour
             return false;
         }
 
+        UnregisterEquippedPartDataBySlot(slot);
+
         UnregisterPartsInObject(attachedObject);
         UnregisterSlotsInObject(attachedObject);
 
@@ -380,6 +457,7 @@ public class CorePartsController : MonoBehaviour
         if (rebuildBodyShape)
         {
             _bodyShapeController?.RebuildShapeFromVisuals();
+            MechPreviewStudio.Instance.RefreshPreview();
         }
 
         return true;

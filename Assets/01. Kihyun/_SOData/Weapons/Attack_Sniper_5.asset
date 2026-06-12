@@ -10,19 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e1b1fcedf4d30334f861d12febf4455f, type: 3}
-  m_Name: Attack_DoubleGun_1
+  m_Name: Attack_Sniper_5
   m_EditorClassIdentifier: Assembly-CSharp::AttackPartsData
-  _partsName: double_gun_1
-  _partsPrefab: {fileID: 100014, guid: 0f9ed21d7fc8c514fa13c120eac9300e, type: 3}
+  _partsName: sniper_5
+  _partsPrefab: {fileID: 100000, guid: 9e22c5b8b259718468c05b451ab49f8a, type: 3}
   _requiredLoad: 0
-  _partsImage: {fileID: 1042982441, guid: 90c7d3cbce0c87342ad4e169693f8974, type: 3}
+  _partsImage: {fileID: 0}
   _maxDurability: 0
   _price: 0
-  _description: double gun description
-  _fireType: 0
-  _damage: 5
-  _range: 10
-  _fireCooldown: 0.5
-  _maxMagazineSize: 10
-  _bulletPrefab: {fileID: 100000, guid: 7e2d264e03fb2fb4fb2b1e559515830a, type: 3}
+  _description: 
+  _fireType: 1
+  _damage: 75
+  _range: 15
+  _fireCooldown: 4
+  _maxMagazineSize: 0
+  _bulletPrefab: {fileID: 0}
   _firePowerCost: 0

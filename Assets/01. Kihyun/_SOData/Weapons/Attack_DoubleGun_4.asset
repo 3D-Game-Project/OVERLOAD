@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e1b1fcedf4d30334f861d12febf4455f, type: 3}
-  m_Name: Attack_DoubleGun_1
+  m_Name: Attack_DoubleGun_4
   m_EditorClassIdentifier: Assembly-CSharp::AttackPartsData
-  _partsName: double_gun_1
-  _partsPrefab: {fileID: 100014, guid: 0f9ed21d7fc8c514fa13c120eac9300e, type: 3}
+  _partsName: double_gun_4
+  _partsPrefab: {fileID: 100014, guid: b2298d5aa5c20b6439b7ce1d33b39cdb, type: 3}
   _requiredLoad: 0
-  _partsImage: {fileID: 1042982441, guid: 90c7d3cbce0c87342ad4e169693f8974, type: 3}
+  _partsImage: {fileID: -1564296211, guid: 90c7d3cbce0c87342ad4e169693f8974, type: 3}
   _maxDurability: 0
-  _price: 0
-  _description: double gun description
+  _price: 50
+  _description: 'Level 4 Double Gun. Dmg: 20 / Range : 10'
   _fireType: 0
-  _damage: 5
+  _damage: 20
   _range: 10
   _fireCooldown: 0.5
   _maxMagazineSize: 10

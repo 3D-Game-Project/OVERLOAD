@@ -18,6 +18,10 @@ public class SlotOptionPopupUI : MonoBehaviour
     [SerializeField] private AttachTargetPopupUI _attachTargetPopup;
     [SerializeField] private Vector2 _offset = new Vector2(120f, -40f);
 
+    [Header("References")]
+    [SerializeField] private CorePartsController _corePartsController;
+    [SerializeField] private PartHoverInfoPopupUI _hoverInfoPopup;
+
     private RectTransform _rectTransform;
 
     private InventorySlot _currentSlot;
@@ -27,6 +31,9 @@ public class SlotOptionPopupUI : MonoBehaviour
     private void Awake()
     {
         _rectTransform = GetComponent<RectTransform>();
+
+        if (_corePartsController == null)
+            _corePartsController = FindFirstObjectByType<CorePartsController>();
 
         if (_equipOrUnequipButton != null)
             _equipOrUnequipButton.onClick.AddListener(OnEquipOrUnequipClicked);
@@ -39,6 +46,9 @@ public class SlotOptionPopupUI : MonoBehaviour
 
         if (_dropButton != null)
             _dropButton.onClick.AddListener(OnDropClicked);
+
+        if (_hoverInfoPopup == null)
+            _hoverInfoPopup = FindFirstObjectByType<PartHoverInfoPopupUI>(FindObjectsInactive.Include);
 
         Close();
     }
@@ -63,9 +73,12 @@ public class SlotOptionPopupUI : MonoBehaviour
 
         if (_equipOrUnequipText != null)
         {
-            // 지금은 임시로 무조건 "장착"
-            // 다음 단계에서 실제 장착 여부에 따라 "장착/해제"로 바꿀 예정
-            _equipOrUnequipText.text = "Equip";
+            bool isEquipped =
+                _corePartsController != null &&
+                _corePartsController.IsEquipped(_currentPart);
+            Debug.LogWarning($"isEquipped : {isEquipped}");
+
+            _equipOrUnequipText.text = isEquipped ? "Unequip" : "Equip";
         }
 
         MoveNextToSlot(slot);
@@ -84,6 +97,9 @@ public class SlotOptionPopupUI : MonoBehaviour
 
         if (_attachTargetPopup != null)
             _attachTargetPopup.Close();
+
+        if (_hoverInfoPopup != null)
+            _hoverInfoPopup.Hide();
 
         gameObject.SetActive(false);
 
@@ -106,6 +122,22 @@ public class SlotOptionPopupUI : MonoBehaviour
     {
         if (_currentPart == null)
             return;
+
+        bool isEquipped = _corePartsController.IsEquipped(_currentPart);
+
+        if (isEquipped)
+        {
+            bool success = _corePartsController.DetachPart(_currentPart);
+
+            if (success)
+            {
+                Debug.Log($"[SlotOptionPopup] Unequip 완료: {_currentPart.name}");
+                _inventory?.NotifyInventoryChanged();
+                Close();
+            }
+
+            return;
+        }
 
         Debug.Log($"[SlotOptionPopup] 장착 버튼 클릭: {_currentPart.PartsName}");
 
