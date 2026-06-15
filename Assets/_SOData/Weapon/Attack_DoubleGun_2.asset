@@ -20,10 +20,10 @@ MonoBehaviour:
   _price: 50
   _description: 
   _fireType: 1
-  _weaponType: 1
+  _weaponType: 5
   _damage: 3
   _range: 10
-  _fireCooldown: 2
+  _fireCooldown: 0.1
   _maxMagazineSize: 20
   _bulletPrefab: {fileID: 100000, guid: 7e2d264e03fb2fb4fb2b1e559515830a, type: 3}
   _firePowerCost: 0

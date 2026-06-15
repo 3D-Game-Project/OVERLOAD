@@ -74,7 +74,6 @@ public class EffectManager : MonoBehaviour
 
     // 공격 적중시 무기타입에 따른 파티클 생성용
     // Instantiate(takeTamageParticle, pos, Quaternion.LookRotation(normal)); => 지정한 파티클을 hit.point에 생성시킬 때, hit.normal각도로 회전시켜 생성되도록 처리
-
     public void CreateTakeDamageEffect(WeaponType type, Vector3 pos, Vector3 normal)
     {
         if(_takeDamageDictionary.TryGetValue(type, out ParticleSystem takeTamageParticle) && takeTamageParticle != null)
@@ -84,6 +83,9 @@ public class EffectManager : MonoBehaviour
         }
     }
 
+    // 기존의 파츠 내구도 0이 되었을 때, Destroy처리로 임시 구현해두었던 사항에 대한 변경처리
+    // 파츠 내구도가 0이 되면 파티클을 생성하도록 구현.
+    // 무한정 부위파괴에 대한 이펙트를 나타내는것 보다 5초의 시간동안 파티클이 생성되었다 사라지도록 수정
     public void PlayPartDestroyEffect(Vector3 position, Transform followTarget)
     {
         if (_destroyParticle != null)
