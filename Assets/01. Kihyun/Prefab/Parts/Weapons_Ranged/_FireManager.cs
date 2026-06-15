@@ -13,7 +13,7 @@ public class FireManager : MonoBehaviour
     private Coroutine _reloadCoroutine;
     private bool _isReloadEventSubscribed;
 
-    [SerializeField] private ParticleSystem _muzzleFlashParticle;
+    private ParticleSystem _muzzleFlashInstance;
 
     public AttackPartsData AttackPartsData => _attackPartsData;
 
@@ -32,6 +32,13 @@ public class FireManager : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        if (_attackPartsData != null && _muzzlePoint != null && EffectManager.instance != null)
+        {
+            _muzzleFlashInstance = EffectManager.instance.CreateFireEffect(_attackPartsData.WeaponType, _muzzlePoint);
+        }
+    }
     private void OnEnable()
     {
         SubscribeReloadEvent();
@@ -85,6 +92,8 @@ public class FireManager : MonoBehaviour
 
     public void TryFire(Vector3 targetPoint)
     {
+        if (!this.enabled) return;
+
         if (_attackPartsData == null)
             return;
 
@@ -96,9 +105,9 @@ public class FireManager : MonoBehaviour
 
         if (WeaponRuntime.TryFire())
         {
-            if (_muzzleFlashParticle != null)
+            if (_muzzleFlashInstance != null)
             {
-                _muzzleFlashParticle.Play();
+                _muzzleFlashInstance.Play();
             }
 
             switch (_attackPartsData.FireType)
@@ -160,25 +169,24 @@ public class FireManager : MonoBehaviour
 
         Vector3 fireDirection = (targetPoint - _muzzlePoint.position).normalized;
 
-        if (Physics.Raycast(
-                _muzzlePoint.position,
-                fireDirection,
-                out RaycastHit hit,
-                _attackPartsData.Range,
-                _targetLayer))
+        float attackRange = _attackPartsData != null ? _attackPartsData.Range : 10f;
+
+        if (Physics.Raycast(_muzzlePoint.position, fireDirection, out RaycastHit hit, attackRange, _targetLayer))
         {
-            Debug.Log($"FindHitScan {hit.collider.name}");
+
+            if (EffectManager.instance != null && _attackPartsData != null)
+            {
+                EffectManager.instance.CreateTakeDamageEffect(_attackPartsData.WeaponType, hit.point, hit.normal);
+            }
 
             DurabilityController hitDurability = hit.collider.GetComponentInParent<DurabilityController>();
 
             if (hitDurability != null)
-        {
-            // 🎯 맞은 부위가 오른팔이면 오른팔 스크립트의 TakeDamage가 실행되어
-            // 알아서 오른팔 내구도가 깎이고, 오른팔 방어구를 추적하게 됩니다!
-            hitDurability.TakeDamage(_attackPartsData.Damage);
+            {
+                hitDurability.TakeDamage(_attackPartsData.Damage);
             
-            Debug.Log($"Hitscan 부위 이름: {hit.collider.gameObject.name} / 타입: {hitDurability.DurabilityType}");
-        }
+                Debug.Log($"Hitscan 부위 이름: {hit.collider.gameObject.name} / 타입: {hitDurability.DurabilityType}");
+            }
         }
     }
 

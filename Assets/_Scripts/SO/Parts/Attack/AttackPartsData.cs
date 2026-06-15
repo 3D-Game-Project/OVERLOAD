@@ -8,6 +8,7 @@ public class AttackPartsData : PartsData
 
     [Header("무기 타입")]
     [SerializeField] private FireType _fireType;
+    [SerializeField] private WeaponType _weaponType;
 
     [Header("무기 정보")]
     [SerializeField] private int _damage;
@@ -27,5 +28,7 @@ public class AttackPartsData : PartsData
     public int MaxMagazineSize => _maxMagazineSize;
     public GameObject BulletPrefab => _bulletPrefab;
     public FireType FireType => _fireType;
+
+    public WeaponType WeaponType => _weaponType;
     public float FirePowerCost => _firePowerCost;
 }

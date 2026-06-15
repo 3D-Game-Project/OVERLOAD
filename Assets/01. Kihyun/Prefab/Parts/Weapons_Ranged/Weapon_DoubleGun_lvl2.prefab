@@ -368,7 +368,8 @@ MonoBehaviour:
   _targetLayer:
     serializedVersion: 2
     m_Bits: 0
-  _muzzleFlashParticle: {fileID: 7748109543525019595}
+  _muzzleFlashPrefab: {fileID: 19800008, guid: e38caa64dc90a604cb94f5e8b8ab6417, type: 3}
+  _impactParticlePrefab: {fileID: 19800008, guid: 7075bd5fe1480184695a32611c15da57, type: 3}
 --- !u!114 &-7471297192521287740
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -443,6 +444,10 @@ MonoBehaviour:
   _partsData: {fileID: 11400000, guid: 49236d3d62f8a2b4686170eb125fdcfc, type: 2}
   _unitData: {fileID: 0}
   _attachedSlotId: 
+  _destroyedPartList: []
+  _destroyPartEffect: {fileID: 198656289721292014, guid: 64891a0eb28db934898420d80ca07cb3, type: 3}
+  _animator: {fileID: 0}
+  _deathTrigger: Death
 --- !u!65 &6838142173471946850
 BoxCollider:
   m_ObjectHideFlags: 0
