@@ -13,6 +13,8 @@ public class FireManager : MonoBehaviour
     private Coroutine _reloadCoroutine;
     private bool _isReloadEventSubscribed;
 
+    [SerializeField] private ParticleSystem _muzzleFlashParticle;
+
     public AttackPartsData AttackPartsData => _attackPartsData;
 
     // 카메라 세팅 방지
@@ -94,7 +96,10 @@ public class FireManager : MonoBehaviour
 
         if (WeaponRuntime.TryFire())
         {
-            //RotateToPlayer(targetPoint);
+            if (_muzzleFlashParticle != null)
+            {
+                _muzzleFlashParticle.Play();
+            }
 
             switch (_attackPartsData.FireType)
             {
