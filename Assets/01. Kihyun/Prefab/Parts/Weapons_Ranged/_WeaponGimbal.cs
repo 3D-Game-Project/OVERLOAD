@@ -4,7 +4,8 @@ public class WeaponGimbalController : MonoBehaviour
 {
     [Header("Rotation Bounds (파츠별 고유 각도 제한)")]
     [Range(0f, 180f)][SerializeField] private float maxHorizontalAngle = 45f; 
-    [Range(0f, 180f)][SerializeField] private float maxVerticalAngle = 60f;   
+    [Range(0f, 180f)][SerializeField] private float maxVerticalAngle = 60f;
+    public float MaxVerticalAngle => maxVerticalAngle;
 
     [Header("Rotation Speed")]
     [SerializeField] private float rotationSpeed = 360f; 
