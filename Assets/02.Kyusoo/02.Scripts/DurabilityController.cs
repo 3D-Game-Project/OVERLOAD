@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using System.Collections;
 
 public class DurabilityController : MonoBehaviour
 {
@@ -10,7 +11,7 @@ public class DurabilityController : MonoBehaviour
     [SerializeField] private UnitData _unitData;
     [SerializeField] private string _attachedSlotId;
 
-    private List<PartsData> _destroyedPartList = new List<PartsData>();
+    [SerializeField]private List<PartsData> _destroyedPartList = new List<PartsData>();
 
     private bool _isDestroyed = false;
     private DurabilityController _rootCoreController;
@@ -21,6 +22,9 @@ public class DurabilityController : MonoBehaviour
     public bool IsDestroyed => _isDestroyed;
     public DurabilityType DurabilityType => _durabilityType;
     public PartsData PartsData => _partsData;
+
+    [SerializeField] private Animator _animator;
+    [SerializeField] private string _deathTrigger = "Death";
 
     private void Awake()
     {
@@ -135,16 +139,7 @@ public class DurabilityController : MonoBehaviour
 
         if(_durabilityType == DurabilityType.Core)
         {
-            // 애니메이션 처리
-
-            // DropRuntime.DropPart호출
-            if(_unitData is EnemyData enemyData)
-            {
-                DropRuntime dropRuntime = new DropRuntime();
-
-                dropRuntime.DropParts(enemyData, transform.position, _destroyedPartList);
-            }
-            Destroy(gameObject, 0.5f);
+            StartCoroutine(CoreDestroySequence());
         }
         else
         {
@@ -155,7 +150,7 @@ public class DurabilityController : MonoBehaviour
                 _rootCoreController.AddDestroyedPartToList(_partsData);
             }
 
-            Destroy(gameObject);
+            PlayPartDestroyEffect();
         }
 
     }
@@ -206,6 +201,18 @@ public class DurabilityController : MonoBehaviour
             if (name == "WeaponGimbalController" || name == "FireManager" || name == "AttackPartController") 
                 script.enabled = false;
         }
+
+        Animator[] animators = GetComponentsInChildren<Animator>(true);
+        foreach (Animator animator in animators)
+        {
+            animator.enabled = false;
+        }
+
+        ParticleSystem[] particles = GetComponentsInChildren<ParticleSystem>(true);
+        foreach (var particle in particles)
+        {
+            particle.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+        }
     }
 
     // 코어가 아닌 파츠가 파괴될 때, 파괴된 정보를 코어에게 전달하여 나중에 드랍리스트에서 제거시키는 용도
@@ -255,5 +262,43 @@ public class DurabilityController : MonoBehaviour
         _currentDurability = Mathf.Clamp(currentDurability, 0f, _maxDurability);
 
         _isDestroyed = _currentDurability <= 0f;
+    }
+
+    private IEnumerator CoreDestroySequence()
+    {
+        if (TryGetComponent(out UnityEngine.AI.NavMeshAgent agent))
+        {
+            agent.isStopped = true;
+            agent.enabled = false;
+        }
+
+        if (TryGetComponent(out Collider collider)) collider.enabled = false;
+        if (TryGetComponent(out CharacterController characterController)) characterController.enabled = false;
+
+        if (_animator != null && !string.IsNullOrEmpty(_deathTrigger))
+        {
+            _animator.SetTrigger(_deathTrigger);
+        }
+
+        yield return new WaitForSeconds(2.0f);
+
+        if(_unitData is EnemyData enemyData)
+        {
+            DropRuntime dropRuntime = new DropRuntime();
+            dropRuntime.DropParts(enemyData, transform.root.transform.position, _destroyedPartList);
+        }
+
+        Destroy(gameObject);
+
+    }
+
+    private void PlayPartDestroyEffect()
+    {
+        if (EffectManager.instance != null)
+        {
+            Transform followTarget = _rootCoreController != null ? _rootCoreController.transform : transform.root;
+
+            EffectManager.instance.PlayPartDestroyEffect(transform.position, followTarget);
+        }
     }
 }
