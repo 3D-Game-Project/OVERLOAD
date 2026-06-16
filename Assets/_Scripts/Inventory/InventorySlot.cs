@@ -8,6 +8,7 @@ public class InventorySlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     public Image itemIcon;
     public Button slotButton;
 
+    public InventoryPartItem currentPartItem;
     private PartsData currentPart;
     private ItemData currentItem;
     private PlayerInventory inventory;
@@ -78,6 +79,7 @@ public class InventorySlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     public void UpdateSlot(PartsData part)
     {
         currentPart = part;
+        currentPartItem = null;
         currentItem = null;
 
         if (part != null)
@@ -95,8 +97,34 @@ public class InventorySlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         RefreshEquippedHighlight();
     }
 
+    // 수정한 거에 맞게 추가
+    public void UpdateSlot(InventoryPartItem partItem)
+    {
+        currentPartItem = partItem;
+        currentPart = partItem != null ? partItem.PartsData : null;
+        currentItem = null;
+
+        if (currentPart == null)
+        {
+            SetEmptyVisual();
+            return;
+        }
+
+        if (itemIcon != null)
+        {
+            itemIcon.gameObject.SetActive(true);
+            itemIcon.sprite = currentPart.PartsImage;
+            itemIcon.enabled = currentPart.PartsImage != null;
+            itemIcon.color = Color.white;
+            itemIcon.preserveAspect = true;
+        }
+
+        RefreshEquippedHighlight();
+    }
+
     public void UpdateSlot(ItemData item)
     {
+        currentPartItem = null;
         currentItem = item;
         currentPart = null;
 
@@ -116,6 +144,10 @@ public class InventorySlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     private void SetEmptyVisual()
     {
+        currentPartItem = null;
+        currentPart = null;
+        currentItem = null;
+
         if (itemIcon != null)
         {
             itemIcon.sprite = null;
@@ -171,7 +203,7 @@ public class InventorySlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         }
         else if (isCurrentInventoryTab)
         {
-            if (currentPart != null)
+            if (currentPartItem != null && currentPartItem.PartsData != null)
             {
                 if (_slotOptionPopup == null)
                     _slotOptionPopup = FindFirstObjectByType<SlotOptionPopupUI>(FindObjectsInactive.Include);
@@ -180,10 +212,10 @@ public class InventorySlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
                 {
                     if (_hoverInfoPopup != null)
                     {
-                        _hoverInfoPopup.ShowPinned(currentPart);
+                        _hoverInfoPopup.ShowPinned(currentPartItem.PartsData);
                     }
 
-                    _slotOptionPopup.Open(this, currentPart, inventory);
+                    _slotOptionPopup.Open(this, currentPartItem, inventory);
                 }
                 else
                 {
@@ -202,13 +234,13 @@ public class InventorySlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         if (_slotBackground == null)
             return;
 
-        if (currentPart == null || _corePartsController == null)
+        if (currentPartItem == null || _corePartsController == null)
         {
             _slotBackground.color = _normalColor;
             return;
         }
 
-        bool isEquipped = _corePartsController.IsEquipped(currentPart);
+        bool isEquipped = _corePartsController.IsEquipped(currentPartItem);
 
         _slotBackground.color = isEquipped ? _equippedColor : _normalColor;
     }

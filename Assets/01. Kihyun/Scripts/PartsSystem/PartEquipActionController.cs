@@ -35,6 +35,7 @@ public class PartEquipActionController : MonoBehaviour
     private PartEquipActionType _currentActionType;
     private PartsData _currentPartsData;
     private AttachmentSlot _currentSlot;
+    private InventoryPartItem _currentPartItem;
 
     private float _elapsedTime;
     private float _requiredTime;
@@ -44,6 +45,7 @@ public class PartEquipActionController : MonoBehaviour
     public PartEquipActionType CurrentActionType => _currentActionType;
     public PartsData CurrentPartsData => _currentPartsData;
     public AttachmentSlot CurrentSlot => _currentSlot;
+    public InventoryPartItem CurrentPartItem => _currentPartItem;
 
     public event Action<PartEquipActionType, PartsData, AttachmentSlot> OnActionStarted;
     public event Action<float> OnActionProgressChanged;
@@ -127,6 +129,50 @@ public class PartEquipActionController : MonoBehaviour
         return true;
     }
 
+    public bool TryStartAttach(InventoryPartItem partItem, AttachmentSlot slot)
+    {
+        if (!CanStartCommonCheck())
+            return false;
+
+        if (partItem == null || partItem.PartsData == null)
+        {
+            Debug.LogWarning("장착할 InventoryPartItem 또는 PartsData가 없습니다.");
+            return false;
+        }
+
+        PartsData partsData = partItem.PartsData;
+
+        if (slot == null)
+        {
+            Debug.LogWarning("장착할 슬롯이 없습니다.");
+            return false;
+        }
+
+        if (slot.HasPart)
+        {
+            Debug.LogWarning($"{slot.SlotId} 슬롯에는 이미 파츠가 있습니다. 교체하려면 Replace를 사용하세요.");
+            return false;
+        }
+
+        if (!slot.CanAttach(partsData))
+        {
+            Debug.LogWarning($"{slot.SlotId} 슬롯에는 {partsData.PartsType} 파츠를 장착할 수 없습니다.");
+            return false;
+        }
+
+        float actionTime = _attachTime;
+
+        StartAction(
+            PartEquipActionType.Attach,
+            partsData,
+            slot,
+            actionTime,
+            partItem
+        );
+
+        return true;
+    }
+
     public bool TryStartDetach(string slotId)
     {
         AttachmentSlot slot = FindSlot(slotId);
@@ -190,7 +236,7 @@ public class PartEquipActionController : MonoBehaviour
             return false;
         }
 
-        if (!slot.CanAttach(partsData))
+        if (!slot.AllowsPartType(partsData))
         {
             Debug.LogWarning($"{slot.SlotId} 슬롯에는 {partsData.PartsType} 파츠를 장착할 수 없습니다.");
             return false;
@@ -209,6 +255,49 @@ public class PartEquipActionController : MonoBehaviour
             slot,
             actionTime
         );
+        return true;
+    }
+
+    public bool TryStartReplace(InventoryPartItem partItem, AttachmentSlot slot)
+    {
+        if (!CanStartCommonCheck())
+            return false;
+
+        if (partItem == null || partItem.PartsData == null)
+        {
+            Debug.LogWarning("교체할 InventoryPartItem 또는 PartsData가 없습니다.");
+            return false;
+        }
+
+        PartsData partsData = partItem.PartsData;
+
+        if (slot == null)
+        {
+            Debug.LogWarning("교체할 슬롯이 없습니다.");
+            return false;
+        }
+
+        if (!slot.AllowsPartType(partsData))
+        {
+            Debug.LogWarning($"{slot.SlotId} 슬롯에는 {partsData.PartsType} 파츠를 장착할 수 없습니다.");
+            return false;
+        }
+
+        float actionTime = _attachTime;
+
+        if (slot.HasPart)
+            actionTime += _detachTime;
+
+        actionTime += _replaceExtraTime;
+
+        StartAction(
+            PartEquipActionType.Replace,
+            partsData,
+            slot,
+            actionTime,
+            partItem
+        );
+
         return true;
     }
 
@@ -267,10 +356,12 @@ public class PartEquipActionController : MonoBehaviour
         PartEquipActionType actionType,
         PartsData partsData,
         AttachmentSlot slot,
-        float requiredTime)
+        float requiredTime,
+        InventoryPartItem partItem = null)
     {
         _currentActionType = actionType;
         _currentPartsData = partsData;
+        _currentPartItem = partItem;
         _currentSlot = slot;
 
         _elapsedTime = 0f;
@@ -324,6 +415,9 @@ public class PartEquipActionController : MonoBehaviour
         switch (_currentActionType)
         {
             case PartEquipActionType.Attach:
+                if (_currentPartItem != null)
+                    return _corePartsController.AttachPartItem(_currentPartItem, _currentSlot);
+
                 return _corePartsController.AttachPart(
                     _currentPartsData,
                     _currentSlot
@@ -335,6 +429,9 @@ public class PartEquipActionController : MonoBehaviour
                 );
 
             case PartEquipActionType.Replace:
+                if (_currentPartItem != null)
+                    return _corePartsController.ReplacePartItem(_currentPartItem, _currentSlot);
+
                 return _corePartsController.ReplacePart(
                     _currentPartsData,
                     _currentSlot
@@ -347,6 +444,7 @@ public class PartEquipActionController : MonoBehaviour
     {
         _currentActionType = default;
         _currentPartsData = null;
+        _currentPartItem = null;
         _currentSlot = null;
         _elapsedTime = 0f;
         _requiredTime = 0f;

@@ -108,29 +108,107 @@ public class DropRuntime
     // 위치의 경우 몬스터의 위치를 기준으로 1만큼 랜덤한 위치에 생성되도록 처리
     // Collider를 적용하는 이유는 드랍처리를 진행할 때, OnTriggerEnter를 진행하기 위해 추가
     // Collider의 최초 크기가 작은것을 고려하여 size center를 조정
+    //private void CreateDropParts(List<PartsData> _dropList, Vector3 spawnPosition)
+    //{
+    //    Debug.Log($"드랍 파츠 아이템 생성");
+    //    for (int i = 0; i < _dropList.Count; i++)
+    //    {
+    //        GameObject dropPart = Object.Instantiate(_dropList[i].PartsPrefab);
+    //        dropPart.AddComponent<BoxCollider>();
+    //        BoxCollider collider = dropPart.GetComponent<BoxCollider>();
+    //        if (collider != null)
+    //        {
+    //            collider.isTrigger = true;
+    //            collider.center = new Vector3(-0.3f, 0, 0.6f);
+    //            collider.size = new Vector3(1f, 1f, 3f);
+    //        }
+    //        dropPart.transform.localScale = Vector3.one;
+
+    //        Vector3 randomOffset = Random.insideUnitSphere * 5f;
+    //        randomOffset.y = 0f;
+    //        Vector3 scatterPosition = spawnPosition + randomOffset;
+
+    //        Vector3 finalGroundPos = GetSpawnDropPos(scatterPosition);
+
+    //        dropPart.transform.position = finalGroundPos + new Vector3(0f, 0.6f, 0f);
+    //    }
+    //}
+
     private void CreateDropParts(List<PartsData> _dropList, Vector3 spawnPosition)
     {
-        Debug.Log($"드랍 파츠 아이템 생성");
+        Debug.Log("드랍 파츠 아이템 생성");
+
         for (int i = 0; i < _dropList.Count; i++)
         {
-            GameObject dropPart = Object.Instantiate(_dropList[i].PartsPrefab);
-            dropPart.AddComponent<BoxCollider>();
-            BoxCollider collider = dropPart.GetComponent<BoxCollider>();
-            if (collider != null)
-            {
-                collider.isTrigger = true;
-                collider.center = new Vector3(-0.3f, 0, 0.6f);
-                collider.size = new Vector3(1f, 1f, 3f);
-            }
-            dropPart.transform.localScale = Vector3.one;
+            PartsData partsData = _dropList[i];
 
-            Vector3 randomOffset = Random.insideUnitSphere * 5f;
-            randomOffset.y = 0f;
-            Vector3 scatterPosition = spawnPosition + randomOffset;
+            if (partsData == null)
+                continue;
 
-            Vector3 finalGroundPos = GetSpawnDropPos(scatterPosition);
-
-            dropPart.transform.position = finalGroundPos + new Vector3(0f, 0.6f, 0f);
+            CreateDropPart(
+                partsData,
+                spawnPosition,
+                partsData.MaxDurability
+            );
         }
+    }
+
+    public void DropInventoryPart(InventoryPartItem partItem, Vector3 spawnPosition)
+    {
+        if (partItem == null || partItem.PartsData == null)
+        {
+            Debug.LogWarning("[DropRuntime] 드랍할 InventoryPartItem 또는 PartsData가 없습니다.");
+            return;
+        }
+
+        CreateDropPart(
+            partItem.PartsData,
+            spawnPosition,
+            partItem.CurrentDurability
+        );
+    }
+
+    private void CreateDropPart(PartsData partsData, Vector3 centerPosition, float currentDurability)
+    {
+        if (partsData == null || partsData.PartsPrefab == null)
+        {
+            Debug.LogWarning("[DropRuntime] 드랍할 PartsData 또는 PartsPrefab이 없습니다.");
+            return;
+        }
+
+        GameObject dropPart = Object.Instantiate(partsData.PartsPrefab);
+
+        BoxCollider collider = dropPart.GetComponent<BoxCollider>();
+        if (collider == null)
+            collider = dropPart.AddComponent<BoxCollider>();
+
+        collider.isTrigger = true;
+        collider.center = new Vector3(-0.3f, 0f, 0.6f);
+        collider.size = new Vector3(1f, 1f, 3f);
+
+        dropPart.transform.localScale = Vector3.one;
+
+        DurabilityController durability =
+            dropPart.GetComponent<DurabilityController>();
+
+        if (durability == null)
+            durability = dropPart.GetComponentInChildren<DurabilityController>();
+
+        if (durability != null)
+        {
+            durability.InitializeDroppedPart(partsData, currentDurability);
+        }
+
+        Vector3 randomOffset = Random.insideUnitSphere * 2f;
+        randomOffset.y = 0f;
+
+        Vector3 scatterPosition = centerPosition + randomOffset;
+        Vector3 finalGroundPos = GetSpawnDropPos(scatterPosition);
+
+        dropPart.transform.position = finalGroundPos + new Vector3(0f, 0.6f, 0f);
+
+        Debug.Log(
+            $"[DropRuntime] 인벤토리 파츠 드랍: {partsData.PartsName} / Durability: {currentDurability}"
+        );
     }
 }

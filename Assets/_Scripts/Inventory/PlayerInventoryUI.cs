@@ -10,6 +10,7 @@ public class PlayerInventoryUI : MonoBehaviour
     [SerializeField] private Transform _consumablesSlotParent;
 
     [SerializeField] private CorePartsController _corePartsController;
+    [SerializeField] private PartEquipActionController _partEquipActionController;
 
     private List<InventorySlot> _partsUISlots = new List<InventorySlot>();
     private List<InventorySlot> _consumablesUISlots = new List<InventorySlot>();
@@ -27,6 +28,9 @@ public class PlayerInventoryUI : MonoBehaviour
         if (_corePartsController == null)
             _corePartsController = FindFirstObjectByType<CorePartsController>();
 
+        if (_partEquipActionController == null)
+            _partEquipActionController = FindFirstObjectByType<PartEquipActionController>();
+
         _inventory = FindFirstObjectByType<PlayerInventory>();
 
         _cachedMenu = FindFirstObjectByType<MenuController>(FindObjectsInactive.Include);
@@ -42,6 +46,12 @@ public class PlayerInventoryUI : MonoBehaviour
     {
         if (_inventory == null)
             _inventory = FindFirstObjectByType<PlayerInventory>();
+
+        if (_partEquipActionController != null)
+        {
+            _partEquipActionController.OnActionFinished -= HandleEquipActionFinished;
+            _partEquipActionController.OnActionFinished += HandleEquipActionFinished;
+        }
 
         if (_inventory != null)
         {
@@ -71,6 +81,11 @@ public class PlayerInventoryUI : MonoBehaviour
         if (_cachedSlotOptionPopup != null)
         {
             _cachedSlotOptionPopup.Close();
+        }
+
+        if (_partEquipActionController != null)
+        {
+            _partEquipActionController.OnActionFinished -= HandleEquipActionFinished;
         }
     }
 
@@ -123,10 +138,10 @@ public class PlayerInventoryUI : MonoBehaviour
                 _corePartsController, 
                 _cachedHoverInfoPopup);
 
-            if (i < _inventory.PartsList.Count)
-                _partsUISlots[i].UpdateSlot(_inventory.PartsList[i]);
+            if (i < _inventory.PartItems.Count)
+                _partsUISlots[i].UpdateSlot(_inventory.PartItems[i]);
             else
-                _partsUISlots[i].UpdateSlot((PartsData)null);
+                _partsUISlots[i].UpdateSlot((InventoryPartItem)null);
         }
 
         for (int i = 0; i < _consumablesUISlots.Count; i++)
@@ -146,5 +161,13 @@ public class PlayerInventoryUI : MonoBehaviour
             else
                 _consumablesUISlots[i].UpdateSlot((ItemData)null);
         }
+    }
+
+    private void HandleEquipActionFinished(bool success)
+    {
+        if (!success)
+            return;
+
+        RefreshUI();
     }
 }
