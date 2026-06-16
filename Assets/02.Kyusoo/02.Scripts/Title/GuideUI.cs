@@ -1,14 +1,16 @@
+using GifImporter;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using GifImporter;
 
 [System.Serializable]
 public struct GuidePage
 {
     // 챕터별 타이틀, 이미지, 설명 교체 용도
     public string ChapterTitle;
-    public Sprite GuideImage;
+    public Gif GuideGif;
     [TextArea(3, 5)] public string Description;
 }
 
@@ -21,6 +23,9 @@ public class GuideUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _chapterDesc;
     [SerializeField] private TextMeshProUGUI _pageIndex;
     [SerializeField] private Image _chapterImage;
+
+    [Header("GIF 플레이어 컴포넌트")]
+    [SerializeField] private GifPlayer _gifPlayer;
 
     [Header("하단 영역 챕터넘기기 버튼 + 상단 Close")]
     [SerializeField] private Button _previous;
@@ -50,7 +55,19 @@ public class GuideUI : MonoBehaviour
 
         if (_chapterTitle != null) _chapterTitle.text = currentPage.ChapterTitle;
         if (_chapterDesc != null) _chapterDesc.text = currentPage.Description;
-        if (_chapterImage != null) _chapterImage.sprite = currentPage.GuideImage;
+
+        if (currentPage.GuideGif != null && _gifPlayer != null)
+        {
+            if (_chapterImage != null) _chapterImage.gameObject.SetActive(true);
+
+            _gifPlayer.enabled = true;
+            _gifPlayer.Gif = currentPage.GuideGif;
+        }
+        else
+        {
+            if (_gifPlayer != null) _gifPlayer.enabled = false; 
+            
+        }
 
         if (_pageIndex != null)
         {

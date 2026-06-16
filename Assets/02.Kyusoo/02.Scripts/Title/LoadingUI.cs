@@ -1,4 +1,4 @@
-using System.Collections;
+Ôªøusing System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,12 +8,12 @@ using DG.Tweening;
 
 public class LoadingUI : MonoBehaviour
 {
-    [Header("[∑Œµ˘ UI]")]
+    [Header("[Î°úÎî© UI]")]
     [SerializeField] private Slider _loadingSlider;
     [SerializeField] private TextMeshProUGUI _textStatus;
     [SerializeField] private TextMeshProUGUI _textPressAnyKey;
 
-    [Header("[ ∑Œµ˘ ≈ÿΩ∫∆Æ ø¨√‚ ]")]
+    [Header("[ Î°úÎî© ÌÖçÏä§Ìä∏ Ïó∞Ï∂ú ]")]
     [SerializeField] private float _waveSpeed = 4f;   
     [SerializeField] private float _waveHeight = 8f;   
     [SerializeField] private float _waveSpacing = 0.5f;
@@ -23,6 +23,11 @@ public class LoadingUI : MonoBehaviour
 
     private AsyncOperation _asyncOperation;
     private bool _isLoadingComplete = false;
+
+    private string[] _loadTargetAssets = new string[] {"Terrain", "InGameLoaderPrefabs"};
+
+    [SerializeField] private float _minimumLoadingTime = 5f;
+    [SerializeField] private float _gaugeSmoothSpeed = 1.5f;
 
     private void OnEnable()
     {
@@ -114,26 +119,58 @@ public class LoadingUI : MonoBehaviour
 
     private IEnumerator LoadSceneSequence()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return null;
+        yield return null;
+
+        float startTime = Time.time;
 
         _asyncOperation = SceneManager.LoadSceneAsync(_nextSceneName);
         _asyncOperation.allowSceneActivation = false;
 
-        float fakeProgress = 0f;
-
-        while (_asyncOperation.progress < 0.9f || fakeProgress < 1.0f)
+        if (AssetLoader.Instance != null)
         {
-            float realSceneProgress = _asyncOperation.progress;
+            AssetLoader.Instance.StartLoadingAssets(_loadTargetAssets);
+        }
 
-            fakeProgress += Time.deltaTime * 0.4f;
-            float currentProgress = Mathf.Clamp01(Mathf.Min(realSceneProgress / 0.9f, fakeProgress));
+        float currentDisplayProgress = 0f;
 
-            if (_loadingSlider != null) _loadingSlider.value = currentProgress;
+        while (true)
+        {
+            float sceneProgress = Mathf.Clamp01(_asyncOperation.progress / 0.9f);
+            float assetProgress = AssetLoader.Instance != null ? AssetLoader.Instance.Progress : 0f;
+            float actualTargetProgress = (sceneProgress + assetProgress) * 0.5f;
 
-            UpdateStatusText(currentProgress);
+            float elapsedTime = Time.time - startTime;
+            if (elapsedTime < _minimumLoadingTime)
+            {
+                actualTargetProgress = Mathf.Min(actualTargetProgress, 0.9f);
+            }
 
-            if (currentProgress >= 1.0f) break;
+            currentDisplayProgress = Mathf.MoveTowards(
+                currentDisplayProgress,
+                actualTargetProgress,
+                Time.deltaTime * _gaugeSmoothSpeed
+            );
 
+            if (_loadingSlider != null) _loadingSlider.value = currentDisplayProgress;
+            UpdateStatusText(currentDisplayProgress);
+
+            
+            if (sceneProgress >= 1f &&
+                (AssetLoader.Instance == null || AssetLoader.Instance.IsDone) &&
+                elapsedTime >= _minimumLoadingTime &&
+                currentDisplayProgress >= 0.9f)
+            {
+                break;
+            }
+
+            yield return null;
+        }
+
+        while (currentDisplayProgress < 1.0f)
+        {
+            currentDisplayProgress = Mathf.MoveTowards(currentDisplayProgress, 1.0f, Time.deltaTime * _gaugeSmoothSpeed * 2f);
+            if (_loadingSlider != null) _loadingSlider.value = currentDisplayProgress;
             yield return null;
         }
 
@@ -144,9 +181,7 @@ public class LoadingUI : MonoBehaviour
         if (_textPressAnyKey != null)
         {
             _textPressAnyKey.gameObject.SetActive(true);
-            _textPressAnyKey.DOFade(1f, 0.8f)
-                .SetLoops(-1, LoopType.Yoyo) 
-                .SetEase(Ease.InOutSine);
+            _textPressAnyKey.DOFade(1f, 0.8f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
         }
     }
 

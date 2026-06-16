@@ -1081,9 +1081,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 640926299}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 800, y: -50}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &184864708
@@ -3874,9 +3874,9 @@ RectTransform:
   - {fileID: 1656651313}
   m_Father: {fileID: 640926299}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 1040, y: -50}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 160, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &559405561
@@ -4940,7 +4940,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &824022389
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5014,32 +5014,44 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GuideUI
   _guidePages:
   - ChapterTitle: "1. \uC774\uB3D9"
-    GuideImage: {fileID: 0}
+    GuideGif: {fileID: 11400000, guid: 045b16b17fe31f64eb8223d655650091, type: 2}
     Description: "WASD\uB97C \uC0AC\uC6A9\uD558\uC5EC \uC774\uB3D9\uD560 \uC218 \uC788\uC2B5\uB2C8\uB2E4.\nShift,
       Space Bar\uB97C \uC0AC\uC6A9\uD558\uBA74 \uB300\uC2DC, \uC810\uD504, \uBE44\uD589\uC744
       \uD560 \uC218 \uC788\uC2B5\uB2C8\uB2E4. "
   - ChapterTitle: "2. \uC804\uD22C"
-    GuideImage: {fileID: 0}
+    GuideGif: {fileID: 11400000, guid: 7942908610f2cec4d92f102b971e4d58, type: 2}
     Description: "Mouse Left\uB97C \uD1B5\uD574 \uC7A5\uCC29\uD55C \uD30C\uCE20\uC758
       \uACF5\uACA9\uC744 \uD560 \uC218 \uC788\uC2B5\uB2C8\uB2E4.\n\uBAAC\uC2A4\uD130\uC640\uC758
       \uC804\uD22C\uB97C \uD1B5\uD574 \uB4DC\uB78D\uB41C \uC544\uC774\uD15C\uC740
       Z\uB85C \uC8FC\uC6B8 \uC218 \uC788\uC2B5\uB2C8\uB2E4."
   - ChapterTitle: "3. \uC778\uBCA4\uD1A0\uB9AC"
-    GuideImage: {fileID: 0}
-    Description: 
+    GuideGif: {fileID: 11400000, guid: 742faa814ee40e34d8ba5e2589a37b61, type: 2}
+    Description: "E, ESC\uB97C \uC785\uB825\uD558\uC5EC \uC778\uD130\uD398\uC774\uC2A4\uB97C
+      \uD65C\uC131\uD654 \uD560 \uC218 \uC788\uC2B5\uB2C8\uB2E4.\r\n\uC778\uD130\uD398\uC774\uC2A4\uC5D0\uB294
+      \uCE90\uB9AD\uD130 \uC815\uBCF4, \uC778\uBCA4\uD1A0\uB9AC, \uC124\uC815\uC774
+      \uAC00\uB2A5\uD569\uB2C8\uB2E4."
   - ChapterTitle: "4. \uD30C\uCE20 \uC7A5\uCC29"
-    GuideImage: {fileID: 0}
-    Description: 
+    GuideGif: {fileID: 11400000, guid: f177e5d0ff768ef4abbeed1fb0d2a02e, type: 2}
+    Description: "\uC778\uBCA4\uD1A0\uB9AC\uC5D0 \uC874\uC7AC\uD558\uB294 \uD30C\uCE20\uB97C
+      \uD074\uB9AD\uD558\uBA74 \uB2E4\uC591\uD55C \uC0C1\uD638\uC791\uC6A9\uC774
+      \uAC00\uB2A5\uD569\uB2C8\uB2E4.\r\nEquip > \uC7A5\uCC29\uBD80\uC704 \uC120\uD0DD\uC744
+      \uD1B5\uD574 \uD30C\uCE20 \uC7A5\uCC29 \uBC0F \uD0C8\uCC29\uC774 \uAC00\uB2A5\uD569\uB2C8\uB2E4."
   - ChapterTitle: "5. \uC0C1\uC810"
-    GuideImage: {fileID: 0}
-    Description: 
+    GuideGif: {fileID: 11400000, guid: 5480d1095d04d18439db81d2af920d5b, type: 2}
+    Description: "\uC0C1\uC810 NPC\uC5D0\uAC8C \uB2E4\uAC00\uAC00\uC11C F\uB97C \uD1B5\uD574
+      \uC0C1\uC810\uC5D0 \uC9C4\uC785\uD560 \uC218 \uC788\uC2B5\uB2C8\uB2E4.\r\n\uC0C1\uC810\uC5D0\uB294
+      \uC218\uB9AC\uD0A4\uD2B8\uC640 \uD68D\uB4DD\uD55C \uC774\uB825\uC774 \uC788\uB294
+      \uD30C\uCE20\uB97C \uAD6C\uB9E4\uD560 \uC218 \uC788\uC2B5\uB2C8\uB2E4."
   - ChapterTitle: "6. \uAC8C\uC784 \uBAA9\uD45C"
-    GuideImage: {fileID: 0}
-    Description: 
+    GuideGif: {fileID: 11400000, guid: 7942908610f2cec4d92f102b971e4d58, type: 2}
+    Description: "\uCD5C\uC885 \uBCF4\uC2A4\uC640\uC758 \uC2F8\uC6C0\uC5D0\uC11C
+      \uC2B9\uB9AC\uB97C \uC704\uD574 \uB2E4\uC591\uD55C \uD30C\uCE20\uB97C \uC5BB\uC5B4
+      \uAC15\uD574\uC9C0\uC138\uC694!"
   _chapterTitle: {fileID: 1878538486}
   _chapterDesc: {fileID: 199517059}
   _pageIndex: {fileID: 184864708}
   _chapterImage: {fileID: 2008222102}
+  _gifPlayer: {fileID: 2008222104}
   _previous: {fileID: 959720684}
   _next: {fileID: 559405561}
   _close: {fileID: 279037600}
@@ -5702,9 +5714,9 @@ RectTransform:
   - {fileID: 686463034}
   m_Father: {fileID: 640926299}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 560, y: -50}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 160, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &959720684
@@ -7439,6 +7451,8 @@ MonoBehaviour:
   _waveHeight: 8
   _waveSpacing: 0.5
   _nextSceneName: SecondBuildScene
+  _minimumLoadingTime: 5
+  _gaugeSmoothSpeed: 1.5
 --- !u!1 &1344300896
 GameObject:
   m_ObjectHideFlags: 0
@@ -10094,6 +10108,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1947664372}
+  - component: {fileID: 1947664373}
   m_Layer: 0
   m_Name: AssetLoader
   m_TagString: Untagged
@@ -10116,6 +10131,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1947664373
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1947664371}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ac769cc840f5bd40895f79580a62475, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AssetLoader
+  _sourcePrefabs:
+  - {fileID: 7028308593123321832, guid: dc90b93142807b1428a67bfb3c59263b, type: 3}
+  - {fileID: 965962863158665399, guid: a69a935ef5bd5144fb7e1650755c0849, type: 3}
 --- !u!1 &1953404905
 GameObject:
   m_ObjectHideFlags: 0
@@ -10606,6 +10636,7 @@ GameObject:
   - component: {fileID: 2008222101}
   - component: {fileID: 2008222103}
   - component: {fileID: 2008222102}
+  - component: {fileID: 2008222104}
   m_Layer: 5
   m_Name: Guide_Image
   m_TagString: Untagged
@@ -10670,6 +10701,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2008222100}
   m_CullTransparentMesh: 1
+--- !u!114 &2008222104
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2008222100}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c3f106a78e1aa142b294d8d1a41114b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: GifForUnity::GifImporter.GifPlayer
+  Gif: {fileID: 0}
 --- !u!1 &2011707887
 GameObject:
   m_ObjectHideFlags: 0
