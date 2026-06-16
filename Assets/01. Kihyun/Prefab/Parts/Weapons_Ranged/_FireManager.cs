@@ -34,7 +34,7 @@ public class FireManager : MonoBehaviour
     {
         SubscribeReloadEvent();
     }
-
+    
     private void OnDisable()
     {
         UnsubscribeReloadEvent();
