@@ -50,7 +50,7 @@ public partial class ChaseTargetAction : Action
     // 공격 사거리에 들어오지 않았다면 플레이어 위치를 기반 추격 계속 진행하도록 처리
     protected override Status OnUpdate()
     {
-        if (_agent == null || Target?.Value == null) return Status.Failure;
+        if (_agent == null || !_agent.isActiveAndEnabled || !_agent.isOnNavMesh || Target?.Value == null) return Status.Failure;
 
         Vector3 currentPosXZ = new Vector3(_agent.transform.position.x, 0f, _agent.transform.position.z);
         Vector3 targetPosXZ = new Vector3(Target.Value.transform.position.x, 0f, Target.Value.transform.position.z);

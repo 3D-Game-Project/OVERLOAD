@@ -219,7 +219,16 @@ public class DurabilityController : MonoBehaviour
 
     private IEnumerator CoreDestroySequence()
     {
-        if(_animator != null && !string.IsNullOrEmpty(_deathTrigger))
+        if (TryGetComponent(out UnityEngine.AI.NavMeshAgent agent))
+        {
+            agent.isStopped = true;
+            agent.enabled = false;
+        }
+
+        if (TryGetComponent(out Collider collider)) collider.enabled = false;
+        if (TryGetComponent(out CharacterController characterController)) characterController.enabled = false;
+
+        if (_animator != null && !string.IsNullOrEmpty(_deathTrigger))
         {
             _animator.SetTrigger(_deathTrigger);
         }

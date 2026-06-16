@@ -36,6 +36,8 @@ public class PlayerLocomotionMotor : MonoBehaviour
 
     private void LateUpdate()
     {
+        if (_characterController == null || !_characterController.enabled || !_characterController.gameObject.activeInHierarchy) return;
+
         ApplyGravity();
         ApplyFallSpeedLimit();
 
