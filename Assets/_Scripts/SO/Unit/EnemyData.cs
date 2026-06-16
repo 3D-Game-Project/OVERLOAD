@@ -10,7 +10,7 @@ public class EnemyData : UnitData
     [SerializeField] private List<DropItem> _dropItems;
 
     public List<PartsData> DropParts => _dropParts;
-    public List<DropItem > DropItems => _dropItems;
+    public List<DropItem> DropItems => _dropItems;
 
     [Header("Movement")]
     public float PatrolSpeed = 4f;

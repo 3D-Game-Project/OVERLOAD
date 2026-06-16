@@ -45,7 +45,16 @@ public class CorePartsController : MonoBehaviour
     private readonly List<IBoosterPart> _boosterParts = new();
     private readonly List<IAttackPart> _attackParts = new();
 
+    // LEGACY:
+    // PartsData 기준 장착 추적.
+    // 같은 PartsData 파츠가 여러 개 있으면 구분이 안 됨.
+    // InventorySlot / SlotOptionPopupUI / AttachTargetPopupUI / PartEquipActionController가
+    // 전부 InventoryPartItem 기준으로 전환되면 삭제 후보.
     private readonly Dictionary<PartsData, AttachmentSlot> _equippedSlotByPartData = new();
+
+    // NEW:
+    // 개별 인벤토리 파츠 기준 장착 추적.
+    private readonly Dictionary<InventoryPartItem, AttachmentSlot> _equippedSlotByPartItem = new();
 
     public bool HasLocomotionPart => _locomotionParts.Count > 0;
     public bool HasBoosterPart => _boosterParts.Count > 0;
@@ -102,6 +111,10 @@ public class CorePartsController : MonoBehaviour
             if (setup == null)
                 continue;
 
+            // LEGACY:
+            // 시작 장착 파츠는 아직 PartsData 기준.
+            // 초기 장착 파츠까지 인벤토리 개별 아이템으로 관리하려면
+            // InitialPartSetup도 InventoryPartItem 생성 방식으로 변경 필요.
             AttachPartInternal(setup.partsData, setup.slot, false);
         }
 
@@ -117,56 +130,53 @@ public class CorePartsController : MonoBehaviour
         HandleAttackParts();
     }
 
+    // LEGACY:
+    // PartsData 기준 즉시 장착.
+    // PartEquipActionController의 레거시 경로와 초기 장착에서 사용 가능.
+    // 최종적으로는 AttachPartItem() 중심으로 전환 예정.
     public bool AttachPart(PartsData partsData, AttachmentSlot slot)
     {
         return AttachPartInternal(partsData, slot, true);
     }
 
-    public bool ReplacePart(PartsData newPartsData, AttachmentSlot targetSlot)
+    // NEW:
+    // InventoryPartItem 기준 장착.
+    public bool AttachPartItem(InventoryPartItem partItem, AttachmentSlot slot)
     {
-        if (newPartsData == null)
+        if (partItem == null || partItem.PartsData == null)
         {
-            Debug.LogWarning("교체할 PartsData가 없습니다.");
+            Debug.LogWarning("장착할 InventoryPartItem 또는 PartsData가 없습니다.");
             return false;
         }
 
-        if (targetSlot == null)
-        {
-            Debug.LogWarning("교체할 AttachmentSlot이 없습니다.");
-            return false;
-        }
-
-        Debug.Log(
-            $"Replace 요청 / Slot: {targetSlot.SlotId} / " +
-            $"HasPart: {targetSlot.HasPart} / " +
-            $"AttachedObject: {(targetSlot.AttachedObject != null ? targetSlot.AttachedObject.name : "None")}"
-        );
-
-        if (!targetSlot.AllowsPartType(newPartsData))
-        {
-            Debug.LogWarning($"{targetSlot.SlotId} 슬롯에는 {newPartsData.PartsType} 파츠를 장착할 수 없습니다.");
-            return false;
-        }
-
-        if (!CanReplaceByLoad(newPartsData, targetSlot))
-        {
-            Debug.LogWarning("코어 장착 부하 한도를 초과해서 파츠를 교체할 수 없습니다.");
-            return false;
-        }
-
-        if (targetSlot.HasPart)
-        {
-            Debug.Log($"기존 파츠 제거 시도: {targetSlot.AttachedObject.name}");
-            DetachPartInternal(targetSlot, false);
-        }
-        else
-        {
-            RemoveUntrackedChildrenInSlot(targetSlot);
-        }
-
-        return AttachPartInternal(newPartsData, targetSlot, true);
+        return AttachPartInternal(partItem.PartsData, slot, true, partItem);
     }
 
+    // LEGACY:
+    // PartsData 기준 교체.
+    // 내부 로직은 ReplacePartInternal로 통합.
+    public bool ReplacePart(PartsData newPartsData, AttachmentSlot targetSlot)
+    {
+        return ReplacePartInternal(newPartsData, targetSlot, null);
+    }
+
+    // NEW:
+    // InventoryPartItem 기준 교체.
+    public bool ReplacePartItem(InventoryPartItem newPartItem, AttachmentSlot targetSlot)
+    {
+        if (newPartItem == null || newPartItem.PartsData == null)
+        {
+            Debug.LogWarning("교체할 InventoryPartItem 또는 PartsData가 없습니다.");
+            return false;
+        }
+
+        return ReplacePartInternal(newPartItem.PartsData, targetSlot, newPartItem);
+    }
+
+    // LEGACY DELETE CANDIDATE:
+    // SlotId 기반 CorePartsController 직접 교체.
+    // PartEquipActionController.TryStartReplace(..., slotId)를 사용하게 되면 삭제 가능.
+    // 삭제 전 Find All References 확인.
     public bool ReplacePartBySlotId(PartsData newPartsData, string slotId)
     {
         AttachmentSlot targetSlot = FindSlotById(slotId);
@@ -185,6 +195,10 @@ public class CorePartsController : MonoBehaviour
         return DetachPartInternal(slot, true);
     }
 
+    // LEGACY DELETE CANDIDATE:
+    // SlotId 기반 CorePartsController 직접 해제.
+    // PartEquipActionController.TryStartDetach(slotId)를 사용하게 되면 삭제 가능.
+    // 삭제 전 Find All References 확인.
     public bool DetachPartBySlotId(string slotId)
     {
         AttachmentSlot targetSlot = FindSlotById(slotId);
@@ -229,12 +243,17 @@ public class CorePartsController : MonoBehaviour
         return foundSlot;
     }
 
-    // 파츠가 장착됐는지 확인
+    // LEGACY:
+    // PartsData 기준 장착 여부 확인.
+    // 같은 PartsData를 가진 개별 파츠를 구분하지 못함.
+    // InventorySlot 하이라이트도 나중에는 IsEquipped(InventoryPartItem)으로 바꿔야 함.
     public bool IsEquipped(PartsData partsData)
     {
         return FindEquippedSlot(partsData) != null;
     }
 
+    // LEGACY:
+    // PartsData 기준 장착 슬롯 찾기.
     public AttachmentSlot FindEquippedSlot(PartsData partsData)
     {
         if (partsData == null)
@@ -251,20 +270,33 @@ public class CorePartsController : MonoBehaviour
         return null;
     }
 
-    // 파츠가 장착된 슬롯을 찾아서 해제
-    public bool DetachPart(PartsData partsData)
+    // NEW:
+    // 개별 인벤토리 파츠 기준 장착 여부 확인.
+    public bool IsEquipped(InventoryPartItem partItem)
     {
-        AttachmentSlot equippedSlot = FindEquippedSlot(partsData);
-
-        if (equippedSlot == null)
-        {
-            Debug.LogWarning($"{partsData.name} 파츠는 현재 장착되어 있지 않습니다.");
-            return false;
-        }
-
-        return DetachPart(equippedSlot);
+        return FindEquippedSlot(partItem) != null;
     }
 
+    // NEW:
+    // 개별 인벤토리 파츠 기준 장착 슬롯 찾기.
+    public AttachmentSlot FindEquippedSlot(InventoryPartItem partItem)
+    {
+        if (partItem == null)
+            return null;
+
+        if (_equippedSlotByPartItem.TryGetValue(partItem, out AttachmentSlot slot))
+        {
+            if (slot != null && slot.HasPart)
+                return slot;
+
+            _equippedSlotByPartItem.Remove(partItem);
+        }
+
+        return null;
+    }
+
+    // LEGACY:
+    // PartsData 기준 장착 등록.
     private void RegisterEquippedPartData(PartsData partsData, AttachmentSlot slot)
     {
         if (partsData == null || slot == null)
@@ -273,6 +305,8 @@ public class CorePartsController : MonoBehaviour
         _equippedSlotByPartData[partsData] = slot;
     }
 
+    // LEGACY:
+    // PartsData 기준 장착 해제 등록 제거.
     private void UnregisterEquippedPartDataBySlot(AttachmentSlot slot)
     {
         if (slot == null)
@@ -293,6 +327,42 @@ public class CorePartsController : MonoBehaviour
             _equippedSlotByPartData.Remove(removeTarget);
     }
 
+    // NEW:
+    // InventoryPartItem 기준 장착 등록.
+    private void RegisterEquippedPartItem(InventoryPartItem partItem, AttachmentSlot slot)
+    {
+        if (partItem == null || slot == null)
+            return;
+
+        _equippedSlotByPartItem[partItem] = slot;
+        partItem.SetEquipped(true);
+    }
+
+    // NEW:
+    // InventoryPartItem 기준 장착 해제 등록 제거.
+    private void UnregisterEquippedPartItemBySlot(AttachmentSlot slot)
+    {
+        if (slot == null)
+            return;
+
+        InventoryPartItem removeTarget = null;
+
+        foreach (var pair in _equippedSlotByPartItem)
+        {
+            if (pair.Value == slot)
+            {
+                removeTarget = pair.Key;
+                break;
+            }
+        }
+
+        if (removeTarget != null)
+        {
+            removeTarget.SetEquipped(false);
+            _equippedSlotByPartItem.Remove(removeTarget);
+        }
+    }
+
     public List<AttachmentSlot> GetCompatibleSlots(PartsData partsData, bool onlyEmptySlot = true)
     {
         List<AttachmentSlot> result = new List<AttachmentSlot>();
@@ -300,12 +370,9 @@ public class CorePartsController : MonoBehaviour
         if (partsData == null)
             return result;
 
-        foreach(AttachmentSlot slot in _attachmentSlots)
+        foreach (AttachmentSlot slot in _attachmentSlots)
         {
             if (slot == null)
-                continue;
-
-            if (onlyEmptySlot && slot.HasPart)
                 continue;
 
             if (onlyEmptySlot)
@@ -325,11 +392,11 @@ public class CorePartsController : MonoBehaviour
         return result;
     }
 
-
     private bool AttachPartInternal(
         PartsData partsData,
         AttachmentSlot slot,
-        bool rebuildBodyShape)
+        bool rebuildBodyShape,
+        InventoryPartItem partItem = null)
     {
         if (partsData == null)
         {
@@ -351,7 +418,6 @@ public class CorePartsController : MonoBehaviour
             return false;
         }
 
-        // 슬롯 상태는 비어있다고 되어 있는데 실제 자식 파츠가 남아있는 경우 방지
         RemoveUntrackedChildrenInSlot(slot);
 
         if (!slot.CanAttach(partsData))
@@ -383,11 +449,16 @@ public class CorePartsController : MonoBehaviour
 
         ApplyVisualMirror(partObject, slot);
 
-        // 규수: 부착한 파츠의 SlotId를 자동으로 DurabilityController에 추가하기 위해서 추가
         DurabilityController[] durabilities = partObject.GetComponentsInChildren<DurabilityController>(true);
         foreach (var durability in durabilities)
         {
+            if (partItem != null)
+            {
+                durability.InitializeFromInventoryItem(partItem);
+            }
+
             durability.SetAssociatedSlotId(slot.SlotId);
+
             Debug.Log($"💉 [SlotID 주입 성공!] {partObject.name}에 {slot.SlotId} 등록 완료.");
         }
 
@@ -404,7 +475,14 @@ public class CorePartsController : MonoBehaviour
         part.OnAttached(slot);
 
         slot.SetAttachedObject(partObject);
+
+        // LEGACY:
+        // PartsData 기준 장착 등록.
         RegisterEquippedPartData(partsData, slot);
+
+        // NEW:
+        // InventoryPartItem 기준 장착 등록.
+        RegisterEquippedPartItem(partItem, slot);
 
         if (_coreLoadController != null)
         {
@@ -417,7 +495,6 @@ public class CorePartsController : MonoBehaviour
         if (rebuildBodyShape)
         {
             _bodyShapeController?.RebuildShapeFromVisuals();
-            MechPreviewStudio.Instance.RefreshPreview();
         }
 
         Debug.Log($"{partsData.PartsName} 파츠 장착 완료");
@@ -452,7 +529,13 @@ public class CorePartsController : MonoBehaviour
             return false;
         }
 
+        // LEGACY:
+        // PartsData 기준 장착 등록 해제.
         UnregisterEquippedPartDataBySlot(slot);
+
+        // NEW:
+        // InventoryPartItem 기준 장착 등록 해제.
+        UnregisterEquippedPartItemBySlot(slot);
 
         UnregisterPartsInObject(attachedObject);
         UnregisterSlotsInObject(attachedObject);
@@ -465,10 +548,57 @@ public class CorePartsController : MonoBehaviour
         if (rebuildBodyShape)
         {
             _bodyShapeController?.RebuildShapeFromVisuals();
-            MechPreviewStudio.Instance.RefreshPreview();
         }
 
         return true;
+    }
+
+    private bool ReplacePartInternal(
+        PartsData newPartsData,
+        AttachmentSlot targetSlot,
+        InventoryPartItem newPartItem)
+    {
+        if (newPartsData == null)
+        {
+            Debug.LogWarning("교체할 PartsData가 없습니다.");
+            return false;
+        }
+
+        if (targetSlot == null)
+        {
+            Debug.LogWarning("교체할 AttachmentSlot이 없습니다.");
+            return false;
+        }
+
+        Debug.Log(
+            $"Replace 요청 / Slot: {targetSlot.SlotId} / " +
+            $"HasPart: {targetSlot.HasPart} / " +
+            $"AttachedObject: {(targetSlot.AttachedObject != null ? targetSlot.AttachedObject.name : "None")}"
+        );
+
+        if (!targetSlot.AllowsPartType(newPartsData))
+        {
+            Debug.LogWarning($"{targetSlot.SlotId} 슬롯에는 {newPartsData.PartsType} 파츠를 장착할 수 없습니다.");
+            return false;
+        }
+
+        if (!CanReplaceByLoad(newPartsData, targetSlot))
+        {
+            Debug.LogWarning("코어 장착 부하 한도를 초과해서 파츠를 교체할 수 없습니다.");
+            return false;
+        }
+
+        if (targetSlot.HasPart)
+        {
+            Debug.Log($"기존 파츠 제거 시도: {targetSlot.AttachedObject.name}");
+            DetachPartInternal(targetSlot, false);
+        }
+        else
+        {
+            RemoveUntrackedChildrenInSlot(targetSlot);
+        }
+
+        return AttachPartInternal(newPartsData, targetSlot, true, newPartItem);
     }
 
     private bool RemoveUntrackedChildrenInSlot(AttachmentSlot slot)
@@ -873,8 +1003,11 @@ public class CorePartsController : MonoBehaviour
 
     public void ResetYawRootsForPreview()
     {
-        if (_coreYawRoot != null) _coreYawRoot.localRotation = Quaternion.identity;
-        if (_legYawRoot != null) _legYawRoot.localRotation = Quaternion.identity;
+        if (_coreYawRoot != null)
+            _coreYawRoot.localRotation = Quaternion.identity;
+
+        if (_legYawRoot != null)
+            _legYawRoot.localRotation = Quaternion.identity;
     }
 
     private void ApplyVisualMirror(GameObject partObject, AttachmentSlot slot)
