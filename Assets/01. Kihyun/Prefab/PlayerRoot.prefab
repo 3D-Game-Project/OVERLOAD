@@ -519,8 +519,8 @@ GameObject:
   - component: {fileID: 8869916135188319949}
   - component: {fileID: -792087593370038472}
   - component: {fileID: 1477607579669403041}
-  - component: {fileID: 5798723119147244317}
   - component: {fileID: 1033345605488257751}
+  - component: {fileID: 1765931684203913628}
   m_Layer: 6
   m_Name: PlayerRoot
   m_TagString: Player
@@ -720,6 +720,7 @@ MonoBehaviour:
   _coreYawRoot: {fileID: 1984183087415090231}
   _legYawRoot: {fileID: 20554035174693987}
   _inputDeadZone: 0.05
+  _processPlayerInput: 1
 --- !u!114 &6039434109314213488
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -796,7 +797,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInventory
   InventorySize: 25
   ConsumableSize: 5
-  PartsList: []
+  PartItems: []
   ConsumablesList: []
 --- !u!114 &-792087593370038472
 MonoBehaviour:
@@ -840,23 +841,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   _bulletPrefab: {fileID: 100000, guid: 20e1981553f6e8f458ca183d29ea7bcc, type: 3}
---- !u!114 &5798723119147244317
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8560611295260395016}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5d28d972c910dae4a9878373e0bfd3f9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerCombatController
-  _unitData: {fileID: 11400000, guid: 9806c62939af4c348980b7080d5b0018, type: 2}
-  _currentAimPoint: {x: 0, y: 0, z: 0}
-  targetAndObstacleLayer:
-    serializedVersion: 2
-    m_Bits: 128
 --- !u!114 &1033345605488257751
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -880,3 +864,24 @@ MonoBehaviour:
   _replaceKey: 49
   _detachKey: 50
   _attachKey: 51
+--- !u!114 &1765931684203913628
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8560611295260395016}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5e78ad0209321740b7bb5e0d6bd4b08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DurabilityController
+  _durabilityType: 0
+  _currentDurability: 0
+  _maxDurability: 300
+  _partsData: {fileID: 0}
+  _unitData: {fileID: 11400000, guid: 9806c62939af4c348980b7080d5b0018, type: 2}
+  _attachedSlotId: 
+  _destroyedPartList: []
+  _animator: {fileID: 0}
+  _deathTrigger: Death
