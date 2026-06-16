@@ -77,10 +77,39 @@ public class PlayerInteractController : MonoBehaviour
     {
         if (_target == null || _inventory == null) return;
 
+        //if (_targetParts != null)
+        //{
+        //    _inventory.AddPart(_targetParts);
+        //    if (_shop != null) _shop.CheckExistParts(_targetParts);
+        //}
+
         if (_targetParts != null)
         {
-            _inventory.AddPart(_targetParts);
-            if (_shop != null) _shop.CheckExistParts(_targetParts);
+            InventoryPartItem addedItem = _inventory.AddPart(_targetParts);
+
+            if (addedItem != null)
+            {
+                DurabilityController durability =
+                    _target.GetComponent<DurabilityController>();
+
+                if (durability == null)
+                    durability = _target.GetComponentInChildren<DurabilityController>();
+
+                if (durability != null)
+                {
+                    addedItem.SetDurability(durability.CurrentDurability);
+
+                    Debug.Log(
+                        $"[PlayerInteract] 드랍 파츠 내구도 반영: " +
+                        $"{_targetParts.PartsName} / {addedItem.CurrentDurability} / {addedItem.MaxDurability}"
+                    );
+
+                    _inventory.NotifyInventoryChanged();
+                }
+            }
+
+            if (_shop != null)
+                _shop.CheckExistParts(_targetParts);
         }
 
         else if (_targetCurrency != null)

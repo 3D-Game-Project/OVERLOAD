@@ -15,6 +15,8 @@ public class DurabilityController : MonoBehaviour
     private bool _isDestroyed = false;
     private DurabilityController _rootCoreController;
 
+    private InventoryPartItem _linkedPartItem;
+
     public float CurrentDurability => _currentDurability;
     public bool IsDestroyed => _isDestroyed;
     public DurabilityType DurabilityType => _durabilityType;
@@ -46,7 +48,7 @@ public class DurabilityController : MonoBehaviour
         {
             _rootCoreController = GetRootCoreController();
 
-            if (_partsData != null && _currentDurability <= 0)
+            if (_linkedPartItem == null && _partsData != null && _currentDurability <= 0)
             {
                 InitializePart(_partsData, false);
             }
@@ -67,8 +69,32 @@ public class DurabilityController : MonoBehaviour
         {
             _currentDurability = _maxDurability;
         }
+    }
 
-        _currentDurability = _maxDurability;
+    public void InitializeFromInventoryItem(InventoryPartItem partItem)
+    {
+        if (partItem == null || partItem.PartsData == null)
+        {
+            Debug.LogWarning("[DurabilityController] 연결할 InventoryPartItem 또는 PartsData가 없습니다.");
+            return;
+        }
+
+        _linkedPartItem = partItem;
+        _partsData = partItem.PartsData;
+        _durabilityType = DurabilityType.Part;
+
+        _maxDurability = partItem.MaxDurability;
+        _currentDurability = partItem.CurrentDurability;
+
+        _isDestroyed = _currentDurability <= 0f;
+    }
+
+    private void SyncToInventoryItem()
+    {
+        if (_linkedPartItem == null)
+            return;
+
+        _linkedPartItem.SetDurability(_currentDurability);
     }
 
     public void TakeDamage(float attackDamage)
@@ -88,6 +114,9 @@ public class DurabilityController : MonoBehaviour
         }
 
         _currentDurability -= finalDamage;
+        _currentDurability = Mathf.Clamp(_currentDurability, 0f, _maxDurability);
+
+        SyncToInventoryItem();
 
         if (_currentDurability <= 0f) 
         {
@@ -208,5 +237,23 @@ public class DurabilityController : MonoBehaviour
     {
         Debug.Log($"SetAssociatedSlotId, {slotId}");
         _attachedSlotId = slotId;
+    }
+
+    public void InitializeDroppedPart(PartsData partData, float currentDurability)
+    {
+        if (partData == null)
+        {
+            Debug.LogWarning("[DurabilityController] 드랍 파츠 초기화 실패: PartsData 없음");
+            return;
+        }
+
+        _linkedPartItem = null;
+
+        _partsData = partData;
+        _durabilityType = DurabilityType.Part;
+        _maxDurability = partData.MaxDurability;
+        _currentDurability = Mathf.Clamp(currentDurability, 0f, _maxDurability);
+
+        _isDestroyed = _currentDurability <= 0f;
     }
 }

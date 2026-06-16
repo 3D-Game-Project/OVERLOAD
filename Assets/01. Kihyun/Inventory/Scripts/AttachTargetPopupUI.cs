@@ -11,6 +11,7 @@ public class AttachTargetPopupUI : MonoBehaviour
     [Header("References")]
     [SerializeField] private CorePartsController _corePartsController;
     [SerializeField] private SlotOptionPopupUI _slotOptionPopup;
+    [SerializeField] private PartEquipActionController _partEquipActionController;
 
     [Header("Slot Button UI")]
     [SerializeField] private Transform _slotButtonParent;
@@ -30,6 +31,7 @@ public class AttachTargetPopupUI : MonoBehaviour
     private PartsData _currentPart;
     private InventorySlot _currentSlot;
     private PlayerInventory _inventory;
+    private InventoryPartItem _currentPartItem;
 
     private void Awake()
     {
@@ -38,13 +40,16 @@ public class AttachTargetPopupUI : MonoBehaviour
         if (_corePartsController == null)
             _corePartsController = FindFirstObjectByType<CorePartsController>();
 
+        if (_partEquipActionController == null)
+            _partEquipActionController = FindFirstObjectByType<PartEquipActionController>();
+
         Close();
     }
 
     public void Open(
         RectTransform baseRect,
         InventorySlot slot,
-        PartsData part,
+        InventoryPartItem partItem,
         PlayerInventory inventory)
     {
         if (_rectTransform == null)
@@ -68,14 +73,15 @@ public class AttachTargetPopupUI : MonoBehaviour
             return;
         }
 
-        if (part == null)
+        if (partItem == null || partItem.PartsData == null)
         {
-            Debug.LogWarning("[AttachTargetPopup] 선택된 PartsData가 없습니다.");
+            Debug.LogWarning("[AttachTargetPopup] 선택된 InventoryPartItem 또는 PartsData가 없습니다.");
             return;
         }
 
         _currentSlot = slot;
-        _currentPart = part;
+        _currentPartItem = partItem;
+        _currentPart = partItem.PartsData;
         _inventory = inventory;
 
         MoveNextToBase(baseRect);
@@ -91,6 +97,7 @@ public class AttachTargetPopupUI : MonoBehaviour
     public void Close()
     {
         _currentSlot = null;
+        _currentPartItem = null;
         _currentPart = null;
         _inventory = null;
 
@@ -215,9 +222,9 @@ public class AttachTargetPopupUI : MonoBehaviour
 
     private void TryAttachToSlot(AttachmentSlot targetSlot)
     {
-        if (_corePartsController == null)
+        if (_partEquipActionController == null)
         {
-            Debug.LogWarning("[AttachTargetPopup] CorePartsController가 없습니다.");
+            Debug.LogWarning("[AttachTargetPopup] PartEquipActionController가 없습니다.");
             return;
         }
 
@@ -233,35 +240,41 @@ public class AttachTargetPopupUI : MonoBehaviour
             return;
         }
 
-        bool success;
+        bool started;
+
+        if (_currentPartItem == null || _currentPartItem.PartsData == null)
+        {
+            Debug.LogWarning("[AttachTargetPopup] 선택된 InventoryPartItem이 없습니다.");
+            return;
+        }
 
         if (targetSlot.HasPart)
         {
-            Debug.Log($"[AttachTargetPopup] 교체 시도: {_currentPart.name} → {targetSlot.SlotId}");
-            success = _corePartsController.ReplacePart(_currentPart, targetSlot);
+            Debug.Log($"[AttachTargetPopup] 교체 작업 시작 요청: {_currentPartItem.PartsData.name} → {targetSlot.SlotId}");
+            started = _partEquipActionController.TryStartReplace(_currentPartItem, targetSlot);
         }
         else
         {
-            Debug.Log($"[AttachTargetPopup] 장착 시도: {_currentPart.name} → {targetSlot.SlotId}");
-            success = _corePartsController.AttachPart(_currentPart, targetSlot);
+            Debug.Log($"[AttachTargetPopup] 장착 작업 시작 요청: {_currentPartItem.PartsData.name} → {targetSlot.SlotId}");
+            started = _partEquipActionController.TryStartAttach(_currentPartItem, targetSlot);
         }
 
-        if (success)
+        if (started)
         {
-            Debug.Log($"[AttachTargetPopup] 장착/교체 완료: {_currentPart.name} → {targetSlot.SlotId}");
-
-            _inventory?.NotifyInventoryChanged();
-            MechPreviewStudio.Instance.RefreshPreview();
+            Debug.Log($"[AttachTargetPopup] 파츠 작업 시작 성공: {_currentPart.name} → {targetSlot.SlotId}");
 
             if (_slotOptionPopup != null)
+            {
                 _slotOptionPopup.Close();
-
+            }
             else
+            {
                 Close();
+            }
         }
         else
         {
-            Debug.LogWarning($"[AttachTargetPopup] 장착/교체 실패: {_currentPart.name} → {targetSlot.SlotId}");
+            Debug.LogWarning($"[AttachTargetPopup] 파츠 작업 시작 실패: {_currentPart.name} → {targetSlot.SlotId}");
         }
     }
 }

@@ -8,8 +8,26 @@ public class PlayerInventory : MonoBehaviour
     public int InventorySize = 20;
     public int ConsumableSize = 5;
 
-    public List<PartsData> PartsList = new List<PartsData>();
+    [Header("Parts Inventory")]
+    public List<InventoryPartItem> PartItems = new List<InventoryPartItem>();
     public List<ItemData> ConsumablesList = new List<ItemData>();
+
+    // 임시용
+    public List<PartsData> PartsList
+    {
+        get
+        {
+            List<PartsData> result = new List<PartsData>();
+
+            foreach (InventoryPartItem item in PartItems)
+            {
+                if (item != null && item.PartsData != null)
+                    result.Add(item.PartsData);
+            }
+
+            return result;
+        }
+    }
 
     public Dictionary<string, int> CurrencyList = new Dictionary<string, int>();
 
@@ -28,19 +46,44 @@ public class PlayerInventory : MonoBehaviour
 
     // 파츠 추가 함수 - PlayerInteractionController의 Pickup시 호출
     // 아이템 유효성 검증 후 인벤토리에 추가 및 UI 갱신
-    public void AddPart(PartsData item)
-    {
-        if (item == null) return;
+    //public void AddPart(PartsData item)
+    //{
+    //    if (item == null) return;
 
-        if (PartsList.Count < InventorySize)
+    //    if (PartItems.Count < InventorySize)
+    //    {
+    //        InventoryPartItem newPartItem = new InventoryPartItem(item);
+    //        PartItems.Add(newPartItem);
+
+    //        Debug.Log($"[Inventory] {item.name} 획득 및 추가 완료. ID: {newPartItem.InstanceId}");
+    //        OnInventoryChanged?.Invoke();
+    //    }
+    //    else
+    //    {
+    //        Debug.LogWarning("인벤토리가 가득 찼습니다!");
+    //    }
+    //}
+
+    public InventoryPartItem AddPart(PartsData item)
+    {
+        if (item == null)
+            return null;
+
+        if (PartItems.Count < InventorySize)
         {
-            PartsList.Add(item);
-            Debug.Log($"[Inventory] {item.name} 획득 및 추가 완료.");
-            OnInventoryChanged?.Invoke(); 
+            InventoryPartItem newPartItem = new InventoryPartItem(item);
+            PartItems.Add(newPartItem);
+
+            Debug.Log($"[Inventory] {item.name} 획득 및 추가 완료. ID: {newPartItem.InstanceId}");
+
+            OnInventoryChanged?.Invoke();
+
+            return newPartItem;
         }
         else
         {
             Debug.LogWarning("인벤토리가 가득 찼습니다!");
+            return null;
         }
     }
 
@@ -70,22 +113,43 @@ public class PlayerInventory : MonoBehaviour
         // 이후 UI갱신을 위한 이벤트 발행
     }
 
+    public bool RemovePartItem(InventoryPartItem item)
+    {
+        if (item == null)
+            return false;
+
+        bool removed = PartItems.Remove(item);
+
+        if (removed)
+        {
+            Debug.Log($"[Inventory] 파츠 제거 완료: {item.PartsData?.PartsName} / ID: {item.InstanceId}");
+            OnInventoryChanged?.Invoke();
+        }
+
+        return removed;
+    }
+
     // 판매시 파츠 인벤토리에서 제거하는 함수
     public bool RemovePart(PartsData item)
     {
-        if (item == null) return false;
+        if (item == null)
+            return false;
 
-        if (PartsList.Contains(item))
+        InventoryPartItem targetItem = null;
+
+        foreach (InventoryPartItem partItem in PartItems)
         {
-            Debug.Log($"RemovePart {item}");
-            PartsList.Remove(item);
-
-            OnInventoryChanged?.Invoke();
-
-            return true;
+            if (partItem != null && partItem.PartsData == item)
+            {
+                targetItem = partItem;
+                break;
+            }
         }
 
-        return false;
+        if (targetItem == null)
+            return false;
+
+        return RemovePartItem(targetItem);
     }
 
     public void NotifyInventoryChanged()
