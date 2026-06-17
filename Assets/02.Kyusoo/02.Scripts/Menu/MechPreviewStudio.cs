@@ -78,7 +78,7 @@ public class MechPreviewStudio : MonoBehaviour
 
         if (playerPrefab == null) return;
 
-        _previewInstance = Instantiate(playerPrefab, _spawnPoint.position, _spawnPoint.rotation * Quaternion.Euler(0f, 180f, 0f), transform);
+        _previewInstance = Instantiate(playerPrefab, _spawnPoint.position, _spawnPoint.rotation * Quaternion.Euler(0f, -135f, 0f), transform);
 
         if (_previewInstance.TryGetComponent(out CorePartsController corePartsComp))
         {

@@ -1,5 +1,7 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Pool;
 using UnityEngine.UIElements;
 
 public class EffectManager : MonoBehaviour
@@ -18,6 +20,9 @@ public class EffectManager : MonoBehaviour
     [Header("부위 파괴 이펙트")]
     [SerializeField] private ParticleSystem _destroyParticle;
 
+    private Dictionary<WeaponType, ObjectPool<ParticleSystem>> _firePools = new Dictionary<WeaponType, ObjectPool<ParticleSystem>>();
+    private Dictionary<WeaponType, ObjectPool<ParticleSystem>> _takeDamagePools = new Dictionary<WeaponType, ObjectPool<ParticleSystem>>();
+
     private void Awake()
     {
         if (instance == null)
@@ -32,6 +37,8 @@ public class EffectManager : MonoBehaviour
         }
 
         ConvertParticleArrayToDictionary();
+
+        InitializeObjectPools();
     }
 
     // Struct로 짝지은 이펙드들이 데이터상에서 Array에 담김
@@ -59,14 +66,78 @@ public class EffectManager : MonoBehaviour
         }
     }
 
+    private void InitializeObjectPools()
+    {
+        foreach (var pair in _fireDictionary)
+        {
+            WeaponType type = pair.Key;
+            ParticleSystem prefab = pair.Value;
+
+            _firePools[type] = new ObjectPool<ParticleSystem>(
+                createFunc: () => Instantiate(prefab, transform),
+                actionOnGet: (effect) => {
+                    if (effect != null && effect.gameObject != null)
+                    {
+                        effect.gameObject.SetActive(true);
+                    }
+                },
+                actionOnRelease: (effect) => {
+                    if (effect != null && effect.gameObject != null)
+                    {
+                        effect.transform.SetParent(transform);
+                        effect.gameObject.SetActive(false);
+                    }
+                },
+                actionOnDestroy: (effect) => { if (effect != null) Destroy(effect.gameObject); },
+                defaultCapacity: 10, maxSize: 30
+            );
+        }
+
+        foreach (var pair in _takeDamageDictionary)
+        {
+            WeaponType type = pair.Key;
+            ParticleSystem prefab = pair.Value;
+
+            _takeDamagePools[type] = new ObjectPool<ParticleSystem>(
+                createFunc: () => Instantiate(prefab, transform),
+                actionOnGet: (effect) => effect.gameObject.SetActive(true),
+                actionOnRelease: (effect) => effect.gameObject.SetActive(false),
+                actionOnDestroy: (effect) => { if (effect != null) Destroy(effect.gameObject); },
+                defaultCapacity: 15, maxSize: 40
+            );
+        }
+    }
+
     // FireManager의 TryFire이 진행될 때, 무기타입에 따른 파티클 생성
     public ParticleSystem CreateFireEffect(WeaponType type, Transform parent)
     {
-        if(_fireDictionary.TryGetValue(type, out ParticleSystem fireParticle) && fireParticle != null)
+        if (_firePools.TryGetValue(type, out ObjectPool<ParticleSystem> pool))
         {
-            ParticleSystem fireEffect = Instantiate(fireParticle, parent);
-            fireEffect.transform.localPosition = Vector3.zero;
-            fireEffect.transform.localRotation = Quaternion.identity;
+            ParticleSystem fireEffect = null;
+
+            try
+            {
+                fireEffect = pool.Get();
+                if (fireEffect == null || fireEffect.gameObject == null)
+                {
+                    _fireDictionary.TryGetValue(type, out ParticleSystem prefab);
+                    fireEffect = Instantiate(prefab, transform);
+                }
+            }
+            catch
+            {
+                _fireDictionary.TryGetValue(type, out ParticleSystem prefab);
+                fireEffect = Instantiate(prefab, transform);
+            }
+
+            if (fireEffect != null)
+            {
+                fireEffect.transform.SetParent(parent);
+                fireEffect.transform.localPosition = Vector3.zero;
+                fireEffect.transform.localRotation = Quaternion.identity;
+
+                StartCoroutine(ReleaseParticleCoroutine(pool, fireEffect, fireEffect.main.duration));
+            }
             return fireEffect;
         }
         return null;
@@ -76,10 +147,31 @@ public class EffectManager : MonoBehaviour
     // Instantiate(takeTamageParticle, pos, Quaternion.LookRotation(normal)); => 지정한 파티클을 hit.point에 생성시킬 때, hit.normal각도로 회전시켜 생성되도록 처리
     public void CreateTakeDamageEffect(WeaponType type, Vector3 pos, Vector3 normal)
     {
-        if(_takeDamageDictionary.TryGetValue(type, out ParticleSystem takeTamageParticle) && takeTamageParticle != null)
+        if (_takeDamagePools.TryGetValue(type, out ObjectPool<ParticleSystem> pool))
         {
-            Instantiate(takeTamageParticle, pos, Quaternion.LookRotation(normal));
-            Debug.Log($"피격 이펙트 생성, 타입: {type}, 파티클: {takeTamageParticle}");
+            ParticleSystem takeDamageEffect = null;
+            try
+            {
+                takeDamageEffect = pool.Get();
+                if (takeDamageEffect == null || takeDamageEffect.gameObject == null)
+                {
+                    _takeDamageDictionary.TryGetValue(type, out ParticleSystem prefab);
+                    takeDamageEffect = Instantiate(prefab, transform);
+                }
+            }
+            catch
+            {
+                _takeDamageDictionary.TryGetValue(type, out ParticleSystem prefab);
+                takeDamageEffect = Instantiate(prefab, transform);
+            }
+
+            if (takeDamageEffect != null)
+            {
+                takeDamageEffect.transform.position = pos;
+                takeDamageEffect.transform.rotation = Quaternion.LookRotation(normal);
+
+                StartCoroutine(ReleaseParticleCoroutine(pool, takeDamageEffect, takeDamageEffect.main.duration));
+            }
         }
     }
 
@@ -98,6 +190,22 @@ public class EffectManager : MonoBehaviour
             }
 
             Destroy(destroyParticle.gameObject, 5f);
+        }
+    }
+
+    private IEnumerator ReleaseParticleCoroutine(ObjectPool<ParticleSystem> targetPool, ParticleSystem particle, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        if (particle != null && particle.gameObject != null && particle.gameObject.activeSelf)
+        {
+            try
+            {
+                targetPool.Release(particle);
+            }
+            catch
+            {
+            }
         }
     }
 }

@@ -4,6 +4,9 @@ public class BoosterPartController : PartBehaviour, IBoosterPart
 {
     private BoosterPartsData _boosterData;
 
+    [Header("Owner")]
+    [SerializeField] private int _ownerLayer;
+
     public override void Initialize(PartsData data, CorePartContext context)
     {
         base.Initialize(data, context);
@@ -14,11 +17,24 @@ public class BoosterPartController : PartBehaviour, IBoosterPart
             return;
         }
 
+        if (_context != null && _context.OwnerRoot != null)
+        {
+            _ownerLayer = _context.OwnerRoot.gameObject.layer;
+            gameObject.layer = _ownerLayer;
+        }
+
+
+
         Debug.Log(
             $"부스터 파츠 초기화 완료\n" +
             $"Parts Name: {_boosterData.PartsName}\n" +
             $"Function: {_boosterData.BoosterFunction}"
         );
+
+        if (TryGetComponent(out DurabilityController durability))
+        {
+            durability.InitializePart(_boosterData, false);
+        }
     }
 
     public void HandleBooster(BoosterCommand command, float deltaTime)

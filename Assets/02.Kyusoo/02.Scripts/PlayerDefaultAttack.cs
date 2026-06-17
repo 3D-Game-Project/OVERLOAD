@@ -23,6 +23,8 @@ public class PlayerDefaultAttack : MonoBehaviour
     private bool _isReload;
     private bool _isPlayer = false;
 
+    public float Damage => _damage;
+
     private void Awake()
     {
         if (_fireType == FireType.Projectile && _bulletPrefab != null)

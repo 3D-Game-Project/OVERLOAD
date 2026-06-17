@@ -1,12 +1,13 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
+﻿using System;
 using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 public class DurabilityController : MonoBehaviour
 {
     [SerializeField] private DurabilityType _durabilityType;
     [SerializeField] private float _currentDurability;
-    [SerializeField] private float _maxDurability = 300f;
+    [SerializeField] private float _maxDurability;
     [SerializeField] private PartsData _partsData;
     [SerializeField] private UnitData _unitData;
     [SerializeField] private string _attachedSlotId;
@@ -23,8 +24,12 @@ public class DurabilityController : MonoBehaviour
     public DurabilityType DurabilityType => _durabilityType;
     public PartsData PartsData => _partsData;
 
+    public float MaxDurability => _maxDurability;
+
     [SerializeField] private Animator _animator;
     [SerializeField] private string _deathTrigger = "Death";
+
+    public event Action<float, float> OnDurabilityChanged;
 
     private void Awake()
     {
@@ -33,6 +38,9 @@ public class DurabilityController : MonoBehaviour
         {
             Debug.Log("CharacterController 확인.");
             _durabilityType = DurabilityType.Core;
+
+            _maxDurability = 300f;
+            _currentDurability = _maxDurability;
 
         }
         else if(GetComponent<Collider>() != null)
@@ -46,7 +54,8 @@ public class DurabilityController : MonoBehaviour
     {
         if (_durabilityType == DurabilityType.Core)
         {
-            _currentDurability = _maxDurability;
+            OnDurabilityChanged?.Invoke(_currentDurability, _maxDurability);
+
         }
         else
         {
@@ -121,6 +130,11 @@ public class DurabilityController : MonoBehaviour
         _currentDurability = Mathf.Clamp(_currentDurability, 0f, _maxDurability);
 
         SyncToInventoryItem();
+
+        if (_durabilityType == DurabilityType.Core)
+        {
+            OnDurabilityChanged?.Invoke(_currentDurability, _maxDurability);
+        }
 
         if (_currentDurability <= 0f) 
         {

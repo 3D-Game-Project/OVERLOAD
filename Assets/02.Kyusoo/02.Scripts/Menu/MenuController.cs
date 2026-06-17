@@ -1,6 +1,7 @@
 ﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class MenuController : MonoBehaviour
 {
@@ -30,6 +31,8 @@ public class MenuController : MonoBehaviour
     [SerializeField] private string[] tabNames = { "Character", "Shop", "Inventory", "Settings" };
 
     [SerializeField] private GameObject playerPrefab;
+    private CanvasGroup[] _tabCanvasGroups;
+    private CanvasGroup _mainInterfaceCanvasGroup;
 
     private GameObject[] _tabPanels;
     private int _currentTabIndex = 0;
@@ -48,11 +51,42 @@ public class MenuController : MonoBehaviour
     {
         _tabPanels = new GameObject[] { statusPanel, shopPanel, inventoryPanel, systemSettings };
 
+        _tabCanvasGroups = new CanvasGroup[_tabPanels.Length];
+
+        if (mainInterfacePanel != null)
+        {
+            _mainInterfaceCanvasGroup = mainInterfacePanel.GetComponent<CanvasGroup>();
+            if (_mainInterfaceCanvasGroup == null)
+            {
+                _mainInterfaceCanvasGroup = mainInterfacePanel.AddComponent<CanvasGroup>();
+            }
+            _mainInterfaceCanvasGroup.alpha = 0f;
+            _mainInterfaceCanvasGroup.blocksRaycasts = false;
+        }
+
         if (previousBtn != null) previousBtn.onClick.AddListener(NavigateToPreviousTab);
         if (nextBtn != null) nextBtn.onClick.AddListener(NavigateToNextTab);
         if (shop == null) shop = FindFirstObjectByType<Shop>();
 
         _slotOptionPopup = FindFirstObjectByType<SlotOptionPopupUI>(FindObjectsInactive.Include);
+
+        for (int i = 0; i < _tabPanels.Length; i++)
+        {
+            if (_tabPanels[i] != null)
+            {
+                _tabCanvasGroups[i] = _tabPanels[i].GetComponent<CanvasGroup>();
+                if (_tabCanvasGroups[i] == null)
+                {
+                    _tabCanvasGroups[i] = _tabPanels[i].AddComponent<CanvasGroup>();
+                }
+
+                _tabCanvasGroups[i].alpha = 0f;
+                _tabCanvasGroups[i].blocksRaycasts = false;
+                _tabCanvasGroups[i].interactable = false;
+
+                _tabPanels[i].SetActive(true);
+            }
+        }
     }
 
     private void Start()
@@ -92,8 +126,18 @@ public class MenuController : MonoBehaviour
                 return;
             }
 
-            if (!_isMenuOpen) OpenMenu(3); 
-            else CloseMenu(); 
+            if (!_isMenuOpen)
+            {
+                OpenMenu(3);
+            }
+            else if (_currentTabIndex == 3)
+            {
+                CloseMenu();
+            }
+            else
+            {
+                SwitchTab(3);
+            }
         }
 
         // 상점
@@ -140,6 +184,17 @@ public class MenuController : MonoBehaviour
             MechPreviewStudio.Instance.SetupPreviewModel(playerPrefab);
         }
 
+        if (_mainInterfaceCanvasGroup != null)
+        {
+            _mainInterfaceCanvasGroup.DOKill();
+            _mainInterfaceCanvasGroup.blocksRaycasts = true;
+            //_mainInterfaceCanvasGroup.interactable = true;
+            _mainInterfaceCanvasGroup.DOFade(1f, 0.25f).SetEase(Ease.OutCubic);
+        }
+
+        SetAllDurabilityUIActive(false);
+
+        _currentTabIndex = targetTabIdx;
         SwitchTab(targetTabIdx);
     }
 
@@ -188,21 +243,77 @@ public class MenuController : MonoBehaviour
         {
             MechPreviewStudio.Instance.CleanUpPreview();
         }
+
+        if (_mainInterfaceCanvasGroup != null)
+        {
+            _mainInterfaceCanvasGroup.DOKill();
+            _mainInterfaceCanvasGroup.blocksRaycasts = false;
+
+            _mainInterfaceCanvasGroup.DOFade(0f, 0.15f).SetEase(Ease.InQuad).OnComplete(() =>
+            {
+                if (mainInterfacePanel != null) mainInterfacePanel.SetActive(false);
+                if (backgroundImage != null) backgroundImage.SetActive(false);
+
+                for (int i = 0; i < _tabPanels.Length; i++)
+                {
+                    if (_tabPanels[i] != null && _tabCanvasGroups[i] != null)
+                    {
+                        _tabCanvasGroups[i].DOKill();
+                        _tabCanvasGroups[i].alpha = 0f;
+                        _tabCanvasGroups[i].blocksRaycasts = false;
+                        _tabCanvasGroups[i].interactable = false;
+                    }
+                }
+            });
+        }
+
+        SetAllDurabilityUIActive(true);
     }
 
     // 탭 전환처리
     // 인덱스에 맞는 패널만 켜고 나머지 끄기
     private void SwitchTab(int index)
     {
-        _currentTabIndex = index;
+        if (DOTween.IsTweening(_mainInterfaceCanvasGroup) || _mainInterfaceCanvasGroup.alpha < 1f)
+        {
+            return;
+        }
+
+        int targetIndex = index;
+        int previousTabIndex = _currentTabIndex;
 
         for (int i = 0; i < _tabPanels.Length; i++)
         {
-            if (_tabPanels[i] != null)
+            if (_tabPanels[i] == null || _tabCanvasGroups[i] == null) continue;
+
+            _tabCanvasGroups[i].DOKill(); 
+
+            if (i == targetIndex)
             {
-                _tabPanels[i].SetActive(i == _currentTabIndex);
+                _tabPanels[i].SetActive(true);
+
+                _tabCanvasGroups[i].blocksRaycasts = true;
+                _tabCanvasGroups[i].interactable = true;
+                _tabCanvasGroups[i].DOFade(1f, 0.12f).SetEase(Ease.InQuad);
+            }
+            else
+            {
+                _tabCanvasGroups[i].blocksRaycasts = false;
+                _tabCanvasGroups[i].interactable = false;
+
+
+                GameObject targetPanel = _tabPanels[i];
+                _tabCanvasGroups[i].DOFade(0f, 0.08f).SetEase(Ease.OutQuad).OnComplete(() =>
+                {
+                    if (targetPanel != _tabPanels[_currentTabIndex])
+                    {
+                        targetPanel.SetActive(false);
+                    }
+                });
             }
         }
+        _currentTabIndex = targetIndex;
+
         UpdateTabNavigationTexts();
     }
 
@@ -258,6 +369,21 @@ public class MenuController : MonoBehaviour
             nextIdx = (nextIdx + 1) % _tabPanels.Length;
         }
         if (_rightTabText != null) _rightTabText.text = tabNames[nextIdx];
+    }
+
+    private void SetAllDurabilityUIActive(bool isActive)
+    {
+        Transform[] allTransforms = Resources.FindObjectsOfTypeAll<Transform>();
+
+        foreach (Transform transform in allTransforms)
+        {
+            if (transform.name.Contains("Durability") 
+                && (transform.root.gameObject.layer == 7)
+                && transform.gameObject.scene.name != null)
+            {
+                transform.gameObject.SetActive(isActive);
+            }
+        }
     }
 
 }

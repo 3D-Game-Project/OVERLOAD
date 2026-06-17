@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1325638594250399495}
   - component: {fileID: 146025897344200900}
   - component: {fileID: 1550451308240278800}
+  - component: {fileID: 8002010869924463765}
   m_Layer: 0
   m_Name: Backpack_Hussar_Med
   m_TagString: Untagged
@@ -58,6 +59,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db2054639542bd949b9c68bad7b02f15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PartAttachAnchor
+--- !u!114 &8002010869924463765
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8397542037179671392}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5e78ad0209321740b7bb5e0d6bd4b08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DurabilityController
+  _durabilityType: 0
+  _currentDurability: 0
+  _maxDurability: 0
+  _partsData: {fileID: 11400000, guid: 0475ff470e8d06249a2b627c2ff13458, type: 2}
+  _unitData: {fileID: 0}
+  _attachedSlotId: 
+  _destroyedPartList: []
+  _animator: {fileID: 0}
+  _deathTrigger: Death
 --- !u!1001 &3044693152425336207
 PrefabInstance:
   m_ObjectHideFlags: 0

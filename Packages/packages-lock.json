@@ -329,6 +329,13 @@
       },
       "url": "https://packages.unity.com"
     },
+    "ru.threedisevenzeror.unitygifdecoder": {
+      "version": "https://github.com/3DI70R/Unity-GifDecoder.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "90ffa399087521817ab03ce9213ec33b38e4492f"
+    },
     "com.unity.modules.accessibility": {
       "version": "1.0.0",
       "depth": 0,
