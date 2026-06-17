@@ -12,6 +12,14 @@ public class PlayerInventory : MonoBehaviour
     public List<InventoryPartItem> PartItems = new List<InventoryPartItem>();
     public List<ItemData> ConsumablesList = new List<ItemData>();
 
+    [Header("Repair Kit")]
+    [SerializeField] private RepairKitData _repairKitData;
+    [SerializeField] private int _repairKitCount;
+
+    public RepairKitData RepairKitData => _repairKitData;
+    public int RepairKitCount => _repairKitCount;
+    public bool HasRepairKit => _repairKitCount > 0 && _repairKitData != null;
+
     // 임시용
     public List<PartsData> PartsList
     {
@@ -91,6 +99,12 @@ public class PlayerInventory : MonoBehaviour
     {
         if (item == null) return;
 
+        if (item is RepairKitData repairKit)
+        {
+            AddRepairKit(repairKit, 1);
+            return;
+        }
+
         if (ConsumablesList.Count < ConsumableSize)
         {
             ConsumablesList.Add(item);
@@ -154,6 +168,52 @@ public class PlayerInventory : MonoBehaviour
 
     public void NotifyInventoryChanged()
     {
+        OnInventoryChanged?.Invoke();
+    }
+
+    public RepairKitData FindFirstRepairKit()
+    {
+        foreach(ItemData item in ConsumablesList)
+        {
+            if (item is RepairKitData repairKit)
+                return repairKit;
+        }
+
+        return null;
+    }
+
+    public bool ConsumeRepairKit()
+    {
+        if (!HasRepairKit)
+        {
+            Debug.LogWarning("[Inventory] 사용할 RepairKit이 없습니다.");
+            return false;
+        }
+
+        _repairKitCount--;
+
+        Debug.Log($"[Inventory] RepairKit 사용: 남은 개수 {_repairKitCount}");
+
+        OnInventoryChanged?.Invoke();
+
+        return true;
+    }
+
+    public void AddRepairKit(RepairKitData repairKit, int amount = 1)
+    {
+        if (repairKit == null)
+            return;
+
+        if (amount <= 0)
+            return;
+
+        if (_repairKitData == null)
+            _repairKitData = repairKit;
+
+        _repairKitCount += amount;
+
+        Debug.Log($"[Inventory] RepairKit 획득: {_repairKitCount}개 보유");
+
         OnInventoryChanged?.Invoke();
     }
 }

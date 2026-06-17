@@ -8,6 +8,7 @@ public class PartHoverInfoPopupUI : MonoBehaviour
     [SerializeField] private TMP_Text _partNameText;
     [SerializeField] private TMP_Text _partTypeText;
     [SerializeField] private TMP_Text _partLoadText;
+    [SerializeField] private TMP_Text _partDurabilityText;
     [SerializeField] private TMP_Text _partDescriptionText;
 
     private bool _isPinned;
@@ -19,25 +20,25 @@ public class PartHoverInfoPopupUI : MonoBehaviour
     }
 
     // 기존 Show 호출이 있어도 깨지지 않도록 유지
-    public void Show(PartsData part)
-    {
-        ShowTemporary(part);
-    }
+    //public void Show(PartsData part)
+    //{
+    //    ShowTemporary(part);
+    //}
 
     // 마우스 hover용
-    public void ShowTemporary(PartsData part)
+    public void ShowTemporary(InventoryPartItem partItem)
     {
         if (_isPinned)
             return;
 
-        ShowInternal(part);
+        ShowInternal(partItem);
     }
 
     // 슬롯 클릭 고정용
-    public void ShowPinned(PartsData part)
+    public void ShowPinned(InventoryPartItem partItem)
     {
         _isPinned = true;
-        ShowInternal(part);
+        ShowInternal(partItem);
     }
 
     // 마우스가 슬롯에서 나갔을 때 사용
@@ -57,15 +58,17 @@ public class PartHoverInfoPopupUI : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    private void ShowInternal(PartsData part)
+    private void ShowInternal(InventoryPartItem partItem)
     {
-        if (part == null)
+        if (partItem == null || partItem.PartsData == null)
         {
             Hide();
             return;
         }
 
-        _currentPart = part;
+        PartsData part = partItem.PartsData;
+
+        gameObject.SetActive(true);
 
         if (_partNameText != null)
             _partNameText.text = part.PartsName;
@@ -76,9 +79,13 @@ public class PartHoverInfoPopupUI : MonoBehaviour
         if (_partLoadText != null)
             _partLoadText.text = $"Load : {part.RequiredLoad}";
 
-        if (_partDescriptionText != null)
-            _partDescriptionText.text = "";
+        if (_partDurabilityText != null)
+        {
+            _partDurabilityText.text =
+                $"Durability : {partItem.CurrentDurability:0} / {partItem.MaxDurability:0}";
+        }
 
-        gameObject.SetActive(true);
+        if (_partDescriptionText != null)
+            _partDescriptionText.text = part.Description;
     }
 }
