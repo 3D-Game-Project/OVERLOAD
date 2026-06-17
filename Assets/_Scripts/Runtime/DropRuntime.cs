@@ -46,18 +46,41 @@ public class DropRuntime
             CreateDropParts(_dropList, spawnPosition);
         }
 
+        // DropCurrencyItems로 이전
+        //if (_enemyData.DropItems != null && _enemyData.DropItems.Count > 0)
+        //{
+        //    foreach (DropItem dropData in _enemyData.DropItems)
+        //    {
+        //        if (dropData == null || dropData.ItemPrefab == null) continue;
 
-        if (_enemyData.DropItems != null && _enemyData.DropItems.Count > 0)
+        //        float currencyRoll = Random.Range(0f, 100f);
+        //        if (currencyRoll <= dropData.DropChance)
+        //        {
+        //            CreateDropCurrency(dropData, spawnPosition);
+        //        }
+        //    }
+        //}
+        DropCurrencyItems(_enemyData, spawnPosition);
+    }
+
+    private void DropCurrencyItems(EnemyData enemyData, Vector3 spawnPosition)
+    {
+        if (enemyData == null)
+            return;
+
+        if (enemyData.DropItems == null || enemyData.DropItems.Count <= 0)
+            return;
+
+        foreach (DropItem dropData in enemyData.DropItems)
         {
-            foreach (DropItem dropData in _enemyData.DropItems)
-            {
-                if (dropData == null || dropData.ItemPrefab == null) continue;
+            if (dropData == null || dropData.ItemPrefab == null)
+                continue;
 
-                float currencyRoll = Random.Range(0f, 100f);
-                if (currencyRoll <= dropData.DropChance)
-                {
-                    CreateDropCurrency(dropData, spawnPosition);
-                }
+            float currencyRoll = Random.Range(0f, 100f);
+
+            if (currencyRoll <= dropData.DropChance)
+            {
+                CreateDropCurrency(dropData, spawnPosition);
             }
         }
     }
@@ -199,6 +222,13 @@ public class DropRuntime
             durability.InitializeDroppedPart(partsData, currentDurability);
         }
 
+        DroppedPartItem droppedPartItem = dropPart.GetComponent<DroppedPartItem>();
+
+        if (droppedPartItem == null)
+            droppedPartItem = dropPart.AddComponent<DroppedPartItem>();
+
+        droppedPartItem.Initialize(partsData, currentDurability);
+
         Vector3 randomOffset = Random.insideUnitSphere * 2f;
         randomOffset.y = 0f;
 
@@ -210,5 +240,84 @@ public class DropRuntime
         Debug.Log(
             $"[DropRuntime] 인벤토리 파츠 드랍: {partsData.PartsName} / Durability: {currentDurability}"
         );
+    }
+
+    /// <summary>
+    /// 장착된 걸 기준으로 parts를 드랍
+    /// </summary>
+    public void DropAttachedPartsFromUnit(GameObject unitRoot, EnemyData enemyData, Vector3 spawnPosition)
+    {
+        if (unitRoot == null)
+            return;
+
+        // 드랍할 파츠 리스트
+        List<GameObject> droppedObjects = new List<GameObject>();
+        int droppedPartCount = 0;
+
+        AttachmentSlot[] slots = unitRoot.GetComponentsInChildren<AttachmentSlot>(true);
+
+        foreach(AttachmentSlot slot in slots)
+        {
+            if (slot == null)
+                return;
+
+            if (!slot.HasPart)
+                continue;
+
+            GameObject attachedObject = slot.AttachedObject;
+
+            if (attachedObject == null)
+                continue;
+
+            // 같은 파츠 오브젝트가 중복 슬롯에서 잡히는 상황 방지용
+            if (droppedObjects.Contains(attachedObject))
+                continue;
+
+
+            DurabilityController durability =
+                attachedObject.GetComponent<DurabilityController>();
+
+            if (durability == null)
+                durability = attachedObject.GetComponentInChildren<DurabilityController>(true);
+
+            if (durability == null)
+                continue;
+
+            if (durability.DurabilityType != DurabilityType.Part)
+                continue;
+
+            if (durability.PartsData == null)
+                continue;
+
+            // 파괴된 파츠는 드랍하지 않음
+            if (durability.IsDestroyed || durability.CurrentDurability <= 0f)
+                continue;
+
+            CreateDropPart(
+                durability.PartsData,
+                spawnPosition,
+                durability.CurrentDurability
+            );
+
+            droppedObjects.Add(attachedObject);
+            droppedPartCount++;
+
+            Debug.Log(
+                $"[DropRuntime] 실제 장착 파츠 드랍: " +
+                $"{durability.PartsData.PartsName} / " +
+                $"{durability.CurrentDurability:0} / {durability.MaxDurability:0}"
+            );
+        }
+
+        // 실제 장착 파츠를 하나도 찾지 못하면 기존 EnemyData.DropParts 사용
+        if (droppedPartCount <= 0 && enemyData != null)
+        {
+            Debug.LogWarning("[DropRuntime] 실제 장착 파츠를 찾지 못해 EnemyData.DropParts를 fallback으로 사용합니다.");
+            DropParts(enemyData, spawnPosition, null);
+            return;
+        }
+
+        // 재화 드랍은 기존유지
+        DropCurrencyItems(enemyData, spawnPosition);
     }
 }

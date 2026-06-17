@@ -6,7 +6,7 @@ public abstract class PartsData : ScriptableObject
     [SerializeField] private GameObject _partsPrefab;
     [SerializeField] private int _requiredLoad;
     [SerializeField] private Sprite _partsImage;
-    [SerializeField] private float _maxDurability;
+    [SerializeField] private float _maxDurability = 300;
     [SerializeField] private int _price;
     [TextArea(1,3)][SerializeField] private string _description;
 

@@ -296,10 +296,26 @@ public class DurabilityController : MonoBehaviour
 
         yield return new WaitForSeconds(2.0f);
 
-        if(_unitData is EnemyData enemyData)
+        // LEGACY
+        //if(_unitData is EnemyData enemyData)
+        //{
+        //    DropRuntime dropRuntime = new DropRuntime();
+        //    dropRuntime.DropParts(enemyData, transform.root.transform.position, _destroyedPartList);
+        //}
+
+        // 새로 만든 DropAttachedPartsFromUnit을 기준으로 drop하도록 수정
+        if (_unitData is EnemyData enemyData)
         {
             DropRuntime dropRuntime = new DropRuntime();
-            dropRuntime.DropParts(enemyData, transform.root.transform.position, _destroyedPartList);
+
+            GameObject unitRoot = transform.root.gameObject;
+            Vector3 dropPosition = unitRoot.transform.position;
+
+            dropRuntime.DropAttachedPartsFromUnit(
+                unitRoot,
+                enemyData,
+                dropPosition
+            );
         }
 
         Destroy(gameObject);

@@ -43,7 +43,7 @@ public class AttachTargetPopupUI : MonoBehaviour
         if (_partEquipActionController == null)
             _partEquipActionController = FindFirstObjectByType<PartEquipActionController>();
 
-        Close();
+        ClearSlotButtons();
     }
 
     public void Open(
@@ -88,8 +88,10 @@ public class AttachTargetPopupUI : MonoBehaviour
 
         gameObject.SetActive(true);
 
-        string partName = _currentPart != null ? _currentPart.name : "Unknown Part";
-        Debug.Log($"[AttachTargetPopup] 장착 위치 선택 팝업 열림: {partName}");
+        Debug.Log(
+            $"[AttachTargetPopup] 장착 위치 선택 팝업 열림: " +
+            $"{_currentPartItem.PartsData.PartsName} / ID: {_currentPartItem.InstanceId}"
+        );
 
         BuildSlotButtons();
     }
@@ -130,11 +132,14 @@ public class AttachTargetPopupUI : MonoBehaviour
             return;
         }
 
-        if (_currentPart == null)
+        if (_currentPartItem == null || _currentPartItem.PartsData == null)
         {
-            Debug.LogWarning("[AttachTargetPopup] 선택된 파츠가 없습니다.");
+            Debug.LogWarning("[AttachTargetPopup] 선택된 InventoryPartItem 또는 PartsData가 없습니다.");
             return;
         }
+
+        PartsData selectedPart = _currentPartItem.PartsData;
+        _currentPart = selectedPart;
 
         if (_slotButtonParent == null)
         {
@@ -149,11 +154,12 @@ public class AttachTargetPopupUI : MonoBehaviour
         }
 
         List<AttachmentSlot> compatibleSlots =
-            _corePartsController.GetCompatibleSlots(_currentPart, false);
+            _corePartsController.GetCompatibleSlots(selectedPart, false);
 
         if (compatibleSlots.Count == 0)
         {
-            Debug.Log($"[AttachTargetPopup] {_currentPart.name} 장착 가능 슬롯 없음");
+            Debug.Log($"[AttachTargetPopup] {selectedPart.PartsName} 장착 가능 슬롯 없음");
+            ResizePopupByButtonCount(0);
             return;
         }
 
@@ -179,13 +185,6 @@ public class AttachTargetPopupUI : MonoBehaviour
             });
 
             _createdButtons.Add(button);
-        }
-
-        if (compatibleSlots.Count == 0)
-        {
-            Debug.Log($"[AttachTargetPopup] {_currentPart.name} 장착 가능 슬롯 없음");
-            ResizePopupByButtonCount(0);
-            return;
         }
 
         ResizePopupByButtonCount(_createdButtons.Count);
@@ -228,9 +227,9 @@ public class AttachTargetPopupUI : MonoBehaviour
             return;
         }
 
-        if (_currentPart == null)
+        if (_currentPartItem == null || _currentPartItem.PartsData == null)
         {
-            Debug.LogWarning("[AttachTargetPopup] 선택된 파츠가 없습니다.");
+            Debug.LogWarning("[AttachTargetPopup] 선택된 InventoryPartItem이 없습니다.");
             return;
         }
 
@@ -240,41 +239,48 @@ public class AttachTargetPopupUI : MonoBehaviour
             return;
         }
 
-        bool started;
+        PartsData selectedPart = _currentPartItem.PartsData;
+        _currentPart = selectedPart;
 
-        if (_currentPartItem == null || _currentPartItem.PartsData == null)
-        {
-            Debug.LogWarning("[AttachTargetPopup] 선택된 InventoryPartItem이 없습니다.");
-            return;
-        }
+        bool started;
 
         if (targetSlot.HasPart)
         {
-            Debug.Log($"[AttachTargetPopup] 교체 작업 시작 요청: {_currentPartItem.PartsData.name} → {targetSlot.SlotId}");
+            Debug.Log(
+                $"[AttachTargetPopup] 교체 작업 시작 요청: " +
+                $"{selectedPart.PartsName} → {targetSlot.SlotId}"
+            );
+
             started = _partEquipActionController.TryStartReplace(_currentPartItem, targetSlot);
         }
         else
         {
-            Debug.Log($"[AttachTargetPopup] 장착 작업 시작 요청: {_currentPartItem.PartsData.name} → {targetSlot.SlotId}");
+            Debug.Log(
+                $"[AttachTargetPopup] 장착 작업 시작 요청: " +
+                $"{selectedPart.PartsName} → {targetSlot.SlotId}"
+            );
+
             started = _partEquipActionController.TryStartAttach(_currentPartItem, targetSlot);
         }
 
         if (started)
         {
-            Debug.Log($"[AttachTargetPopup] 파츠 작업 시작 성공: {_currentPart.name} → {targetSlot.SlotId}");
+            Debug.Log(
+                $"[AttachTargetPopup] 파츠 작업 시작 성공: " +
+                $"{selectedPart.PartsName} → {targetSlot.SlotId}"
+            );
 
             if (_slotOptionPopup != null)
-            {
                 _slotOptionPopup.Close();
-            }
             else
-            {
                 Close();
-            }
         }
         else
         {
-            Debug.LogWarning($"[AttachTargetPopup] 파츠 작업 시작 실패: {_currentPart.name} → {targetSlot.SlotId}");
+            Debug.LogWarning(
+                $"[AttachTargetPopup] 파츠 작업 시작 실패: " +
+                $"{selectedPart.PartsName} → {targetSlot.SlotId}"
+            );
         }
     }
 }

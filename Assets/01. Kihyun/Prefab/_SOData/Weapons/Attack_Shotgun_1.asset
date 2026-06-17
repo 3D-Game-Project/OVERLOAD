@@ -16,10 +16,11 @@ MonoBehaviour:
   _partsPrefab: {fileID: 100004, guid: 1da8cf5ce147c1d40857ba26e4637a1e, type: 3}
   _requiredLoad: 0
   _partsImage: {fileID: 792796000, guid: 1f73fc51b0bf55c4cb10906b193d2a47, type: 3}
-  _maxDurability: 0
+  _maxDurability: 300
   _price: 0
   _description: shotgun_description
   _fireType: 0
+  _weaponType: 0
   _damage: 15
   _range: 5
   _fireCooldown: 1
