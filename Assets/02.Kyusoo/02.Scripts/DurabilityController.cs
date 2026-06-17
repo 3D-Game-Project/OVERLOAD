@@ -1,6 +1,7 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
+﻿using System;
 using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 public class DurabilityController : MonoBehaviour
 {
@@ -26,6 +27,8 @@ public class DurabilityController : MonoBehaviour
     [SerializeField] private Animator _animator;
     [SerializeField] private string _deathTrigger = "Death";
 
+    public event Action<float, float> OnDurabilityChanged;
+
     private void Awake()
     {
         
@@ -47,6 +50,8 @@ public class DurabilityController : MonoBehaviour
         if (_durabilityType == DurabilityType.Core)
         {
             _currentDurability = _maxDurability;
+            OnDurabilityChanged?.Invoke(_currentDurability, _maxDurability);
+
         }
         else
         {
@@ -121,6 +126,11 @@ public class DurabilityController : MonoBehaviour
         _currentDurability = Mathf.Clamp(_currentDurability, 0f, _maxDurability);
 
         SyncToInventoryItem();
+
+        if (_durabilityType == DurabilityType.Core)
+        {
+            OnDurabilityChanged?.Invoke(_currentDurability, _maxDurability);
+        }
 
         if (_currentDurability <= 0f) 
         {
