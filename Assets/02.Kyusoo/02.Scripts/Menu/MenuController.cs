@@ -373,7 +373,7 @@ public class MenuController : MonoBehaviour
         foreach (Transform transform in allTransforms)
         {
             if (transform.name.Contains("Durability") 
-                && (transform.root.gameObject.layer == 7)
+                && (transform.root.gameObject.layer == 7 || transform.root.gameObject.layer == 6)
                 && transform.gameObject.scene.name != null)
             {
                 transform.gameObject.SetActive(isActive);

@@ -228,13 +228,13 @@ GameObject:
   - component: {fileID: 205568263}
   - component: {fileID: 205568264}
   - component: {fileID: 205568265}
-  m_Layer: 5
+  m_Layer: 7
   m_Name: EnemyDurability
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &205568263
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1125,7 +1125,7 @@ GameObject:
   - component: {fileID: 821409254}
   - component: {fileID: 821409256}
   - component: {fileID: 821409255}
-  m_Layer: 5
+  m_Layer: 7
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1265,7 +1265,7 @@ GameObject:
   - component: {fileID: 980204340}
   - component: {fileID: 980204339}
   - component: {fileID: 980204338}
-  m_Layer: 5
+  m_Layer: 7
   m_Name: DurabilityUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1420,7 +1420,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1477607579669403041, guid: 6aecca791f52390498f41939fde7cb77, type: 3}
       propertyPath: _damage
-      value: 20
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 1477607579669403041, guid: 6aecca791f52390498f41939fde7cb77, type: 3}
       propertyPath: m_Enabled
@@ -1495,7 +1495,7 @@ GameObject:
   - component: {fileID: 1278607134}
   - component: {fileID: 1278607133}
   - component: {fileID: 1278607132}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: DurabilityUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1995,7 +1995,7 @@ GameObject:
   - component: {fileID: 1436126278}
   - component: {fileID: 1436126280}
   - component: {fileID: 1436126279}
-  m_Layer: 5
+  m_Layer: 7
   m_Name: Gauge
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2944,6 +2944,10 @@ PrefabInstance:
       value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 4132940926856100803, guid: 46eef50988d047b45930791506c21c32, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4132940926856100803, guid: 46eef50988d047b45930791506c21c32, type: 3}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
@@ -3028,12 +3032,20 @@ PrefabInstance:
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 7634546973307437735, guid: 46eef50988d047b45930791506c21c32, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7634546973307437735, guid: 46eef50988d047b45930791506c21c32, type: 3}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8175405060727705107, guid: 46eef50988d047b45930791506c21c32, type: 3}
       propertyPath: m_Name
       value: CoreDurability
+      objectReference: {fileID: 0}
+    - target: {fileID: 8175405060727705107, guid: 46eef50988d047b45930791506c21c32, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 8175405060727705107, guid: 46eef50988d047b45930791506c21c32, type: 3}
       propertyPath: m_IsActive
