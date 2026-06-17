@@ -274,11 +274,6 @@ public class MenuController : MonoBehaviour
     // 인덱스에 맞는 패널만 켜고 나머지 끄기
     private void SwitchTab(int index)
     {
-        if (DOTween.IsTweening(_mainInterfaceCanvasGroup) || _mainInterfaceCanvasGroup.alpha < 1f)
-        {
-            return;
-        }
-
         int targetIndex = index;
         int previousTabIndex = _currentTabIndex;
 

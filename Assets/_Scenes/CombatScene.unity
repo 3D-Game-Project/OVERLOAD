@@ -468,6 +468,18 @@ PrefabInstance:
       propertyPath: _inventory
       value: 
       objectReference: {fileID: 8869916134159359777}
+    - target: {fileID: 1693129970331372666, guid: f2e5618bec5865f499ed4dcf7d1a39cd, type: 3}
+      propertyPath: _repairKitIcon
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1693129970331372666, guid: f2e5618bec5865f499ed4dcf7d1a39cd, type: 3}
+      propertyPath: _repairKitRoot
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1693129970331372666, guid: f2e5618bec5865f499ed4dcf7d1a39cd, type: 3}
+      propertyPath: _repairKitText
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 1790654535498688797, guid: f2e5618bec5865f499ed4dcf7d1a39cd, type: 3}
       propertyPath: playerPrefab
       value: 
