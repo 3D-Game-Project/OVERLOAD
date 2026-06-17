@@ -74,9 +74,20 @@ public class EffectManager : MonoBehaviour
             ParticleSystem prefab = pair.Value;
 
             _firePools[type] = new ObjectPool<ParticleSystem>(
-                createFunc: () => Instantiate(prefab, transform),              
-                actionOnGet: (effect) => effect.gameObject.SetActive(true),     
-                actionOnRelease: (effect) => effect.gameObject.SetActive(false), 
+                createFunc: () => Instantiate(prefab, transform),
+                actionOnGet: (effect) => {
+                    if (effect != null && effect.gameObject != null)
+                    {
+                        effect.gameObject.SetActive(true);
+                    }
+                },
+                actionOnRelease: (effect) => {
+                    if (effect != null && effect.gameObject != null)
+                    {
+                        effect.transform.SetParent(transform);
+                        effect.gameObject.SetActive(false);
+                    }
+                },
                 actionOnDestroy: (effect) => { if (effect != null) Destroy(effect.gameObject); },
                 defaultCapacity: 10, maxSize: 30
             );
@@ -102,13 +113,31 @@ public class EffectManager : MonoBehaviour
     {
         if (_firePools.TryGetValue(type, out ObjectPool<ParticleSystem> pool))
         {
-            ParticleSystem fireEffect = pool.Get();
+            ParticleSystem fireEffect = null;
 
-            fireEffect.transform.SetParent(parent);
-            fireEffect.transform.localPosition = Vector3.zero;
-            fireEffect.transform.localRotation = Quaternion.identity;
+            try
+            {
+                fireEffect = pool.Get();
+                if (fireEffect == null || fireEffect.gameObject == null)
+                {
+                    _fireDictionary.TryGetValue(type, out ParticleSystem prefab);
+                    fireEffect = Instantiate(prefab, transform);
+                }
+            }
+            catch
+            {
+                _fireDictionary.TryGetValue(type, out ParticleSystem prefab);
+                fireEffect = Instantiate(prefab, transform);
+            }
 
-            StartCoroutine(ReleaseParticleCoroutine(pool, fireEffect, fireEffect.main.duration));
+            if (fireEffect != null)
+            {
+                fireEffect.transform.SetParent(parent);
+                fireEffect.transform.localPosition = Vector3.zero;
+                fireEffect.transform.localRotation = Quaternion.identity;
+
+                StartCoroutine(ReleaseParticleCoroutine(pool, fireEffect, fireEffect.main.duration));
+            }
             return fireEffect;
         }
         return null;
@@ -120,12 +149,29 @@ public class EffectManager : MonoBehaviour
     {
         if (_takeDamagePools.TryGetValue(type, out ObjectPool<ParticleSystem> pool))
         {
-            ParticleSystem takeDamageEffect = pool.Get();
+            ParticleSystem takeDamageEffect = null;
+            try
+            {
+                takeDamageEffect = pool.Get();
+                if (takeDamageEffect == null || takeDamageEffect.gameObject == null)
+                {
+                    _takeDamageDictionary.TryGetValue(type, out ParticleSystem prefab);
+                    takeDamageEffect = Instantiate(prefab, transform);
+                }
+            }
+            catch
+            {
+                _takeDamageDictionary.TryGetValue(type, out ParticleSystem prefab);
+                takeDamageEffect = Instantiate(prefab, transform);
+            }
 
-            takeDamageEffect.transform.position = pos;
-            takeDamageEffect.transform.rotation = Quaternion.LookRotation(normal);
+            if (takeDamageEffect != null)
+            {
+                takeDamageEffect.transform.position = pos;
+                takeDamageEffect.transform.rotation = Quaternion.LookRotation(normal);
 
-            StartCoroutine(ReleaseParticleCoroutine(pool, takeDamageEffect, takeDamageEffect.main.duration));
+                StartCoroutine(ReleaseParticleCoroutine(pool, takeDamageEffect, takeDamageEffect.main.duration));
+            }
         }
     }
 
@@ -151,9 +197,15 @@ public class EffectManager : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
 
-        if (particle != null && particle.gameObject.activeSelf)
+        if (particle != null && particle.gameObject != null && particle.gameObject.activeSelf)
         {
-            targetPool.Release(particle);
+            try
+            {
+                targetPool.Release(particle);
+            }
+            catch
+            {
+            }
         }
     }
 }

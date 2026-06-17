@@ -11,6 +11,9 @@ public class LegPartController : PartBehaviour, ILocomotionPart
     private LegPartsData _legData;
     private LegTypeProfile _profile;
 
+    [Header("Owner")]
+    [SerializeField] private int _ownerLayer;
+
     private Vector3 _currentHorizontalVelocity;
 
     public override void Initialize(PartsData data, CorePartContext context)
@@ -21,6 +24,12 @@ public class LegPartController : PartBehaviour, ILocomotionPart
         {
             Debug.LogError($"{gameObject.name}에는 LegPartsData가 필요합니다.");
             return;
+        }
+
+        if (_context != null && _context.OwnerRoot != null)
+        {
+            _ownerLayer = _context.OwnerRoot.gameObject.layer;
+            gameObject.layer = _ownerLayer;
         }
 
         _profile = _legData.LegTypeProfile;
@@ -37,6 +46,11 @@ public class LegPartController : PartBehaviour, ILocomotionPart
             $"Leg Type: {_legData.LegType}\n" +
             $"Move Speed: {_legData.MoveSpeed}"
         );
+
+        if (TryGetComponent(out DurabilityController durability))
+        {
+            durability.InitializePart(_legData, false);
+        }
     }
 
     public void HandleLocomotion(LocomotionCommand command, float deltaTime)

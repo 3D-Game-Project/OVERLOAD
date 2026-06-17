@@ -82,7 +82,9 @@ public class MenuController : MonoBehaviour
 
                 _tabCanvasGroups[i].alpha = 0f;
                 _tabCanvasGroups[i].blocksRaycasts = false;
-                _tabPanels[i].SetActive(false);
+                _tabCanvasGroups[i].interactable = false;
+
+                _tabPanels[i].SetActive(true);
             }
         }
     }
@@ -124,8 +126,18 @@ public class MenuController : MonoBehaviour
                 return;
             }
 
-            if (!_isMenuOpen) OpenMenu(3); 
-            else CloseMenu(); 
+            if (!_isMenuOpen)
+            {
+                OpenMenu(3);
+            }
+            else if (_currentTabIndex == 3)
+            {
+                CloseMenu();
+            }
+            else
+            {
+                SwitchTab(3);
+            }
         }
 
         // 상점
@@ -176,6 +188,7 @@ public class MenuController : MonoBehaviour
         {
             _mainInterfaceCanvasGroup.DOKill();
             _mainInterfaceCanvasGroup.blocksRaycasts = true;
+            //_mainInterfaceCanvasGroup.interactable = true;
             _mainInterfaceCanvasGroup.DOFade(1f, 0.25f).SetEase(Ease.OutCubic);
         }
 
@@ -248,7 +261,7 @@ public class MenuController : MonoBehaviour
                         _tabCanvasGroups[i].DOKill();
                         _tabCanvasGroups[i].alpha = 0f;
                         _tabCanvasGroups[i].blocksRaycasts = false;
-                        _tabPanels[i].SetActive(false);
+                        _tabCanvasGroups[i].interactable = false;
                     }
                 }
             });
@@ -261,39 +274,46 @@ public class MenuController : MonoBehaviour
     // 인덱스에 맞는 패널만 켜고 나머지 끄기
     private void SwitchTab(int index)
     {
-        int previousTabIndex = _currentTabIndex;
-        _currentTabIndex = index;
-
-        if (previousTabIndex != _currentTabIndex)
+        if (DOTween.IsTweening(_mainInterfaceCanvasGroup) || _mainInterfaceCanvasGroup.alpha < 1f)
         {
-            CanvasGroup oldGroup = _tabCanvasGroups[previousTabIndex];
-            GameObject oldPanel = _tabPanels[previousTabIndex];
-
-            if (oldGroup != null && oldPanel != null)
-            {
-                oldGroup.DOKill();
-                oldGroup.blocksRaycasts = false;
-                oldGroup.DOFade(0f, 0.08f).SetEase(Ease.OutQuad).OnComplete(() => {
-                    oldPanel.SetActive(false);
-                });
-            }
+            return;
         }
+
+        int targetIndex = index;
+        int previousTabIndex = _currentTabIndex;
 
         for (int i = 0; i < _tabPanels.Length; i++)
         {
-            if (_tabCanvasGroups[i] == null) continue;
+            if (_tabPanels[i] == null || _tabCanvasGroups[i] == null) continue;
 
-            if (i == _currentTabIndex)
+            _tabCanvasGroups[i].DOKill(); 
+
+            if (i == targetIndex)
             {
-                _tabCanvasGroups[i].DOKill();
-                _tabCanvasGroups[i].blocksRaycasts = true;
-
                 _tabPanels[i].SetActive(true);
-                _tabCanvasGroups[i].blocksRaycasts = true;
 
+                _tabCanvasGroups[i].blocksRaycasts = true;
+                _tabCanvasGroups[i].interactable = true;
                 _tabCanvasGroups[i].DOFade(1f, 0.12f).SetEase(Ease.InQuad);
             }
+            else
+            {
+                _tabCanvasGroups[i].blocksRaycasts = false;
+                _tabCanvasGroups[i].interactable = false;
+
+
+                GameObject targetPanel = _tabPanels[i];
+                _tabCanvasGroups[i].DOFade(0f, 0.08f).SetEase(Ease.OutQuad).OnComplete(() =>
+                {
+                    if (targetPanel != _tabPanels[_currentTabIndex])
+                    {
+                        targetPanel.SetActive(false);
+                    }
+                });
+            }
         }
+        _currentTabIndex = targetIndex;
+
         UpdateTabNavigationTexts();
     }
 
@@ -357,7 +377,9 @@ public class MenuController : MonoBehaviour
 
         foreach (Transform transform in allTransforms)
         {
-            if (transform.name.Contains("Durability") && transform.gameObject.scene.name != null)
+            if (transform.name.Contains("Durability") 
+                && (transform.root.gameObject.layer == 7)
+                && transform.gameObject.scene.name != null)
             {
                 transform.gameObject.SetActive(isActive);
             }

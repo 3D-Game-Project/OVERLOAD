@@ -1117,6 +1117,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3355374091406811893}
   - component: {fileID: 3747945524776229256}
+  - component: {fileID: 1297167028325309593}
   m_Layer: 0
   m_Name: Legs_Spider_Lt
   m_TagString: Untagged
@@ -1152,7 +1153,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05202799900d4af44ae63f3ac60747b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LegPartController
-  _baseCoreYawSpeed: 720
   _baseLegYawSpeed: 360
-  _coreForwardYawOffset: 0
   _legForwardYawOffset: 0
+  _ownerLayer: 0
+--- !u!114 &1297167028325309593
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8423101242249763884}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5e78ad0209321740b7bb5e0d6bd4b08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DurabilityController
+  _durabilityType: 0
+  _currentDurability: 0
+  _maxDurability: 0
+  _partsData: {fileID: 11400000, guid: 69f87b8627a102c4d81027017bf203f6, type: 2}
+  _unitData: {fileID: 0}
+  _attachedSlotId: 
+  _destroyedPartList: []
+  _animator: {fileID: 0}
+  _deathTrigger: Death
