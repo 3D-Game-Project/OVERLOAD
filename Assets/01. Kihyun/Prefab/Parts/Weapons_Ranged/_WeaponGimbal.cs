@@ -8,7 +8,10 @@ public class WeaponGimbalController : MonoBehaviour
     public float MaxVerticalAngle => maxVerticalAngle;
 
     [Header("Rotation Speed")]
-    [SerializeField] private float rotationSpeed = 360f; 
+    [SerializeField] private float rotationSpeed = 360f;
+
+    [SerializeField] private float smoothDamping = 15f;
+    private Quaternion currentTargetLocalRot = Quaternion.identity;
 
     private IAimProvider aimProvider;
     private Quaternion defaultLocalRotation;
@@ -16,6 +19,7 @@ public class WeaponGimbalController : MonoBehaviour
     private void Awake()
     {
         defaultLocalRotation = transform.localRotation;
+        currentTargetLocalRot = defaultLocalRotation;
     }
 
     private void Start()
@@ -46,9 +50,16 @@ public class WeaponGimbalController : MonoBehaviour
         if (transform.parent == null) return;
 
         Vector3 localTargetPos = transform.parent.InverseTransformPoint(targetWorldPoint);
-        if (localTargetPos == Vector3.zero) return;
 
-        Quaternion targetLocalRot = Quaternion.LookRotation(localTargetPos, Vector3.up);
+        Vector3 localWeaponPos = transform.parent.InverseTransformPoint(transform.position);
+        Vector3 directionToTarget = localTargetPos - localWeaponPos;
+
+        if (directionToTarget.z < 2.0f)
+        {
+            directionToTarget.z = 5.0f;
+        }
+
+        Quaternion targetLocalRot = Quaternion.LookRotation(directionToTarget, Vector3.up);
         Vector3 targetEuler = targetLocalRot.eulerAngles;
 
         float pitch = NormalizeAngle(targetEuler.x);
@@ -57,9 +68,15 @@ public class WeaponGimbalController : MonoBehaviour
 
         Quaternion clampedLocalRot = Quaternion.Euler(pitch, 0f, 0f);
 
+        currentTargetLocalRot = Quaternion.Slerp(
+            currentTargetLocalRot,
+            clampedLocalRot,
+            smoothDamping * Time.deltaTime
+        );
+
         transform.localRotation = Quaternion.RotateTowards(
             transform.localRotation,
-            clampedLocalRot,
+            currentTargetLocalRot,
             rotationSpeed * Time.deltaTime
         );
     }
@@ -72,9 +89,10 @@ public class WeaponGimbalController : MonoBehaviour
 
     public void ResetToDefault()
     {
+        currentTargetLocalRot = Quaternion.Slerp(currentTargetLocalRot, defaultLocalRotation, smoothDamping * Time.deltaTime);
         transform.localRotation = Quaternion.RotateTowards(
             transform.localRotation,
-            defaultLocalRotation,
+            currentTargetLocalRot,
             rotationSpeed * Time.deltaTime
         );
     }
