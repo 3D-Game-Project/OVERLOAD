@@ -47,7 +47,12 @@ public partial class PatrolNavigateAction : Action
         
         if (_agent == null || PatrolPositions?.Value == null || PatrolPositions.Value.Count == 0)
             return Status.Failure;
- 
+
+        if (!_agent.gameObject.activeInHierarchy || !_agent.enabled || !_agent.isOnNavMesh)
+        {
+            return Status.Running;
+        }
+
         if (CurrentPatrolIndex.Value < 0 || CurrentPatrolIndex.Value >= PatrolPositions.Value.Count)
         {
             CurrentPatrolIndex.Value = 0;
