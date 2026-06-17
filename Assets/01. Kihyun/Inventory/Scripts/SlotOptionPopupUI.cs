@@ -22,6 +22,7 @@ public class SlotOptionPopupUI : MonoBehaviour
     [SerializeField] private CorePartsController _corePartsController;
     [SerializeField] private PartHoverInfoPopupUI _hoverInfoPopup;
     [SerializeField] private PartEquipActionController _partEquipActionController;
+    [SerializeField] private PartRepairActionController _partRepairActionController;
 
     private RectTransform _rectTransform;
 
@@ -54,6 +55,9 @@ public class SlotOptionPopupUI : MonoBehaviour
 
         if (_partEquipActionController == null)
             _partEquipActionController = FindFirstObjectByType<PartEquipActionController>();
+
+        if (_partRepairActionController == null)
+            _partRepairActionController = FindFirstObjectByType<PartRepairActionController>();
 
         Close();
     }
@@ -128,6 +132,9 @@ public class SlotOptionPopupUI : MonoBehaviour
         if (_currentPart == null)
             return;
 
+        if (IsAnyActionBusy())
+            return;
+
         bool isEquipped = _corePartsController.IsEquipped(_currentPartItem);
 
         if (isEquipped)
@@ -182,45 +189,34 @@ public class SlotOptionPopupUI : MonoBehaviour
         if (_currentPartItem == null || _currentPartItem.PartsData == null)
             return;
 
-        if (!_currentPartItem.CanRepair())
+        if (IsAnyActionBusy())
+            return;
+
+        if (_partRepairActionController == null)
         {
-            Debug.Log($"[SlotOptionPopup] 이미 최대 내구도입니다: {_currentPartItem.PartsData.PartsName}");
-            Close();
+            Debug.LogWarning("[SlotOptionPopup] PartRepairActionController가 없습니다.");
             return;
         }
 
-        _currentPartItem.RepairToFull();
+        bool started = _partRepairActionController.TryStartRepair(_currentPartItem);
 
-        Debug.Log(
-            $"[SlotOptionPopup] 수리 완료: {_currentPartItem.PartsData.PartsName} / " +
-            $"{_currentPartItem.CurrentDurability} / {_currentPartItem.MaxDurability}"
-        );
-
-        // 장착 중인 파츠라면, 실제 장착된 프리팹의 DurabilityController도 같이 갱신
-        if (_corePartsController != null)
+        if (started)
         {
-            AttachmentSlot equippedSlot = _corePartsController.FindEquippedSlot(_currentPartItem);
-
-            if (equippedSlot != null && equippedSlot.AttachedObject != null)
-            {
-                DurabilityController[] durabilities =
-                    equippedSlot.AttachedObject.GetComponentsInChildren<DurabilityController>(true);
-
-                foreach (DurabilityController durability in durabilities)
-                {
-                    durability.InitializeFromInventoryItem(_currentPartItem);
-                }
-            }
+            Debug.Log($"[SlotOptionPopup] 수리 작업 시작: {_currentPartItem.PartsData.PartsName}");
+            Close();
         }
-
-        _inventory?.NotifyInventoryChanged();
-
-        Close();
+        else
+        {
+            Debug.LogWarning($"[SlotOptionPopup] 수리 작업 시작 실패: {_currentPartItem.PartsData.PartsName}");
+        }
     }
 
     private void OnDismantleClicked()
     {
         if (_currentPart == null)
+            return;
+
+        if (IsAnyActionBusy())
             return;
 
         Debug.Log($"[SlotOptionPopup] 분해 버튼 클릭: {_currentPart.PartsName}");
@@ -245,6 +241,9 @@ public class SlotOptionPopupUI : MonoBehaviour
             return;
         }
 
+        if (IsAnyActionBusy())
+            return;
+
         Vector3 dropPosition = _inventory.transform.position + _inventory.transform.forward * 2f;
 
         DropRuntime dropRuntime = new DropRuntime();
@@ -258,5 +257,22 @@ public class SlotOptionPopupUI : MonoBehaviour
         }
 
         Close();
+    }
+
+    private bool IsAnyActionBusy()
+    {
+        if (_partRepairActionController != null && _partRepairActionController.IsBusy)
+        {
+            Debug.LogWarning("[SlotOptionPopup] 수리 중에는 다른 작업을 할 수 없습니다.");
+            return true;
+        }
+
+        if (_partEquipActionController != null && _partEquipActionController.IsBusy)
+        {
+            Debug.LogWarning("[SlotOptionPopup] 장착/해제 작업 중에는 다른 작업을 할 수 없습니다.");
+            return true;
+        }
+
+        return false;
     }
 }

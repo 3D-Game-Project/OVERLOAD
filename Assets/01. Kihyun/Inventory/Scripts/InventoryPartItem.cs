@@ -25,6 +25,28 @@ public class InventoryPartItem
         }
     }
 
+    /// <summary>
+    /// 수리해야할 내구도 판단용 (남은 정도)
+    /// </summary>
+    public float MissingDurability
+    {
+        get
+        {
+            return Mathf.Max(0f, MaxDurability - _currentDurability);
+        }
+    }
+
+    /// <summary>
+    /// 내구도 최대인지 확인용 (맞으면 true)
+    /// </summary>
+    public bool IsFullDurability
+    {
+        get
+        {
+            return _currentDurability >= MaxDurability;
+        }
+    }
+
     public bool IsDestroyed => _currentDurability <= 0f;
 
     // 생성자
@@ -75,5 +97,24 @@ public class InventoryPartItem
             return false;
 
         return _currentDurability < MaxDurability;
+    }
+
+    /// <summary>
+    /// amount만큼의 내구도 수리
+    /// </summary>
+    /// <param name="amount">수리할 정도</param>
+    /// <returns>수리된 정도 반환</returns>
+    public float RepairBy(float amount)
+    {
+        if (amount <= 0f)
+            return 0f;
+
+        float before = _currentDurability;
+
+        SetDurability(_currentDurability + amount);
+
+        float repairedAmount = _currentDurability - before;
+
+        return repairedAmount;
     }
 }

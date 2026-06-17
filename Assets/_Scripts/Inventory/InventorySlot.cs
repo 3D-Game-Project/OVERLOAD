@@ -25,6 +25,10 @@ public class InventorySlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     [SerializeField] private Color _normalColor = Color.white;
     [SerializeField] private Color _equippedColor = new Color(0.35f, 0.75f, 1f, 1f);
 
+    [Header("Durability UI")]
+    [SerializeField] private GameObject _durabilityRoot;
+    [SerializeField] private Image _durabilityCircle;
+
     private CorePartsController _corePartsController;
     private PartHoverInfoPopupUI _hoverInfoPopup;
 
@@ -44,6 +48,9 @@ public class InventorySlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
         if (_corePartsController == null)
             _corePartsController = FindFirstObjectByType<CorePartsController>();
+
+        if (_durabilityRoot == null && _durabilityCircle != null)
+            _durabilityRoot = _durabilityCircle.gameObject;
     }
 
     private void OnEnable()
@@ -75,27 +82,28 @@ public class InventorySlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         RefreshEquippedHighlight();
     }
 
+    // LEGACY
     //PartsData 정보에 맞춰 슬롯 비주얼 업데이트
-    public void UpdateSlot(PartsData part)
-    {
-        currentPart = part;
-        currentPartItem = null;
-        currentItem = null;
+    //public void UpdateSlot(PartsData part)
+    //{
+    //    currentPart = part;
+    //    currentPartItem = null;
+    //    currentItem = null;
 
-        if (part != null)
-        {
-            itemIcon.gameObject.SetActive(true);
-            itemIcon.sprite = part.PartsImage;
-            itemIcon.color = Color.white ;
-        }
-        else
-        {
-            SetEmptyVisual();
+    //    if (part != null)
+    //    {
+    //        itemIcon.gameObject.SetActive(true);
+    //        itemIcon.sprite = part.PartsImage;
+    //        itemIcon.color = Color.white ;
+    //    }
+    //    else
+    //    {
+    //        SetEmptyVisual();
 
-        }
+    //    }
 
-        RefreshEquippedHighlight();
-    }
+    //    RefreshEquippedHighlight();
+    //}
 
     // 수정한 거에 맞게 추가
     public void UpdateSlot(InventoryPartItem partItem)
@@ -120,6 +128,7 @@ public class InventorySlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         }
 
         RefreshEquippedHighlight();
+        RefreshDurabilityUI();
     }
 
     public void UpdateSlot(ItemData item)
@@ -140,6 +149,7 @@ public class InventorySlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         }
 
         RefreshEquippedHighlight();
+        RefreshDurabilityUI();
     }
 
     private void SetEmptyVisual()
@@ -157,6 +167,9 @@ public class InventorySlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
         if (_slotBackground != null)
             _slotBackground.color = _normalColor;
+
+        if (_durabilityRoot != null)
+            _durabilityRoot.SetActive(false);
     }
 
     public void OnSlotClicked()
@@ -212,7 +225,7 @@ public class InventorySlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
                 {
                     if (_hoverInfoPopup != null)
                     {
-                        _hoverInfoPopup.ShowPinned(currentPartItem.PartsData);
+                        _hoverInfoPopup.ShowTemporary(currentPartItem);
                     }
 
                     _slotOptionPopup.Open(this, currentPartItem, inventory);
@@ -245,6 +258,32 @@ public class InventorySlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         _slotBackground.color = isEquipped ? _equippedColor : _normalColor;
     }
 
+    private void RefreshDurabilityUI()
+    {
+        if (_durabilityRoot == null || _durabilityCircle == null)
+            return;
+
+        if (currentPartItem == null || currentPartItem.PartsData == null)
+        {
+            _durabilityRoot.SetActive(false);
+            return;
+        }
+
+        float maxDurability = currentPartItem.MaxDurability;
+
+        if (maxDurability <= 0f)
+        {
+            _durabilityRoot.SetActive(false);
+            return;
+        }
+
+        float ratio = currentPartItem.CurrentDurability / maxDurability;
+        ratio = Mathf.Clamp01(ratio);
+
+        _durabilityRoot.SetActive(true);
+        _durabilityCircle.fillAmount = ratio;
+    }
+
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (currentPart == null)
@@ -253,7 +292,7 @@ public class InventorySlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         if (_hoverInfoPopup == null)
             return;
 
-        _hoverInfoPopup.ShowTemporary(currentPart);
+        _hoverInfoPopup.ShowTemporary(currentPartItem);
     }
 
     public void OnPointerExit(PointerEventData eventData)
