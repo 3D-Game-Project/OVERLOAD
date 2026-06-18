@@ -7,6 +7,9 @@ public class BoosterPartController : PartBehaviour, IBoosterPart
     [Header("Owner")]
     [SerializeField] private int _ownerLayer;
 
+    private bool _boostLockedUntilRelease;
+    private bool _jumpLockedUntilRelease;
+
     public override void Initialize(PartsData data, CorePartContext context)
     {
         base.Initialize(data, context);
@@ -48,6 +51,8 @@ public class BoosterPartController : PartBehaviour, IBoosterPart
         if (_context.MovementCoordinator == null)
             return;
 
+        UpdateInputLocks(command);
+
         HandleJump(command);
         HandleDash(command, deltaTime);
         HandleFlightOrGlide(command, deltaTime);
@@ -55,11 +60,25 @@ public class BoosterPartController : PartBehaviour, IBoosterPart
 
     public void StopBooster()
     {
+        _boostLockedUntilRelease = false;
+        _jumpLockedUntilRelease = false;
+    }
+
+    private void UpdateInputLocks(BoosterCommand command)
+    {
+        if (!command.JumpHeld)
+            _jumpLockedUntilRelease = false;
+
+        if (!command.BoostHeld)
+            _boostLockedUntilRelease = false;
     }
 
     private void HandleJump(BoosterCommand command)
     {
         if (!command.JumpPressed)
+            return;
+
+        if (_jumpLockedUntilRelease)
             return;
 
         if (!_boosterData.HasFunction(BoosterFunction.Jump))
@@ -72,7 +91,10 @@ public class BoosterPartController : PartBehaviour, IBoosterPart
             return;
 
         if (!TryUseEnergy(_boosterData.JumpEnergyCost))
+        {
+            _jumpLockedUntilRelease = true;
             return;
+        }
 
         _context.MovementCoordinator.RequestJump(
             _boosterData.JumpVelocity
@@ -84,6 +106,9 @@ public class BoosterPartController : PartBehaviour, IBoosterPart
         if (!command.BoostHeld)
             return;
 
+        if (_boostLockedUntilRelease)
+            return;
+
         if (!_boosterData.HasFunction(BoosterFunction.Dash))
             return;
 
@@ -91,7 +116,10 @@ public class BoosterPartController : PartBehaviour, IBoosterPart
             return;
 
         if (!TryUseEnergyPerSec(_boosterData.DashEnergyCostPerSec))
+        {
+            _boostLockedUntilRelease = true;
             return;
+        }
 
         Vector3 dashVelocity =
             command.MoveDirection.normalized * _boosterData.DashSpeed;
@@ -126,8 +154,14 @@ public class BoosterPartController : PartBehaviour, IBoosterPart
 
     private void HandleFlight(BoosterCommand command, float deltaTime)
     {
-        if (!TryUseEnergyPerSec(_boosterData.FlightEnergyCostPerSec))
+        if (_jumpLockedUntilRelease)
             return;
+
+        if (!TryUseEnergyPerSec(_boosterData.FlightEnergyCostPerSec))
+        {
+            _jumpLockedUntilRelease = true;
+            return;
+        }
 
         _context.MovementCoordinator.SubmitVerticalAcceleration(
             _boosterData.FlightVerticalAcceleration,
@@ -148,8 +182,14 @@ public class BoosterPartController : PartBehaviour, IBoosterPart
 
     private void HandleGlide(float deltaTime)
     {
-        if (!TryUseEnergyPerSec(_boosterData.GlideEnergyCostPerSec))
+        if (_jumpLockedUntilRelease)
             return;
+
+        if (!TryUseEnergyPerSec(_boosterData.GlideEnergyCostPerSec))
+        {
+            _jumpLockedUntilRelease = true;
+            return;
+        }
 
         _context.MovementCoordinator.RequestFallSpeedLimit(
             _boosterData.GlideFallSpeedLimit
