@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using TMPro;
 using DG.Tweening;
 
@@ -32,7 +33,10 @@ public struct KeyBindingUI
 public class SettingUI : MonoBehaviour
 {
     [SerializeField] private Slider _volumeSlider;
-    
+
+    [SerializeField] private InputActionAsset _inputActionAsset;
+    [SerializeField] private string _targetActionMapName = "PlayerInputMap";
+
     [SerializeField] private KeyBindingUI[] _keyBindingUI;
     [SerializeField] private Button _closeButton;
 
@@ -43,6 +47,21 @@ public class SettingUI : MonoBehaviour
     private Dictionary<KeyAction, KeyCode> _keyBindings = new Dictionary<KeyAction, KeyCode>();
 
     private bool _ignoreMouseClick = false;
+
+    private Dictionary<KeyAction, (string actionName, string bindingName)> _inputSystemMapping =
+        new Dictionary<KeyAction, (string, string)>()
+    {
+        { KeyAction.Forward,        ("Move", "Up") },       
+        { KeyAction.Backward,       ("Move", "Down") },     
+        { KeyAction.Left,           ("Move", "Left") },     
+        { KeyAction.Right,          ("Move", "Right") },    
+        { KeyAction.Jump_Fly,       ("Jump", "") },         
+        { KeyAction.Dash,           ("Boost", "") },        
+        { KeyAction.Fire,           ("Fire", "") },
+        { KeyAction.Pickup,         ("Pickup", "") },
+        { KeyAction.Inventory,      ("Inventory", "") },
+        { KeyAction.System_Setting, ("Menu", "") }          
+    };
 
     private void Awake()
     {
@@ -73,6 +92,7 @@ public class SettingUI : MonoBehaviour
 
         if (Input.anyKeyDown)
         {
+            Debug.Log("[KeyBind 시스템] 유저의 키 입력 프레임 감지됨!");
             if (Input.GetKeyDown(KeyCode.Mouse0) && EventSystem.current != null)
             {
                 PointerEventData pointerData = new PointerEventData(EventSystem.current) { position = Input.mousePosition };
@@ -94,11 +114,12 @@ public class SettingUI : MonoBehaviour
 
             foreach (KeyCode keyCode in Enum.GetValues(typeof(KeyCode)))
             {
-                if (Input.GetKeyDown(keyCode))
+                if (Input.GetKeyDown(keyCode) || (keyCode == KeyCode.Mouse0 && Input.GetMouseButtonDown(0)))
                 {
-                    
+                    Debug.Log($"[KeyBind 시스템] 매칭된 KeyCode 확인됨 : {keyCode}");
                     if (keyCode == KeyCode.Escape)
                     {
+                        Debug.Log("[KeyBind 시스템] ESC 입력으로 취소됨.");
                         CancelBinding();
                         return;
                     }
@@ -145,6 +166,11 @@ public class SettingUI : MonoBehaviour
             else
                 _keyBindings[item.Action] = loadedKey;
 
+            if (loadedKey != item.DefaultKeyCode)
+            {
+                ApplyOverrideToInputSystem(item.Action, loadedKey);
+            }
+
             if (item.KeyButton != null)
             {
                 item.KeyButton.onClick.AddListener(() => RebindingKey(index));
@@ -189,6 +215,8 @@ public class SettingUI : MonoBehaviour
 
         _keyBindings[currentItem.Action] = newKey;
 
+        ApplyOverrideToInputSystem(currentItem.Action, newKey);
+
         PlayerPrefs.SetString($"{currentItem.Action}", newKey.ToString());
         PlayerPrefs.Save(); 
 
@@ -196,7 +224,95 @@ public class SettingUI : MonoBehaviour
         _currentRebindIndex = -1;
         UpdateKeyTexts();
 
-        Debug.Log($"[KeyBind] {currentItem.Action} 키가 {newKey}로 성공적으로 변경 및 저장되었습니다!");
+        if (_inputActionAsset == null)
+        {
+            Debug.LogError("[검증 실패] 인스펙터 창에 _inputActionAsset 에셋 파일이 연결되지 않았습니다! (빈칸 상태)");
+            return;
+        }
+
+        if (!_inputSystemMapping.TryGetValue(currentItem.Action, out var mapInfo))
+        {
+            Debug.LogError($"[검증 실패] 딕셔너리에 {currentItem.Action}에 대한 매핑 정보가 등록되어 있지 않습니다.");
+            return;
+        }
+
+        var actionMap = _inputActionAsset.FindActionMap(_targetActionMapName);
+        if (actionMap == null)
+        {
+            Debug.LogError($"[검증 실패] 인풋 에셋에서 '{_targetActionMapName}' 이름의 Action Map을 찾을 수 없습니다! 인스펙터 창의 Map Name을 실제 에셋 왼쪽 탭 이름과 똑같이 맞춰주세요.");
+            return;
+        }
+
+        var action = actionMap.FindAction(mapInfo.actionName);
+        if (action == null)
+        {
+            Debug.LogError($"[검증 실패] '{_targetActionMapName}' 맵 하위에서 '{mapInfo.actionName}' 이라는 이름의 Action을 찾을 수 없습니다. 대소문자를 확인해 주세요.");
+            return;
+        }
+
+        Debug.Log($"<Color=Cyan>[실시간 검증 성공]</Color> {currentItem.Action} 액션의 런타임 바인딩이 성공적으로 변경됨!");
+
+        for (int i = 0; i < action.bindings.Count; i++)
+        {
+            if (!string.IsNullOrEmpty(action.bindings[i].overridePath))
+            {
+                Debug.Log($" -> [바인딩 인덱스 {i}번] 경로: {action.bindings[i].overridePath}");
+            }
+        }
+    }
+
+    private void ApplyOverrideToInputSystem(KeyAction action, KeyCode newKeyCode)
+    {
+        if (_inputActionAsset == null) return;
+        if (!_inputSystemMapping.TryGetValue(action, out var mapInfo)) return;
+
+        InputActionMap map = _inputActionAsset.FindActionMap(_targetActionMapName);
+        if (map == null) return;
+
+        InputAction inputAction = map.FindAction(mapInfo.actionName);
+        if (inputAction == null) return;
+
+        string inputSystemPath = ConvertKeyCodeToInputSystemPath(newKeyCode);
+        if (string.IsNullOrEmpty(inputSystemPath)) return;
+
+        inputAction.Disable();
+
+        if (!string.IsNullOrEmpty(mapInfo.bindingName))
+        {
+            for (int i = 0; i < inputAction.bindings.Count; i++)
+            {
+                if (inputAction.bindings[i].name.Equals(mapInfo.bindingName, StringComparison.OrdinalIgnoreCase))
+                {
+                    inputAction.ApplyBindingOverride(i, inputSystemPath);
+                    break;
+                }
+            }
+        }
+        else
+        {
+            inputAction.ApplyBindingOverride(0, inputSystemPath);
+        }
+
+        inputAction.Enable();
+    }
+
+    private string ConvertKeyCodeToInputSystemPath(KeyCode keyCode)
+    {
+        string name = keyCode.ToString().ToLower();
+
+        // 예외 문자열 필터 하드웨어 보정 가공
+        if (keyCode >= KeyCode.Alpha0 && keyCode <= KeyCode.Alpha9)
+            return $"<Keyboard>/{name.Replace("alpha", "")}";
+        if (keyCode >= KeyCode.Mouse0 && keyCode <= KeyCode.Mouse6)
+            return $"<Mouse>/{name.Replace("mouse", "button")}";
+        if (keyCode == KeyCode.LeftShift || keyCode == KeyCode.RightShift)
+            return $"<Keyboard>/{name.Replace("left", "left ").Replace("right", "right ")}";
+        if (keyCode == KeyCode.LeftControl || keyCode == KeyCode.RightControl)
+            return $"<Keyboard>/{name.Replace("leftcontrol", "leftCtrl").Replace("rightcontrol", "rightCtrl")}";
+        if (keyCode == KeyCode.LeftAlt || keyCode == KeyCode.RightAlt)
+            return $"<Keyboard>/{name.Replace("leftalt", "leftAlt").Replace("rightalt", "rightAlt")}";
+
+        return $"<Keyboard>/{name}";
     }
 
     private bool IsKeyDuplicate(KeyCode checkingCode, KeyAction currentAction)
@@ -233,17 +349,10 @@ public class SettingUI : MonoBehaviour
         if (keyCode == KeyCode.RightShift) return "R-Shift";
         if (keyCode == KeyCode.LeftControl) return "L-Ctrl";
         if (keyCode == KeyCode.LeftAlt) return "L-Alt";
-        if (keyCode == KeyCode.Alpha0) return "0";
-        if (keyCode == KeyCode.Alpha1) return "1";
-        if (keyCode == KeyCode.Alpha2) return "2";
-        if (keyCode == KeyCode.Alpha3) return "3";
-        if (keyCode == KeyCode.Alpha4) return "4";
-        if (keyCode == KeyCode.Alpha5) return "5";
-        if (keyCode == KeyCode.Alpha6) return "6";
-        if (keyCode == KeyCode.Alpha7) return "7";
-        if (keyCode == KeyCode.Alpha8) return "8";
-        if (keyCode == KeyCode.Alpha9) return "9";
-        if (keyCode == KeyCode.Alpha0) return "0";
+        for (int i = 0; i <= 9; i++)
+        {
+            if (keyCode == (KeyCode)Enum.Parse(typeof(KeyCode), "Alpha" + i)) return i.ToString();
+        }
 
         return keyCode.ToString();
     }

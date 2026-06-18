@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &7153742038890508964
+--- !u!1 &3583795629746748594
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,9 +8,9 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1103775839161336329}
-  - component: {fileID: 5679318421018802351}
-  - component: {fileID: 9209662033595929001}
+  - component: {fileID: 691529576580456330}
+  - component: {fileID: 4266066610289255490}
+  - component: {fileID: 8203015207103535649}
   m_Layer: 0
   m_Name: CM_ThirdPersonCamera
   m_TagString: Untagged
@@ -18,28 +18,28 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &1103775839161336329
+--- !u!4 &691529576580456330
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7153742038890508964}
+  m_GameObject: {fileID: 3583795629746748594}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -9.7, y: 41.1, z: -33}
+  m_LocalPosition: {x: 0.3, y: 2.6, z: -7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5679318421018802351
+--- !u!114 &4266066610289255490
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7153742038890508964}
+  m_GameObject: {fileID: 3583795629746748594}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f9dfa5b682dcd46bda6128250e975f58, type: 3}
@@ -76,13 +76,13 @@ MonoBehaviour:
       BarrelClipping: 0.25
       Anamorphism: 0
   BlendHint: 0
---- !u!114 &9209662033595929001
+--- !u!114 &8203015207103535649
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7153742038890508964}
+  m_GameObject: {fileID: 3583795629746748594}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 625c14eee3ad46c99df7c7c891ef668a, type: 3}
@@ -92,7 +92,7 @@ MonoBehaviour:
   ShoulderOffset: {x: 0.3, y: 0.8, z: 0}
   VerticalArmLength: 0.3
   CameraSide: 1
-  CameraDistance: 15
+  CameraDistance: 7
   AvoidObstacles:
     Enabled: 0
     CollisionFilter:
