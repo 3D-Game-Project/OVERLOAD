@@ -173,6 +173,18 @@ public class MenuController : MonoBehaviour
         if (backgroundImage != null) backgroundImage.SetActive(true);
         if (mainInterfacePanel != null) mainInterfacePanel.SetActive(true);
 
+        GameObject canvasObj = GameObject.Find("Canvas");
+
+        if (canvasObj != null)
+        {
+            Transform crosshairTransform = canvasObj.transform.Find("Crosshair");
+
+            if (crosshairTransform != null)
+            {
+                crosshairTransform.gameObject.SetActive(false);
+            }
+        }
+
         GameObject playerRootObj = GameObject.Find("Crosshair");
         if (playerRootObj != null) playerRootObj.SetActive(false);
 

@@ -19,6 +19,8 @@ public partial class AttackTargetAction : Action
     private FireManager[] _fireManagers;
     private WeaponGimbalController[] _gimbals;
 
+    private DurabilityController _coreDurability;
+
     private float _lastAnimTime;
 
     // 공격이 시작되면 agent의 움직임을 멈추고 FireManager가 연결된 모든 파츠를 찾기
@@ -27,7 +29,12 @@ public partial class AttackTargetAction : Action
         if (Self?.Value == null || Target?.Value == null) return Status.Failure;
 
         _agent = Self.Value.GetComponent<NavMeshAgent>();
-        if (_agent != null) _agent.ResetPath();
+        if (_agent != null && _agent.isActiveAndEnabled && _agent.isOnNavMesh)
+        {
+            _agent.ResetPath();
+        }
+
+        _coreDurability = Self.Value.GetComponent<DurabilityController>();
 
         _fireManagers = Self.Value.GetComponentsInChildren<FireManager>(false);
         _gimbals = Self.Value.GetComponentsInChildren<WeaponGimbalController>(false);
@@ -42,6 +49,11 @@ public partial class AttackTargetAction : Action
     protected override Status OnUpdate()
     {
         if (Self?.Value == null || Target?.Value == null) return Status.Failure;
+
+        if (_coreDurability != null && (_coreDurability.IsDestroyed || _coreDurability.CurrentDurability <= 0f))
+        {
+            return Status.Failure;
+        }
 
         if (_fireManagers == null || _fireManagers.Length == 0)
         {
@@ -95,9 +107,9 @@ public partial class AttackTargetAction : Action
 
         foreach (FireManager firemanager in _fireManagers)
         {
-            if (firemanager == null || firemanager.WeaponRuntime == null) continue;
+            if (firemanager == null || !firemanager.enabled || firemanager.WeaponRuntime == null) continue;
 
-            
+
             firemanager.TryFire(targetPoint);
 
             if (!firemanager.WeaponRuntime.IsReloading)
