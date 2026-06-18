@@ -1,7 +1,6 @@
 ﻿using DG.Tweening;
 using System.Collections.Generic;
 using TMPro;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -81,7 +80,7 @@ public class StatusPanel : MonoBehaviour
             durabilityRow.SetActive(true);
 
             TextMeshProUGUI partNameText = durabilityRow.transform.Find("PartName")?.GetComponent<TextMeshProUGUI>();
-            Image gaugeImage = durabilityRow.transform.Find("Gauge")?.GetComponent<Image>();
+            Image gaugeImage = durabilityRow.transform.Find("Slider/Gauge")?.GetComponent<Image>();
             TextMeshProUGUI valueText = durabilityRow.transform.Find("DurabilityRatio")?.GetComponent<TextMeshProUGUI>();
 
             if (partNameText != null)
@@ -114,10 +113,12 @@ public class StatusPanel : MonoBehaviour
                 valueText.text = $"{current} / {max}";
             }
 
+            float ratio = Mathf.Clamp01(current / max);
+
             if (gaugeImage != null)
             {
-                float ratio = Mathf.Clamp01(current / max);
                 gaugeImage.fillAmount = 0f;
+
                 gaugeImage.DOFillAmount(ratio, 0.3f).SetEase(Ease.OutCubic);
             }
         }

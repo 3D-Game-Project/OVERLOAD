@@ -19,7 +19,8 @@ MonoBehaviour:
   _maxDurability: 0
   _price: 0
   _description: 
-  _fireType: 0
+  _fireType: 1
+  _weaponType: 0
   _damage: 10
   _range: 10
   _fireCooldown: 0.5

@@ -3659,6 +3659,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SettingUI
   _volumeSlider: {fileID: 2035717525}
+  _inputActionAsset: {fileID: -944628639613478452, guid: 4b2a144cbf6335845a066e2d5e3f68f5, type: 3}
+  _targetActionMapName: PlayerInputMap
   _keyBindingUI:
   - Action: 0
     KeyButton: {fileID: 360955846}
@@ -7451,8 +7453,6 @@ MonoBehaviour:
   _waveHeight: 8
   _waveSpacing: 0.5
   _nextSceneName: SecondBuildScene
-  _minimumLoadingTime: 5
-  _gaugeSmoothSpeed: 1.5
 --- !u!1 &1344300896
 GameObject:
   m_ObjectHideFlags: 0
@@ -10143,9 +10143,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ac769cc840f5bd40895f79580a62475, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AssetLoader
-  _sourcePrefabs:
-  - {fileID: 7028308593123321832, guid: dc90b93142807b1428a67bfb3c59263b, type: 3}
-  - {fileID: 965962863158665399, guid: a69a935ef5bd5144fb7e1650755c0849, type: 3}
+  _sourcePrefabs: []
 --- !u!1 &1953404905
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -6,6 +7,8 @@ using UnityEngine.InputSystem;
 // inputaction의 인터페이스를 받아와서 그 인터페이스를 구현하는 방식
 public class PlayerInputHandler : MonoBehaviour, GameInputAction.IPlayerInputMapActions
 {
+    private PlayerInput _playerInput;
+
     public GameInputAction GameInput { get; private set;
     }
     public Vector2 MoveInput { get; private set; }
@@ -30,6 +33,11 @@ public class PlayerInputHandler : MonoBehaviour, GameInputAction.IPlayerInputMap
     {
         GameInput = new GameInputAction();
         GameInput.PlayerInputMap.SetCallbacks(this);
+        _playerInput = GetComponent<PlayerInput>();
+    }
+    private void Start()
+    {
+        RestoreCustomKeyBindings();
     }
 
     private void OnEnable()
@@ -133,4 +141,85 @@ public class PlayerInputHandler : MonoBehaviour, GameInputAction.IPlayerInputMap
         if (context.started) ReloadTriggered = true;
     }
 
+
+    private void RestoreCustomKeyBindings()
+    {
+        if (GameInput == null || GameInput.asset == null) return;
+
+        InputActionMap map = GameInput.asset.FindActionMap("PlayerInputMap");
+        if (map == null) return;
+
+        RestoreBinding(map, "Move", "Up", KeyAction.Forward);
+        RestoreBinding(map, "Move", "Down", KeyAction.Backward);
+        RestoreBinding(map, "Move", "Left", KeyAction.Left);
+        RestoreBinding(map, "Move", "Right", KeyAction.Right);
+        RestoreBinding(map, "Jump", "", KeyAction.Jump_Fly);
+        RestoreBinding(map, "Boost", "", KeyAction.Dash);
+        RestoreBinding(map, "Fire", "", KeyAction.Fire);
+        RestoreBinding(map, "Pickup", "", KeyAction.Pickup);
+        RestoreBinding(map, "Inventory", "", KeyAction.Inventory);
+        RestoreBinding(map, "Menu", "", KeyAction.System_Setting);
+    }
+
+    private void RestoreBinding(InputActionMap map, string actionName, string bindingName, KeyAction actionEnum)
+    {
+        if (!PlayerPrefs.HasKey($"{actionEnum}")) return;
+
+        InputAction inputAction = map.FindAction(actionName);
+        if (inputAction == null) return;
+
+        string savedKeyStr = PlayerPrefs.GetString($"{actionEnum}");
+        if (!Enum.TryParse(savedKeyStr, out KeyCode keyCode)) return;
+
+        string inputSystemPath = ConvertKeyCodeToInputSystemPath(keyCode);
+        if (string.IsNullOrEmpty(inputSystemPath)) return;
+
+        inputAction.Disable();
+
+        if (!string.IsNullOrEmpty(bindingName))
+        {
+            for (int i = 0; i < inputAction.bindings.Count; i++)
+            {
+                if (inputAction.bindings[i].name.Equals(bindingName, StringComparison.OrdinalIgnoreCase))
+                {
+                    inputAction.ApplyBindingOverride(i, inputSystemPath);
+                    break;
+                }
+            }
+        }
+        else
+        {
+            inputAction.ApplyBindingOverride(0, inputSystemPath);
+        }
+
+        inputAction.Enable();
+        Debug.Log($"[인게임 세이브 로드] 씬 이동 복구 완료 : {actionName}({bindingName}) ➔ {inputSystemPath}");
+    }
+
+    // 경로 가공 툴 파일
+    private string ConvertKeyCodeToInputSystemPath(KeyCode keyCode)
+    {
+        string name = keyCode.ToString().ToLower();
+
+        if (keyCode == KeyCode.Mouse0) return "<Mouse>/leftButton";  // button0 에러 완벽 방어
+        if (keyCode == KeyCode.Mouse1) return "<Mouse>/rightButton"; // button1 에러 완벽 방어
+        if (keyCode == KeyCode.Mouse2) return "<Mouse>/middleButton";
+
+        if (keyCode >= KeyCode.Alpha0 && keyCode <= KeyCode.Alpha9)
+            return $"<Keyboard>/{name.Replace("alpha", "")}";
+
+        if (keyCode == KeyCode.LeftShift || keyCode == KeyCode.RightShift)
+            return $"<Keyboard>/{name.Replace("left", "left ").Replace("right", "right ")}";
+
+        if (keyCode == KeyCode.LeftControl || keyCode == KeyCode.RightControl)
+            return $"<Keyboard>/{name.Replace("leftcontrol", "leftCtrl").Replace("rightcontrol", "rightCtrl")}";
+
+        if (keyCode == KeyCode.LeftAlt || keyCode == KeyCode.RightAlt)
+            return $"<Keyboard>/{name.Replace("leftalt", "leftAlt").Replace("rightalt", "rightAlt")}";
+
+        if (keyCode == KeyCode.Space)
+            return "<Keyboard>/space";
+
+        return $"<Keyboard>/{name}";
+    }
 }
