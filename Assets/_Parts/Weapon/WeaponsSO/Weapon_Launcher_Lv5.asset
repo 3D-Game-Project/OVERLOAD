@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1b1fcedf4d30334f861d12febf4455f, type: 3}
+  m_Name: Weapon_Launcher_Lv5
+  m_EditorClassIdentifier: Assembly-CSharp::AttackPartsData
+  _partsName: Launcher_Lv5
+  _partsPrefab: {fileID: 100000, guid: 2ba7bc8aecc63ed4e93956ed01a6ab6f, type: 3}
+  _requiredLoad: 0
+  _partsImage: {fileID: 137958651, guid: 90c7d3cbce0c87342ad4e169693f8974, type: 3}
+  _maxDurability: 300
+  _price: 100
+  _description: 
+  _fireType: 0
+  _weaponType: 1
+  _damage: 90
+  _range: 20
+  _fireCooldown: 5
+  _maxMagazineSize: 3
+  _bulletPrefab: {fileID: 100000, guid: 4b815154d85842f498b5278505cf5416, type: 3}
+  _firePowerCost: 0
