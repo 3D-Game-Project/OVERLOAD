@@ -93,20 +93,21 @@ public class FireManager : MonoBehaviour
     public void TryFire(Vector3 targetPoint)
     {
         if (!this.enabled) return;
-
-        if (_attackPartsData == null)
-            return;
-
-        if (WeaponRuntime == null)
-            return;
-
-        if (_muzzlePoint == null)
-            return;
+        if (_attackPartsData == null || WeaponRuntime == null || _muzzlePoint == null) return;
 
         if (WeaponRuntime.TryFire())
         {
             if (_muzzleFlashInstance != null)
             {
+                if (!_muzzleFlashInstance.gameObject.activeSelf)
+                {
+                    _muzzleFlashInstance.gameObject.SetActive(true);
+                }
+
+                _muzzleFlashInstance.transform.SetParent(_muzzlePoint, false);
+                _muzzleFlashInstance.transform.localPosition = Vector3.zero;
+                _muzzleFlashInstance.transform.localRotation = Quaternion.identity;
+
                 _muzzleFlashInstance.Play();
             }
 
@@ -115,7 +116,6 @@ public class FireManager : MonoBehaviour
                 case FireType.Projectile:
                     CreateBullet(targetPoint);
                     break;
-
                 case FireType.Hitscan:
                     FireHitscan(targetPoint);
                     break;

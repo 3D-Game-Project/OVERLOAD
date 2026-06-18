@@ -14,11 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AttackPartsData
   _partsName: minigun_1
   _partsPrefab: {fileID: 100014, guid: 0fdcd4ac2b86a08459d20f49cf40486b, type: 3}
-  _requirePower: 10
-  _partsType: 0
+  _requiredLoad: 0
+  _partsImage: {fileID: 0}
+  _maxDurability: 300
+  _price: 0
+  _description: 
   _fireType: 1
-  _damage: 1
+  _weaponType: 5
+  _damage: 5
   _range: 10
   _fireCooldown: 0.2
   _maxMagazineSize: 30
   _bulletPrefab: {fileID: 100000, guid: 7e2d264e03fb2fb4fb2b1e559515830a, type: 3}
+  _firePowerCost: 0
