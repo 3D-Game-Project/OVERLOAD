@@ -454,7 +454,13 @@ public class CorePartsController : MonoBehaviour
         {
             if (partItem != null)
             {
+                // 플레이어 인벤토리에서 장착한 개별 파츠 
                 durability.InitializeFromInventoryItem(partItem);
+            }
+            else
+            {
+                // 적 초기 파츠 -> partsdata를 기준
+                durability.InitializePart(partsData, false);
             }
 
             durability.SetAssociatedSlotId(slot.SlotId);

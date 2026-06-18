@@ -225,7 +225,7 @@ public class InventorySlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
                 {
                     if (_hoverInfoPopup != null)
                     {
-                        _hoverInfoPopup.ShowTemporary(currentPartItem);
+                        _hoverInfoPopup.ShowPinned(currentPartItem);
                     }
 
                     _slotOptionPopup.Open(this, currentPartItem, inventory);
