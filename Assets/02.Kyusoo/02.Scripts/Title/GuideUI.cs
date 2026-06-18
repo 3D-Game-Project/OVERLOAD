@@ -1,9 +1,7 @@
 using GifImporter;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
-using GifImporter;
 
 [System.Serializable]
 public struct GuidePage

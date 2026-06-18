@@ -32,6 +32,9 @@ public class FireManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    ///  시작시 ParticleManager에 사전에 생성한 공격이펙트를 무기타입에 맞춰 사전에 생성시키도록 처리
+    /// </summary>
     private void Start()
     {
         if (_attackPartsData != null && _muzzlePoint != null && EffectManager.instance != null)
@@ -90,6 +93,13 @@ public class FireManager : MonoBehaviour
         SetWeaponOwner(targetLayer, ownerLayer);
     }
 
+    /// <summary>
+    /// PlayerAimController 혹은 에너미기준 플레이어의 위치를 기반으로 사격 실행
+    /// MuzzlePoint를 기준으로 파티클이 생성되도록 함수 실행.
+    /// 이때 파티클이 오브젝트풀링으로 생성되기 때문에 해당 풀링오브젝트를 _muzzlePoint 하위로 생성
+    /// 그리고 로컬포지션을 받아와서 파티클이 머즐포인트에 계속 생성되도록 처리
+    /// </summary>
+    /// <param name="targetPoint"></param>
     public void TryFire(Vector3 targetPoint)
     {
         if (!this.enabled) return;
@@ -227,6 +237,7 @@ public class FireManager : MonoBehaviour
             SubscribeReloadEvent();
         }
     }
+
 
     private void RebuildBulletPool()
     {

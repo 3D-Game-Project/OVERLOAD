@@ -25,27 +25,11 @@ public class MechPreviewStudio : MonoBehaviour
 
     private void Start()
     {
-        GameObject playerRootObj = GameObject.Find("PlayerRoot");
-        if (playerRootObj != null)
-        {
-            _liveActionController = playerRootObj.GetComponent<PartEquipActionController>();
-            if (_liveActionController == null) _liveActionController = playerRootObj.GetComponentInChildren<PartEquipActionController>(true);
-
-            if (_liveActionController != null)
-            {
-                // 진짜 플레이어의 장착 타이머 코루틴이 "성공적으로 종료" 되었을 때만 수신하도록 안전 바인딩!
-                _liveActionController.OnActionFinished -= HandleLiveEquipFinished;
-                _liveActionController.OnActionFinished += HandleLiveEquipFinished;
-            }
-        }
     }
 
     private void OnDestroy()
     {
-        if (_liveActionController != null)
-        {
-            _liveActionController.OnActionFinished -= HandleLiveEquipFinished;
-        }
+ 
     }
 
     // 파츠 조립 코루틴이 끝나 성공(true)을 반환할 때만 새로고침을 수행.
@@ -59,7 +43,6 @@ public class MechPreviewStudio : MonoBehaviour
 
     public void RefreshPreview()
     {
-        Debug.Log("RefreshPreview");
         GameObject playerRootObj = GameObject.Find("PlayerRoot");
         Debug.Log(playerRootObj + "발견");
         if (playerRootObj != null)

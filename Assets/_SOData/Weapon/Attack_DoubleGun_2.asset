@@ -20,7 +20,7 @@ MonoBehaviour:
   _price: 50
   _description: 
   _fireType: 1
-  _weaponType: 3
+  _weaponType: 0
   _damage: 3
   _range: 10
   _fireCooldown: 0.1
