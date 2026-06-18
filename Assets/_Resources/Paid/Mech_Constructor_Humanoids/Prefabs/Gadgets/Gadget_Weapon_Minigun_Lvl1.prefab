@@ -352,6 +352,9 @@ GameObject:
   - component: {fileID: 400014}
   - component: {fileID: 9500000}
   - component: {fileID: 6556816308703038769}
+  - component: {fileID: 1552949629760438227}
+  - component: {fileID: 8205688642934061219}
+  - component: {fileID: 6824510242269272679}
   m_Layer: 0
   m_Name: Gadget_Weapon_Minigun_Lvl1
   m_TagString: Untagged
@@ -414,3 +417,57 @@ MonoBehaviour:
   _targetLayer:
     serializedVersion: 2
     m_Bits: 0
+--- !u!114 &1552949629760438227
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100014}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d10ce24518e34d4c8e87c07558331e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AttackPartController
+  _fireManager: {fileID: 0}
+  _targetLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  _ownerLayer: 0
+--- !u!114 &8205688642934061219
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100014}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 545518895044d674ba4a32a483427fb3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WeaponGimbalController
+  maxHorizontalAngle: 45
+  maxVerticalAngle: 60
+  rotationSpeed: 360
+  smoothDamping: 15
+--- !u!114 &6824510242269272679
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100014}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5e78ad0209321740b7bb5e0d6bd4b08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DurabilityController
+  _durabilityType: 0
+  _currentDurability: 0
+  _maxDurability: 0
+  _partsData: {fileID: 11400000, guid: 61e62221102e4354f905b4862d515fe6, type: 2}
+  _unitData: {fileID: 0}
+  _attachedSlotId: 
+  _destroyedPartList: []
+  _animator: {fileID: 0}
+  _deathTrigger: Death
