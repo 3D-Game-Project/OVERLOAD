@@ -24,6 +24,6 @@ MonoBehaviour:
   _damage: 5
   _range: 15
   _fireCooldown: 0.1
-  _maxMagazineSize: 0
+  _fireEnergy: 1.5
   _bulletPrefab: {fileID: 0}
   _firePowerCost: 0

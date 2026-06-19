@@ -8,6 +8,7 @@ using UnityEngine.InputSystem;
 public class PlayerInputHandler : MonoBehaviour, GameInputAction.IPlayerInputMapActions
 {
     private PlayerInput _playerInput;
+    private MenuController _menuController;
 
     public GameInputAction GameInput { get; private set;
     }
@@ -37,6 +38,7 @@ public class PlayerInputHandler : MonoBehaviour, GameInputAction.IPlayerInputMap
     }
     private void Start()
     {
+        _menuController = FindFirstObjectByType<MenuController>();
         RestoreCustomKeyBindings();
     }
 
@@ -64,11 +66,25 @@ public class PlayerInputHandler : MonoBehaviour, GameInputAction.IPlayerInputMap
 
     public void OnMove(InputAction.CallbackContext context)
     {
+        // 대표적인 설명 추가
+        // 인벤토리가 열렸을 때, Move를 포함한 점프, 공격, 줍기 등의 모든 입력처리를 동작하지않도록 처리
+        if (_menuController != null && _menuController.IsMenuOpen)
+        {
+            MoveInput = Vector2.zero;
+            return;
+        }
         MoveInput = context.ReadValue<Vector2>();
     }
 
     public void OnJump(InputAction.CallbackContext context)
     {
+        if (_menuController != null && _menuController.IsMenuOpen)
+        {
+            IsJumpPressed = false;
+            IsJumpHeld = false;
+            return;
+        }
+
         if (context.started)
         {
             IsJumpPressed = true;
@@ -83,6 +99,13 @@ public class PlayerInputHandler : MonoBehaviour, GameInputAction.IPlayerInputMap
 
     public void OnBoost(InputAction.CallbackContext context)
     {
+        if (_menuController != null && _menuController.IsMenuOpen)
+        {
+            IsBoostPressed = false;
+            IsBoostHeld = false;
+            return;
+        }
+
         if (context.started)
         {
             IsBoostPressed = true;
@@ -97,6 +120,12 @@ public class PlayerInputHandler : MonoBehaviour, GameInputAction.IPlayerInputMap
 
     public void OnPickup(InputAction.CallbackContext context)
     {
+        if (_menuController != null && _menuController.IsMenuOpen)
+        {
+            IsPickupPressed = false;
+            return;
+        }
+
         if (context.started)
         {
             IsPickupPressed = true;
@@ -129,6 +158,12 @@ public class PlayerInputHandler : MonoBehaviour, GameInputAction.IPlayerInputMap
     public void OnFire(InputAction.CallbackContext context)
     {
         if (IsPreview) { IsFire = false; return; }
+
+        if (_menuController != null && _menuController.IsMenuOpen)
+        {
+            IsFire = false;
+            return;
+        }
 
         if (context.started || context.performed) IsFire = true;
         else if (context.canceled) IsFire = false;

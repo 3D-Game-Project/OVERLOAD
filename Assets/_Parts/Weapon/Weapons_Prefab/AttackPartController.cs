@@ -79,13 +79,14 @@ public class AttackPartController : PartBehaviour, IAttackPart
 
     public void HandleReload(bool isReloadPressed)
     {
-        if (!isReloadPressed)
-            return;
+        //    if (!isReloadPressed)
+        //        return;
 
-        if (_fireManager == null)
-            return;
+        //    if (_fireManager == null)
+        //        return;
 
-        _fireManager.StartReload();
+        //    _fireManager.StartReload();
+
     }
 
     private Vector3 GetTargetPoint()

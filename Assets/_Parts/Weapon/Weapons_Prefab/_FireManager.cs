@@ -7,10 +7,11 @@ public class FireManager : MonoBehaviour
     [SerializeField] private Transform _muzzlePoint;
     [SerializeField] private LayerMask _targetLayer;
 
+    private OverheatController _overheatController;
+
     public WeaponRuntime WeaponRuntime { get; private set; }
 
     private BulletPool _bulletPool;
-    private Coroutine _reloadCoroutine;
     private bool _isReloadEventSubscribed;
 
     private ParticleSystem _muzzleFlashInstance;
@@ -37,6 +38,8 @@ public class FireManager : MonoBehaviour
     /// </summary>
     private void Start()
     {
+        if(_overheatController == null) _overheatController = GetComponentInParent<OverheatController>();
+
         if (_attackPartsData != null && _muzzlePoint != null && EffectManager.instance != null)
         {
             _muzzleFlashInstance = EffectManager.instance.CreateFireEffect(_attackPartsData.WeaponType, _muzzlePoint);
@@ -100,17 +103,22 @@ public class FireManager : MonoBehaviour
     /// 그리고 로컬포지션을 받아와서 파티클이 머즐포인트에 계속 생성되도록 처리
     /// </summary>
     /// <param name="targetPoint"></param>
-    public void TryFire(Vector3 targetPoint)
+    public void TryFire(Vector3 targetPoint, Transform targetPart = null)
     {
         if (!this.enabled) return;
         if (_attackPartsData == null || WeaponRuntime == null || _muzzlePoint == null) return;
 
-        if (WeaponRuntime.TryFire())
+        if (!WeaponRuntime.TryFire()) return;
+
+        if (_overheatController != null && _overheatController.TryConsumeEnergy(_attackPartsData.FireEnergy))
         {
+            WeaponRuntime.RecordFire();
+
             if (TryGetComponent(out Animator animator))
             {
                 animator.SetTrigger("Shoot");
             }
+
             if (_muzzleFlashInstance != null)
             {
                 if (!_muzzleFlashInstance.gameObject.activeSelf)
@@ -128,21 +136,13 @@ public class FireManager : MonoBehaviour
             switch (_attackPartsData.FireType)
             {
                 case FireType.Projectile:
-                    CreateBullet(targetPoint);
+                    CreateBullet(targetPoint, targetPart);
                     break;
                 case FireType.Hitscan:
-                    FireHitscan(targetPoint);
+                    FireHitscan(targetPoint, targetPart);
                     break;
             }
         }
-    }
-
-    public void StartReload()
-    {
-        if (WeaponRuntime == null)
-            return;
-
-        WeaponRuntime.StartReload();
     }
 
     // 총알 생성 (ProjectTile은 해당 방향으로 발사되도록 처리해야하기 때문에)
@@ -150,7 +150,7 @@ public class FireManager : MonoBehaviour
     // 총알 생성은 사전에 오브젝트 풀링을 통해 생성한 총알 가져오기
     // 총알의 조준방향은 발사방향을 기준으로 정면으로 나가도록 즉각적인 각도 조정(위 혹은 아래의 적을 조준할 때 총알이 꺽여나가게하지 않도록)
     // 마지막 조건문은 생성되는 총알의 데미지, 사거리 정보를 추가
-    private void CreateBullet(Vector3 targetPoint)
+    private void CreateBullet(Vector3 targetPoint, Transform targetPart)
     {
         if (_bulletPool == null)
             return;
@@ -169,7 +169,8 @@ public class FireManager : MonoBehaviour
                 _attackPartsData.Damage,
                 _attackPartsData.Range,
                 _bulletPool,
-                _targetLayer
+                _targetLayer,
+                targetPart
             );
         }
     }
@@ -177,29 +178,37 @@ public class FireManager : MonoBehaviour
     // 히트스캔타입의 무기 전용 발사 로직
     // 발사방향 설정 후, Ray를 쏴서 히트된 정보 판별
     // Enemy, Player모두 FireManager를 사용할 예정이기 때문에 각각의 피격 함수 호출
-    private void FireHitscan(Vector3 targetPoint)
+    private void FireHitscan(Vector3 targetPoint, Transform targetPart)
     {
         Debug.Log($"HitScan 호출됨");
 
         Vector3 fireDirection = (targetPoint - _muzzlePoint.position).normalized;
+        float attackRange = _attackPartsData != null ? _attackPartsData.Range : 20f;
 
-        float attackRange = _attackPartsData != null ? _attackPartsData.Range : 10f;
+        RaycastHit[] hits = Physics.RaycastAll(_muzzlePoint.position, fireDirection, attackRange, _targetLayer);
 
-        if (Physics.Raycast(_muzzlePoint.position, fireDirection, out RaycastHit hit, attackRange, _targetLayer))
+        System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
+
+        foreach (RaycastHit hit in hits)
         {
-
-            if (EffectManager.instance != null && _attackPartsData != null)
-            {
-                EffectManager.instance.CreateTakeDamageEffect(_attackPartsData.WeaponType, hit.point, hit.normal);
-            }
-
             DurabilityController hitDurability = hit.collider.GetComponentInParent<DurabilityController>();
 
             if (hitDurability != null)
             {
+                if (targetPart != null && hitDurability.transform != targetPart)
+                {
+                    continue;
+                }
+
+                if (EffectManager.instance != null && _attackPartsData != null)
+                {
+                    EffectManager.instance.CreateTakeDamageEffect(_attackPartsData.WeaponType, hit.point, hit.normal);
+                }
+
                 hitDurability.TakeDamage(_attackPartsData.Damage);
-            
                 Debug.Log($"Hitscan 부위 이름: {hit.collider.gameObject.name} / 타입: {hitDurability.DurabilityType}");
+
+                break;
             }
         }
     }
@@ -230,7 +239,6 @@ public class FireManager : MonoBehaviour
         if (_attackPartsData == null)
             return;
 
-        StopReloadCoroutine();
         UnsubscribeReloadEvent();
 
         WeaponRuntime = new WeaponRuntime(_attackPartsData);
@@ -260,7 +268,7 @@ public class FireManager : MonoBehaviour
         if (_attackPartsData.BulletPrefab == null)
             return;
 
-        int poolSize = Mathf.Max(1, _attackPartsData.MaxMagazineSize);
+        int poolSize = Mathf.Max(1, 3);
 
         _bulletPool = gameObject.AddComponent<BulletPool>();
         _bulletPool.Initialize(
@@ -277,7 +285,6 @@ public class FireManager : MonoBehaviour
         if (_isReloadEventSubscribed)
             return;
 
-        WeaponRuntime.OnReloadStarted += ReloadStarted;
         _isReloadEventSubscribed = true;
     }
 
@@ -289,7 +296,6 @@ public class FireManager : MonoBehaviour
         if (!_isReloadEventSubscribed)
             return;
 
-        WeaponRuntime.OnReloadStarted -= ReloadStarted;
         _isReloadEventSubscribed = false;
     }
 
@@ -339,39 +345,6 @@ public class FireManager : MonoBehaviour
         {
             SetLayerRecursively(child, layer);
         }
-    }
-
-    // 무기 재장전시 동작되는 코루틴
-    private void ReloadStarted()
-    {
-        if (_reloadCoroutine != null)
-        {
-            StopCoroutine(_reloadCoroutine);
-        }
-
-        _reloadCoroutine = StartCoroutine(ReloadCoroutine());
-    }
-
-    // 2초 대기 후 Reload완료되었다고 알리기
-    private IEnumerator ReloadCoroutine()
-    {
-        yield return new WaitForSeconds(2f);
-
-        if (WeaponRuntime != null)
-        {
-            WeaponRuntime.CompleteReload();
-        }
-
-        _reloadCoroutine = null;
-    }
-
-    private void StopReloadCoroutine()
-    {
-        if (_reloadCoroutine == null)
-            return;
-
-        StopCoroutine(_reloadCoroutine);
-        _reloadCoroutine = null;
     }
 
     // 몬스터 기준 플레이어가 후방에 있어도 총알이 뒤로 발사되지 않도록 플레이어 방향으로 회전시키는 함수

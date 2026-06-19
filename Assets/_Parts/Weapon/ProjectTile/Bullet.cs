@@ -12,16 +12,19 @@ public class Bullet : MonoBehaviour
     private Vector3 _startPosition;
     private bool _isReturned;
 
+    private Transform _targetPart;
+
     // 총알 데이터 세팅
     // 공격력, 사거리, 타겟레이어 세팅
     // 총구 위치로 startPosition 지정
-    public void Setup(int damage, float range, BulletPool pool, LayerMask targetLayer)
+    public void Setup(int damage, float range, BulletPool pool, LayerMask targetLayer, Transform targetPart = null)
     {
         _damage = damage;
         _maxRange = range;
         _myPool = pool;
         _startPosition = transform.position;
         _targetLayer = targetLayer;
+        _targetPart = targetPart;
         _isReturned = false;
     }
 
@@ -31,7 +34,13 @@ public class Bullet : MonoBehaviour
 
         float moveDistance = _speed * Time.deltaTime;
 
-        if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, moveDistance))
+        RaycastHit[] hits = Physics.RaycastAll(transform.position, transform.forward, moveDistance);
+
+        System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
+
+        bool shouldKeepFlying = true;
+
+        foreach (RaycastHit hit in hits)
         {
             int hitLayer = hit.collider.gameObject.layer;
 
@@ -41,31 +50,37 @@ public class Bullet : MonoBehaviour
 
                 if (targetDurability != null)
                 {
+                    if (_targetPart != null && targetDurability.transform != _targetPart)
+                    {
+                        continue; 
+                    }
+
                     targetDurability.TakeDamage(_damage);
+
+                    ReturnToPool();
+                    shouldKeepFlying = false;
+                    break; 
                 }
-
-                ReturnToPool();
-                return;
             }
-
-            if (hitLayer != LayerMask.NameToLayer("Player"))
+            else if (hitLayer != LayerMask.NameToLayer("Player"))
             {
                 ReturnToPool();
-                return;
+                shouldKeepFlying = false;
+                break;
             }
         }
 
-        transform.Translate(Vector3.forward * moveDistance);
-
-        if (Vector3.Distance(_startPosition, transform.position) >= _maxRange)
+        if (shouldKeepFlying)
         {
-            ReturnToPool();
+            transform.Translate(Vector3.forward * moveDistance);
+
+            if (Vector3.Distance(_startPosition, transform.position) >= _maxRange)
+            {
+                ReturnToPool();
+            }
         }
     }
 
-    // 피격 판정
-    // 타겟 레이어를 맞추었는지 확인 후, 맞췄다면 TakeDamage 함수 호출
-    // Layer를 지정하지 않은 곳에 부딪히는 경우 총알 제거
     private void OnTriggerEnter(Collider other)
     {
       

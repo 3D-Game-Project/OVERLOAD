@@ -590,6 +590,7 @@ GameObject:
   - component: {fileID: 8761703739823510939}
   - component: {fileID: 556890349594034095}
   - component: {fileID: 5597124523057592250}
+  - component: {fileID: 1834399571351232971}
   m_Layer: 6
   m_Name: PlayerRoot
   m_TagString: Player
@@ -956,6 +957,7 @@ MonoBehaviour:
   _partsData: {fileID: 0}
   _unitData: {fileID: 11400000, guid: 9806c62939af4c348980b7080d5b0018, type: 2}
   _attachedSlotId: 
+  _particlePos: {fileID: 0}
   _destroyedPartList: []
   _animator: {fileID: 0}
   _deathTrigger: Death
@@ -976,6 +978,22 @@ MonoBehaviour:
   _partEquipActionController: {fileID: 0}
   _repairTimePer100Durability: 2
   _minimumRepairTime: 0.25
+--- !u!114 &1834399571351232971
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8597838465946235833}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9785cddb1c2c9c429b105e09b11faef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::OverheatController
+  _maxEnergy: 100
+  _currentEnergy: 0
+  _energyRecoveryRate: 40
+  _recoveryDelay: 1.5
 --- !u!1 &8709235386021125407
 GameObject:
   m_ObjectHideFlags: 0

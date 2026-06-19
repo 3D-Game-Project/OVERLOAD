@@ -120,7 +120,6 @@ public class PartDetailPopup : MonoBehaviour
                     if (_statText1 != null) _statText1.text = $"Damage: <color=#FFCC00>{attackData.Damage}</color>";
                     if (_statText2 != null) _statText2.text = $"Range: <color=#FFCC00>{attackData.Range}m</color>";
                     if (_statText3 != null) _statText3.text = $"Cooldown: <color=#FFCC00>{attackData.FireCooldown}s</color>";
-                    if (_statText4 != null) _statText4.text = $"Magazine: <color=#FFCC00>{attackData.MaxMagazineSize} Rnds</color>";
                     if (_statText5 != null) _statText5.text = $"Power Cost: <color=#FF3333>{attackData.FirePowerCost}</color>";
                 }
                 break;

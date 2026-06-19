@@ -23,7 +23,7 @@ MonoBehaviour:
   _weaponType: 1
   _damage: 90
   _range: 20
-  _fireCooldown: 5
-  _maxMagazineSize: 3
+  _fireCooldown: 4
+  _fireEnergy: 10
   _bulletPrefab: {fileID: 100000, guid: 4b815154d85842f498b5278505cf5416, type: 3}
   _firePowerCost: 0
