@@ -31,9 +31,20 @@ public partial class PatrolNavigateAction : Action
         if (PatrolPositions?.Value == null || PatrolPositions.Value.Count == 0)
             return Status.Failure;
 
+        if (CurrentPatrolIndex == null)
+        {
+            Debug.LogError("[PatrolAction] CurrentPatrolIndex가 블랙보드에 연결되지 않았습니다!");
+            return Status.Failure;
+        }
+
         if (PatrolSpeed != null)
         {
             _agent.speed = PatrolSpeed.Value;
+        }
+
+        if (_agent.isActiveAndEnabled && _agent.isOnNavMesh)
+        {
+            _agent.isStopped = false;
         }
 
         return Status.Running;
