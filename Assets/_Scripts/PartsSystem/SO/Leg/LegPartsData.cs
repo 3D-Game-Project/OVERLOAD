@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New_Leg_Parts", menuName = "Data/Parts/Leg/LegParts")]
@@ -16,9 +17,15 @@ public class LegPartsData : PartsData
     [Header("코어 에너지 소모")]
     [SerializeField] private float _dashEnergyCost;
 
+    [Header("Animation")]
+    [SerializeField] private RuntimeAnimatorController _animatorController;
+
     // 프로필
     public LegType LegType => _legTypeProfile.LegType;
     public LegTypeProfile LegTypeProfile => _legTypeProfile;
+
+    // 애니메이션
+    public RuntimeAnimatorController AnimatorController => _animatorController;
 
     public float MoveSpeed => _moveSpeed;
     public float Acceleration => _acceleration;

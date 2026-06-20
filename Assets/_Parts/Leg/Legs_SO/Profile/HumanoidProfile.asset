@@ -21,3 +21,14 @@ MonoBehaviour:
   _dashMultiplier: 1.5
   _turnSpeedMultiplier: 1
   _stability: 0.6
+  _yawControlMode: 0
+  _moveControlMode: 0
+  _turnStartAngle: 30
+  _turnStopAngle: 8
+  _hasStrafeAnimation: 1
+  _hasTurnAnimation: 1
+  _terrainAdaptMode: 2
+  _bodyTiltWeight: 1
+  _bodyTiltSmooth: 8
+  _maxBodyTiltAngle: 25
+  _terrainProbeDistance: 4

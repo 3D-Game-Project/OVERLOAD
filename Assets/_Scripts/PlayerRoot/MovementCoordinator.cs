@@ -20,6 +20,12 @@ public class MovementCoordinator : MonoBehaviour
 
     private float _requestedHorizontalSpeedMultiplier = 1f;
 
+    private bool _isDashBoostingThisFrame;
+    private bool _wasDashBoostingLastFrame;
+
+    public bool IsDashBoostingThisFrame => _isDashBoostingThisFrame;
+    public bool WasDashBoostingLastFrame => _wasDashBoostingLastFrame;
+
     private void Awake()
     {
         if (_locomotionMotor == null)
@@ -28,6 +34,9 @@ public class MovementCoordinator : MonoBehaviour
 
     public void BeginFrame()
     {
+        _wasDashBoostingLastFrame = _isDashBoostingThisFrame;
+        _isDashBoostingThisFrame = false;
+
         _groundHorizontalVelocitySum = Vector3.zero;
         _groundRequestCount = 0;
 
@@ -57,6 +66,11 @@ public class MovementCoordinator : MonoBehaviour
         velocity.y = 0f;
 
         _additionalHorizontalVelocity += velocity;
+    }
+
+    public void NotifyDashBoosting()
+    {
+        _isDashBoostingThisFrame = true;
     }
 
     public void SubmitVerticalVelocityChange(float velocityChange)

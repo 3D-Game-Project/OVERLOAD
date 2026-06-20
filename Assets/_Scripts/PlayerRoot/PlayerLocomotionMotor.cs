@@ -7,22 +7,28 @@ public class PlayerLocomotionMotor : MonoBehaviour
 {
     [Header("Components")]
     [SerializeField] private CharacterController _characterController;
+    [SerializeField] private GroundSensor _groundSensor;
 
     [Header("Gravity")]
     [SerializeField] private float _gravity = -20f;
     [SerializeField] private float _groundedForce = -2f;
     [SerializeField] private float _maxFallSpeed = -25f;
 
+    [Header("Ground Snap")]
+    [SerializeField] private float _groundSnapDistance = 0.3f;
+    [SerializeField] private float _groundSnapContactOffset = 0.02f;
+
     private Vector3 _horizontalVelocity;
     private float _verticalVelocity;
 
     private bool _ignoreGroundSnapThisFrame;
+    private bool _isGrounded;
 
     // 부스터, 다리 파츠 등이 한 프레임 동안 요청하는 값
     private float _horizontalSpeedMultiplier = 1f;
     private float _requestedMaxFallSpeed;
 
-    public bool IsGrounded => _characterController.isGrounded;
+    public bool IsGrounded => _isGrounded;
     public Vector3 HorizontalVelocity => _horizontalVelocity;
     public float VerticalVelocity => _verticalVelocity;
 
@@ -31,6 +37,9 @@ public class PlayerLocomotionMotor : MonoBehaviour
         if (_characterController == null)
             _characterController = GetComponent<CharacterController>();
 
+        if (_groundSensor == null)
+            _groundSensor = GetComponent<GroundSensor>();
+
         _requestedMaxFallSpeed = _maxFallSpeed;
     }
 
@@ -38,14 +47,25 @@ public class PlayerLocomotionMotor : MonoBehaviour
     {
         if (_characterController == null || !_characterController.enabled || !_characterController.gameObject.activeInHierarchy) return;
 
+        RefreshGroundedState();
+
         ApplyGravity();
         ApplyFallSpeedLimit();
 
         Vector3 finalHorizontalVelocity = _horizontalVelocity * _horizontalSpeedMultiplier;
         Vector3 finalVelocity = finalHorizontalVelocity + Vector3.up * _verticalVelocity;
+        Vector3 displacement = finalVelocity * Time.deltaTime;
 
-        _characterController.Move(finalVelocity * Time.deltaTime);
+        if (!_characterController.isGrounded && TryGetSnapGround(out GroundInfo groundInfo))
+        {
+            float snapDistance = Mathf.Min(groundInfo.Distance + _groundSnapContactOffset, _groundSnapDistance);
 
+            displacement.y = Mathf.Min(displacement.y, -snapDistance);
+        }
+
+        _characterController.Move(displacement);
+
+        RefreshGroundedState();
         ResetFrameRequests();
     }
 
@@ -108,7 +128,7 @@ public class PlayerLocomotionMotor : MonoBehaviour
     // ignoreGroundSnapThisFrame을 이용해서 공중에 뜰 때는 중력 잠시 취소
     private void ApplyGravity()
     {
-        if (_characterController.isGrounded && _verticalVelocity < 0f && !_ignoreGroundSnapThisFrame)
+        if (_isGrounded && _verticalVelocity < 0f && !_ignoreGroundSnapThisFrame)
         {
             _verticalVelocity = _groundedForce;
             return;
@@ -133,5 +153,40 @@ public class PlayerLocomotionMotor : MonoBehaviour
         _horizontalSpeedMultiplier = 1f;
         _requestedMaxFallSpeed = _maxFallSpeed;
         _ignoreGroundSnapThisFrame = false;
+    }
+
+    private bool TryGetSnapGround(out GroundInfo groundInfo)
+    {
+        groundInfo = default;
+
+        if (_groundSensor == null)
+            return false;
+
+        if (_ignoreGroundSnapThisFrame)
+            return false;
+
+        if (_verticalVelocity > 0f)
+            return false;
+
+        if (!_groundSensor.TryGetGround(out groundInfo))
+            return false;
+
+        if (groundInfo.Distance > _groundSnapDistance)
+            return false;
+
+        float groundAngle = Vector3.Angle(groundInfo.Normal, Vector3.up);
+
+        return groundAngle <= _characterController.slopeLimit;
+    }
+
+    private void RefreshGroundedState()
+    {
+        if (_ignoreGroundSnapThisFrame)
+        {
+            _isGrounded = false;
+            return;
+        }
+
+        _isGrounded = _characterController.isGrounded || TryGetSnapGround(out _);
     }
 }

@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e29c905744c8acb4b8991a8175c732aa, type: 3}
-  m_Name: SpiderMed
+  m_Name: Spider_Med
   m_EditorClassIdentifier: Assembly-CSharp::LegPartsData
   _partsName: SpiderLegMed
-  _partsPrefab: {fileID: 100000, guid: 18981a06fb298f345ab489e86c560f5c, type: 3}
+  _partsPrefab: {fileID: 100000, guid: a32798260998a5e4598f31c4107a4226, type: 3}
   _requiredLoad: 0
   _partsImage: {fileID: 0}
-  _maxDurability: 0
+  _maxDurability: 550
   _price: 0
   _description: 
   _legTypeProfile: {fileID: 11400000, guid: c78541e47dd59b044a76185612e811fa, type: 2}
@@ -24,3 +24,4 @@ MonoBehaviour:
   _acceleration: 12
   _decceleration: 16
   _dashEnergyCost: 0
+  _animatorController: {fileID: 9100000, guid: 4c720197673e81848925fc17532ced2e, type: 2}

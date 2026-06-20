@@ -124,9 +124,9 @@ public class BoosterPartController : PartBehaviour, IBoosterPart
         Vector3 dashVelocity =
             command.MoveDirection.normalized * _boosterData.DashSpeed;
 
-        _context.MovementCoordinator.SubmitAdditionalHorizontalVelocity(
-            dashVelocity
-        );
+        _context.MovementCoordinator.NotifyDashBoosting();
+
+        _context.MovementCoordinator.SubmitAdditionalHorizontalVelocity(dashVelocity);
     }
 
     private void HandleFlightOrGlide(BoosterCommand command, float deltaTime)
