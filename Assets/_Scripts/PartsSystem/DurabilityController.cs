@@ -35,6 +35,7 @@ public class DurabilityController : MonoBehaviour
     [SerializeField] private string _deathTrigger = "Death";
 
     public event Action<float, float> OnDurabilityChanged;
+    public event Action OnCoreDestroyed;
 
     /// <summary>
     /// 시작시 DurabilityType이 Core인지 Part인지 자동으로 파악하고 그거에 맞춰서 DurabilityType 수정
@@ -378,7 +379,7 @@ public class DurabilityController : MonoBehaviour
             _animator.SetTrigger(_deathTrigger);
         }
 
-        yield return new WaitForSeconds(2.0f);
+        yield return new WaitForSeconds(1.2f);
 
         // LEGACY
         //if(_unitData is EnemyData enemyData)
@@ -392,8 +393,11 @@ public class DurabilityController : MonoBehaviour
         {
             DropRuntime dropRuntime = new DropRuntime();
 
+            // 이 부분 수정.
+            // 수정 이유: dropPosition이 Enemy의 Root의 Pos를 받아오는식이었는데 현재 Monster Spawn Manager가 Root로 변경되어 드랍위치가 고정됨
+            // 그래서 코어 내구도 0 인경우에만 이 로직의 위치를 찾게 되니 gameObject로 처리하면 Core의 위치대로 생성되니 그렇게 수정.
             GameObject unitRoot = transform.root.gameObject;
-            Vector3 dropPosition = unitRoot.transform.position;
+            Vector3 dropPosition = gameObject.transform.position;
 
             dropRuntime.DropAttachedPartsFromUnit(
                 unitRoot,
@@ -402,7 +406,13 @@ public class DurabilityController : MonoBehaviour
             );
         }
 
-        Destroy(gameObject);
+        if(gameObject.layer == 7)
+        {
+            OnCoreDestroyed?.Invoke();
+        }
+
+        if (gameObject.layer == 6) Destroy(gameObject);
+
 
     }
 
@@ -427,6 +437,61 @@ public class DurabilityController : MonoBehaviour
                     EffectManager.instance.StopSparkParticle(this);
                 }
             }
+        }
+    }
+
+    // Pool로 저장한 몬스터가 죽었다가 다시 스폰될 때, 내구도 복원 및 꺼두었던 기능들 복원하는 함수
+    public void ResetDurability()
+    {
+        _isDestroyed = false;
+        _destroyedPartList.Clear();
+
+        if (_durabilityType == DurabilityType.Core)
+        {
+            _currentDurability = _maxDurability;
+            OnDurabilityChanged?.Invoke(_currentDurability, _maxDurability);
+
+            if (TryGetComponent(out UnityEngine.AI.NavMeshAgent agent)) agent.enabled = true;
+            if (TryGetComponent(out Collider collider)) collider.enabled = true;
+            if (TryGetComponent(out CharacterController cc)) cc.enabled = true;
+
+            if (_animator != null && !string.IsNullOrEmpty(_deathTrigger))
+            {
+                _animator.ResetTrigger(_deathTrigger);
+                _animator.Rebind(); 
+                _animator.Update(0f);
+            }
+
+            DurabilityController[] childParts = GetComponentsInChildren<DurabilityController>(true);
+            foreach (var part in childParts)
+            {
+                if (part != this && part.DurabilityType == DurabilityType.Part)
+                {
+                    part.ResetDurability();
+                }
+            }
+        }
+        else 
+        {
+            if (_partsData != null) _maxDurability = _partsData.MaxDurability;
+            _currentDurability = _maxDurability;
+
+            
+            if (TryGetComponent(out Collider col)) col.enabled = true;
+
+            MonoBehaviour[] components = GetComponentsInChildren<MonoBehaviour>(true);
+            foreach (var script in components)
+            {
+                if (script == null || script == this) continue;
+                string name = script.GetType().Name;
+                if (name == "WeaponGimbalController" || name == "FireManager" || name == "AttackPartController")
+                    script.enabled = true;
+            }
+
+            Animator[] animators = GetComponentsInChildren<Animator>(true);
+            foreach (Animator anim in animators) anim.enabled = true;
+
+            CheckAndStopEffects();
         }
     }
 

@@ -406,7 +406,7 @@ GameObject:
   - component: {fileID: 3084877941442852856}
   - component: {fileID: 5572813654131709749}
   m_Layer: 7
-  m_Name: Enemy_Type1
+  m_Name: Enemy_Type6
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -705,10 +705,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CorePartsController
   _attachInitialPartsOnStart: 1
   _initialParts:
-  - partsData: {fileID: 11400000, guid: dff6889040ad84e41bfd0e18a87150e4, type: 2}
+  - partsData: {fileID: 11400000, guid: 62feb803488c1eb44ab9089aa256bdc8, type: 2}
     slot: {fileID: 7680721664655559648}
-  - partsData: {fileID: 11400000, guid: acea059fd1aa49a4b966f70c8ec4592b, type: 2}
+  - partsData: {fileID: 11400000, guid: db799709083c3204b9bc4527a32fffc6, type: 2}
     slot: {fileID: 8959084602277851344}
+  - partsData: {fileID: 11400000, guid: a75edd0e010156f48b44fde613aa567b, type: 2}
+    slot: {fileID: 6999799309414237791}
   - partsData: {fileID: 11400000, guid: eb1a254bec5fb6f4d81d6f755dc315d7, type: 2}
     slot: {fileID: 8270253581132282145}
   _attachmentSlots: []
