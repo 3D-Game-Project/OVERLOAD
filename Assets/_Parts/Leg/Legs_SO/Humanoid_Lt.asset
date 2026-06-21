@@ -24,3 +24,4 @@ MonoBehaviour:
   _acceleration: 12
   _decceleration: 16
   _dashEnergyCost: 0
+  _animatorController: {fileID: 9100000, guid: cdc006f4e3548c744a097d64f05672c4, type: 2}

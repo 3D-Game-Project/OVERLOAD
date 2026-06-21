@@ -25,7 +25,7 @@ MonoBehaviour:
   _moveControlMode: 0
   _turnStartAngle: 30
   _turnStopAngle: 8
-  _hasStrafeAnimation: 1
+  _hasStrafeAnimation: 0
   _hasTurnAnimation: 1
   _terrainAdaptMode: 2
   _bodyTiltWeight: 1

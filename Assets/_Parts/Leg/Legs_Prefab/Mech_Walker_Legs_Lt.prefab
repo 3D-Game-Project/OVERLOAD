@@ -81,7 +81,7 @@ MonoBehaviour:
   _legForwardYawOffset: 0
   _animationDriver: {fileID: 3456251537201988480}
   _ownerLayer: 0
-  _coreFollowTarget: {fileID: 0}
+  _coreFollowTarget: {fileID: 400036}
   _useCoreVisualFollow: 1
   _coreFollowWeight: 1
   _coreFollowSmooth: 12
@@ -137,8 +137,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d8c22bb179dd634b8aa96c3e5be5f9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LegTerrainAdapter
-  _tiltRoot: {fileID: 0}
-  _terrainProbes: []
+  _tiltRoot: {fileID: 400000}
+  _terrainProbes:
+  - {fileID: 6401026830838661202}
+  - {fileID: 974404959755507974}
+  - {fileID: 8477585221357866316}
+  - {fileID: 7649244468626664438}
   _groundLayer:
     serializedVersion: 2
     m_Bits: 2147483648
@@ -179,7 +183,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 100000}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fff0960ef4ea6e04eac66b4a7fd2189d, type: 3}
   m_Name: 
@@ -920,7 +924,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 400048}
-  - component: {fileID: 1003425827753622116}
   m_Layer: 0
   m_Name: Mount_Cockpit
   m_TagString: Untagged
@@ -943,18 +946,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 400044}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1003425827753622116
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 100042}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: db2054639542bd949b9c68bad7b02f15, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PartAttachAnchor
 --- !u!1 &100044
 GameObject:
   m_ObjectHideFlags: 0
@@ -1026,6 +1017,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 400046}
+  - component: {fileID: 6959176792166290513}
   m_Layer: 0
   m_Name: Mount_Top
   m_TagString: Untagged
@@ -1048,6 +1040,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 400038}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6959176792166290513
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100048}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db2054639542bd949b9c68bad7b02f15, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PartAttachAnchor
 --- !u!1 &2045700596002216503
 GameObject:
   m_ObjectHideFlags: 0
