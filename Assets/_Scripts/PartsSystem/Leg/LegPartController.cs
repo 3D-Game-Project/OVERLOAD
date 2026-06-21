@@ -118,9 +118,11 @@ public class LegPartController : PartBehaviour, ILocomotionPart
         // 다리 모듈에 따른 yaw 제어 다르게 하기 위해 새로운 함수 추가
         Vector3 finalMoveDirection = ResolveLegMoveDirection(command, deltaTime);
 
+        bool hasTranslationInput = finalMoveDirection.sqrMagnitude > 0.001f;
+
         // 실제 이동은 카메라 기준 WASD 이동 방향
         // 위에서 만든 finalMoveDirection을 통해 결정하도록 수정
-        UpdateMovement(finalMoveDirection, command.HasMoveInput, deltaTime);
+        UpdateMovement(finalMoveDirection, hasTranslationInput, deltaTime);
 
         _isRunningByBooster =
             _context != null &&
@@ -232,6 +234,14 @@ public class LegPartController : PartBehaviour, ILocomotionPart
                 }
                 break;
 
+            case LegYawControlMode.MoveDirectionWithBackward:
+                UpdateMoveDirectionWithBackwardYaw(command, deltaTime);
+                break;
+
+            case LegYawControlMode.VehicleSteering:
+                UpdateVehicleSteeringYaw(command, deltaTime);
+                break;
+
             case LegYawControlMode.None:
                 break;
         }
@@ -243,6 +253,9 @@ public class LegPartController : PartBehaviour, ILocomotionPart
 
             case LegMoveControlMode.ForwardOnly:
                 return GetForwardOnlyMoveDirection(command);
+
+            case LegMoveControlMode.ForwardBackward:
+                return GetForwardBackwardMoveDirection(command);
 
             default:
                 return command.MoveDirection;
@@ -474,5 +487,137 @@ public class LegPartController : PartBehaviour, ILocomotionPart
 
         _context.CoreYawRoot.localPosition = _coreBaseLocalPosition;
         _hasCoreFollowBase = false;
+    }
+
+    private void UpdateMoveDirectionWithBackwardYaw(LocomotionCommand command, float deltaTime)
+    {
+        if (!command.HasMoveInput)
+        {
+            UpdateCameraThresholdYaw(command.LookDirection, deltaTime);
+            return;
+        }
+
+        Vector3 moveDirection = command.MoveDirection;
+        Vector3 referenceForward = command.LookDirection;
+
+        moveDirection.y = 0f;
+        referenceForward.y = 0f;
+
+        if (moveDirection.sqrMagnitude < 0.001f ||
+            referenceForward.sqrMagnitude < 0.001f)
+        {
+            return;
+        }
+
+        moveDirection.Normalize();
+        referenceForward.Normalize();
+
+        float forwardDot = Vector3.Dot(
+            referenceForward,
+            moveDirection
+        );
+
+        // 정확한 좌우 이동은 Front 영역으로 취급한다.
+        bool isBackward = forwardDot < -0.001f;
+
+        Vector3 targetFacingDirection =
+            isBackward
+                ? -moveDirection
+                : moveDirection;
+
+        _isCameraFollowTurning = false;
+
+        RotateLegYawTowards(
+            targetFacingDirection,
+            deltaTime
+        );
+    }
+
+    private void UpdateVehicleSteeringYaw(
+    LocomotionCommand command,
+    float deltaTime)
+    {
+        if (!command.HasMoveInput)
+            return;
+
+        if (_context.LegYawRoot == null)
+            return;
+
+        Vector3 lookForward = command.LookDirection;
+        lookForward.y = 0f;
+
+        if (lookForward.sqrMagnitude < 0.001f)
+            return;
+
+        lookForward.Normalize();
+
+        Vector3 lookRight =
+            Vector3.Cross(Vector3.up, lookForward).normalized;
+
+        float steeringInput =
+            Vector3.Dot(command.MoveDirection, lookRight);
+
+        if (Mathf.Abs(steeringInput) < 0.001f)
+            return;
+
+        float finalYawSpeed =
+            _baseLegYawSpeed *
+            _profile.TurnSpeedMultiplier;
+
+        float yawDelta =
+            steeringInput *
+            finalYawSpeed *
+            deltaTime;
+
+        _context.LegYawRoot.Rotate(
+            Vector3.up,
+            yawDelta,
+            Space.World
+        );
+
+        _currentTurnInput = steeringInput;
+        _isTurningThisFrame = true;
+    }
+
+    private Vector3 GetForwardBackwardMoveDirection(
+    LocomotionCommand command)
+    {
+        if (!command.HasMoveInput)
+            return Vector3.zero;
+
+        if (_context.LegYawRoot == null)
+            return Vector3.zero;
+
+        Vector3 lookForward = command.LookDirection;
+        lookForward.y = 0f;
+
+        if (lookForward.sqrMagnitude < 0.001f)
+            return Vector3.zero;
+
+        lookForward.Normalize();
+
+        float forwardInput =
+            Vector3.Dot(
+                command.MoveDirection,
+                lookForward
+            );
+
+        if (Mathf.Abs(forwardInput) < 0.001f)
+            return Vector3.zero;
+
+        Vector3 vehicleForward =
+            Quaternion.Euler(
+                0f,
+                -_legForwardYawOffset,
+                0f
+            ) *
+            _context.LegYawRoot.forward;
+
+        vehicleForward.y = 0f;
+
+        if (vehicleForward.sqrMagnitude < 0.001f)
+            return Vector3.zero;
+
+        return vehicleForward.normalized * forwardInput;
     }
 }

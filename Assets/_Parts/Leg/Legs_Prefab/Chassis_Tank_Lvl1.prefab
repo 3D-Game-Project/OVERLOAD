@@ -872,7 +872,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 100022}
-  m_Mesh: {fileID: 4300000, guid: 71a95918ae82a6e4b926f43c2bee2823, type: 3}
+  m_Mesh: {fileID: 4300000, guid: 4e065638ec006c24b8cce048a867b2d1, type: 3}
 --- !u!23 &2300016
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -931,8 +931,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 400024}
+  - component: {fileID: 4542240043040389003}
   - component: {fileID: 3891715627435749976}
   - component: {fileID: -3118334597450702206}
+  - component: {fileID: 1061398087217707796}
+  - component: {fileID: 785468911957854845}
   m_Layer: 0
   m_Name: Chassis_Tank_Lvl1
   m_TagString: Untagged
@@ -959,8 +962,31 @@ Transform:
   - {fileID: 400016}
   - {fileID: 400014}
   - {fileID: 400012}
+  - {fileID: 4962834124270500489}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &4542240043040389003
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100024}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: c9c5962cf1f611c41a384469283f965f, type: 3}
+  m_Controller: {fileID: 9100000, guid: 07ff31a514bd77a4088314f089daf41b, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &3891715627435749976
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -975,7 +1001,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LegPartController
   _baseLegYawSpeed: 360
   _legForwardYawOffset: 0
+  _animationDriver: {fileID: 1061398087217707796}
   _ownerLayer: 0
+  _coreFollowTarget: {fileID: 400018}
+  _useCoreVisualFollow: 1
+  _coreFollowWeight: 1
+  _coreFollowSmooth: 12
+  _coreFollowMaxOffset: 1
+  _terrainAdapter: {fileID: 785468911957854845}
 --- !u!114 &-3118334597450702206
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -995,5 +1028,220 @@ MonoBehaviour:
   _unitData: {fileID: 0}
   _attachedSlotId: 
   _destroyedPartList: []
-  _animator: {fileID: 0}
+  _animator: {fileID: 4542240043040389003}
   _deathTrigger: Death
+--- !u!114 &1061398087217707796
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100024}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 797d2da707ab461449cadf59e30a3552, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LegAnimationDriver
+  _animator: {fileID: 4542240043040389003}
+  _moveParamSmooth: 10
+  _turnParamSmooth: 10
+  _movingThreshold: 0.1
+  _turningThreshold: 5
+--- !u!114 &785468911957854845
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100024}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d8c22bb179dd634b8aa96c3e5be5f9b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LegTerrainAdapter
+  _tiltRoot: {fileID: 400024}
+  _terrainProbes:
+  - {fileID: 3426735441242532521}
+  - {fileID: 4341453360469381413}
+  - {fileID: 9069729354474363078}
+  - {fileID: 3349912747202317825}
+  _groundLayer:
+    serializedVersion: 2
+    m_Bits: 2147483648
+  _rayStartHeight: 1.5
+  _showDebugRay: 1
+  _logGroundHit: 0
+  _footIKPoints: []
+  _footRayStartHeight: 1.5
+  _footRayDistance: 3
+  _footIKSmooth: 20
+  _footPlantHeight: 0.12
+  _footReleaseHeight: 0.45
+  _footWeightSmooth: 12
+  _landingBlendInTime: 0.2
+  _useFootIK: 1
+  _animator: {fileID: 4542240043040389003}
+  _useAnimationFootWeight: 1
+  _useAirborneLegPose: 1
+  _airborneIKWeight: 0.5
+  _airborneFootDropDistance: 0.35
+  _airborneBlendSpeed: 8
+--- !u!1 &580138612091937458
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3349912747202317825}
+  m_Layer: 0
+  m_Name: Probe_RR
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3349912747202317825
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 580138612091937458}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.4, y: 0, z: -1.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4962834124270500489}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4039063254272563148
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9069729354474363078}
+  m_Layer: 0
+  m_Name: Probe_RL
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9069729354474363078
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4039063254272563148}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.4, y: 0, z: -1.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4962834124270500489}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4787075569349141191
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4962834124270500489}
+  m_Layer: 0
+  m_Name: TerrainProbes
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4962834124270500489
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4787075569349141191}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 3426735441242532521}
+  - {fileID: 4341453360469381413}
+  - {fileID: 9069729354474363078}
+  - {fileID: 3349912747202317825}
+  m_Father: {fileID: 400024}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &6958398434284967852
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3426735441242532521}
+  m_Layer: 0
+  m_Name: Probe_FL
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3426735441242532521
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6958398434284967852}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.4, y: 0, z: 2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4962834124270500489}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &7675556189480769865
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4341453360469381413}
+  m_Layer: 0
+  m_Name: Probe_FR
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4341453360469381413
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7675556189480769865}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.4, y: 0, z: 2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4962834124270500489}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

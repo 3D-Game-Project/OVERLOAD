@@ -52,7 +52,7 @@ Animator:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 36424c03a63bae444ae179a3ea208814, type: 3}
+  m_Avatar: {fileID: 9000000, guid: 6c016e59c7778274d8a075cb51013cf1, type: 3}
   m_Controller: {fileID: 9100000, guid: cdc006f4e3548c744a097d64f05672c4, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
@@ -154,13 +154,13 @@ MonoBehaviour:
     animatedFoot: {fileID: 400012}
     ikTarget: {fileID: 4730136637070215176}
     ikConstraint: {fileID: 5077640198542721760}
-    footHeightOffset: 0
+    footHeightOffset: 0.5
     weightParameterName: FootIK_Left
   - name: Right
     animatedFoot: {fileID: 400026}
     ikTarget: {fileID: 3598045667505176231}
     ikConstraint: {fileID: 2150020655796208966}
-    footHeightOffset: 0
+    footHeightOffset: 0.5
     weightParameterName: FootIK_Right
   _footRayStartHeight: 1.5
   _footRayDistance: 3
@@ -173,7 +173,7 @@ MonoBehaviour:
   _animator: {fileID: 9500000}
   _useAnimationFootWeight: 1
   _useAirborneLegPose: 1
-  _airborneIKWeight: 0.5
+  _airborneIKWeight: 0.7
   _airborneFootDropDistance: 0.35
   _airborneBlendSpeed: 8
 --- !u!114 &5821480454955939086
@@ -183,7 +183,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 100000}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fff0960ef4ea6e04eac66b4a7fd2189d, type: 3}
   m_Name: 
@@ -276,7 +276,7 @@ SkinnedMeshRenderer:
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
   m_SkinnedMotionVectors: 1
-  m_Mesh: {fileID: 4300000, guid: b8a6c8f6d15b6274b92153a7f15734cf, type: 3}
+  m_Mesh: {fileID: 4300000, guid: 6c016e59c7778274d8a075cb51013cf1, type: 3}
   m_Bones:
   - {fileID: 400004}
   - {fileID: 400006}
@@ -1052,37 +1052,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db2054639542bd949b9c68bad7b02f15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PartAttachAnchor
---- !u!1 &2045700596002216503
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5222732754690338108}
-  m_Layer: 0
-  m_Name: Mech_Walker_RightHeel_End
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &5222732754690338108
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2045700596002216503}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: -0.33022088, z: -0.31321937}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 848877411493164059}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2311031326013421772
 GameObject:
   m_ObjectHideFlags: 0
@@ -1271,37 +1240,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 639394345141285000}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &5816622620552006810
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2126752502793424507}
-  m_Layer: 0
-  m_Name: Mech_Walker_RightToe_End
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2126752502793424507
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5816622620552006810}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.000000032370483, y: -0.120319605, z: 0.51289976}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 3144220572390879030}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6139068149831309020
 GameObject:
   m_ObjectHideFlags: 0
@@ -1330,9 +1268,7 @@ Transform:
   m_LocalPosition: {x: 0.9382955, y: 0.5228884, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 848877411493164059}
-  - {fileID: 3144220572390879030}
+  m_Children: []
   m_Father: {fileID: 2821638437745984924}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6325697594598468964
@@ -1426,38 +1362,6 @@ MonoBehaviour:
     m_HintWeight: 1
     m_MaintainTargetPositionOffset: 0
     m_MaintainTargetRotationOffset: 0
---- !u!1 &7652254569018748527
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 3144220572390879030}
-  m_Layer: 0
-  m_Name: Mech_Walker_RightToe
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &3144220572390879030
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7652254569018748527}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0.01068945, y: -0.000000017973955, z: -0.0000000016982984, w: 0.9999429}
-  m_LocalPosition: {x: 0.00000022888183, y: -0.4131218, z: 0.43501163}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 2126752502793424507}
-  m_Father: {fileID: 3598045667505176231}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7714994608780092203
 GameObject:
   m_ObjectHideFlags: 0
@@ -1514,38 +1418,6 @@ MonoBehaviour:
     m_HintWeight: 1
     m_MaintainTargetPositionOffset: 0
     m_MaintainTargetRotationOffset: 0
---- !u!1 &7997671120854953591
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 848877411493164059}
-  m_Layer: 0
-  m_Name: Mech_Walker_RightHeel
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &848877411493164059
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7997671120854953591}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0.0000000013022643, z: -0.0000000012352169, w: 1}
-  m_LocalPosition: {x: -0, y: -0.19266754, z: -0.16991454}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 5222732754690338108}
-  m_Father: {fileID: 3598045667505176231}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8043600450719038273
 GameObject:
   m_ObjectHideFlags: 0

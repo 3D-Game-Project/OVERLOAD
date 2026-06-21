@@ -671,6 +671,8 @@ GameObject:
   - component: {fileID: 9500000}
   - component: {fileID: 7059875602871848983}
   - component: {fileID: 7068769127109894731}
+  - component: {fileID: 2144026625305881869}
+  - component: {fileID: -3677681728407124690}
   m_Layer: 0
   m_Name: Legs_Tracks_Lvl3
   m_TagString: Untagged
@@ -692,6 +694,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 400020}
+  - {fileID: 7627643669324245129}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &9500000
@@ -702,12 +705,12 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 100022}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: a3e8533942ea41d48a31f5ac1a86add9, type: 3}
-  m_Controller: {fileID: 9100000, guid: 6735d64edd132c34cbb1fd2623d4ce31, type: 2}
+  m_Controller: {fileID: 9100000, guid: 03d317bc6d631a041b174174575f7b90, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
@@ -730,7 +733,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LegPartController
   _baseLegYawSpeed: 360
   _legForwardYawOffset: 0
+  _animationDriver: {fileID: 460821102157847540, guid: 9d08c28920097aa4cbe17ed78584ff5e, type: 3}
   _ownerLayer: 0
+  _coreFollowTarget: {fileID: 400014}
+  _useCoreVisualFollow: 1
+  _coreFollowWeight: 1
+  _coreFollowSmooth: 12
+  _coreFollowMaxOffset: 1
+  _terrainAdapter: {fileID: -3677681728407124690}
 --- !u!114 &7068769127109894731
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -752,3 +762,218 @@ MonoBehaviour:
   _destroyedPartList: []
   _animator: {fileID: 0}
   _deathTrigger: Death
+--- !u!114 &2144026625305881869
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100022}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 797d2da707ab461449cadf59e30a3552, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LegAnimationDriver
+  _animator: {fileID: 9500000, guid: 9d08c28920097aa4cbe17ed78584ff5e, type: 3}
+  _moveParamSmooth: 10
+  _turnParamSmooth: 10
+  _movingThreshold: 0.1
+  _turningThreshold: 5
+--- !u!114 &-3677681728407124690
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100022}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d8c22bb179dd634b8aa96c3e5be5f9b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LegTerrainAdapter
+  _tiltRoot: {fileID: 400022}
+  _terrainProbes:
+  - {fileID: 5895918635799869457}
+  - {fileID: 7897804066165517094}
+  - {fileID: 5846442578165877461}
+  - {fileID: 3652444684870774519}
+  _groundLayer:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  _rayStartHeight: 1.5
+  _showDebugRay: 1
+  _logGroundHit: 0
+  _footIKPoints: []
+  _footRayStartHeight: 1.5
+  _footRayDistance: 3
+  _footIKSmooth: 20
+  _footPlantHeight: 0.12
+  _footReleaseHeight: 0.45
+  _footWeightSmooth: 12
+  _landingBlendInTime: 0.2
+  _useFootIK: 1
+  _animator: {fileID: 9500000}
+  _useAnimationFootWeight: 1
+  _useAirborneLegPose: 1
+  _airborneIKWeight: 0.5
+  _airborneFootDropDistance: 0.35
+  _airborneBlendSpeed: 8
+--- !u!1 &2231237195662311000
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5846442578165877461}
+  m_Layer: 0
+  m_Name: Probe_RL
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5846442578165877461
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2231237195662311000}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.2, y: 0, z: -1.3}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7627643669324245129}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2239863329304338871
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7897804066165517094}
+  m_Layer: 0
+  m_Name: Probe_FR
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7897804066165517094
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2239863329304338871}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.2, y: 0, z: 1.3}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7627643669324245129}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2525220051378451549
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5895918635799869457}
+  m_Layer: 0
+  m_Name: Probe_FL
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5895918635799869457
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2525220051378451549}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.2, y: 0, z: 1.3}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7627643669324245129}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2776201881418077072
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3652444684870774519}
+  m_Layer: 0
+  m_Name: Probe_RR
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3652444684870774519
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2776201881418077072}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.2, y: 0, z: -1.3}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7627643669324245129}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &3256994242523963378
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7627643669324245129}
+  m_Layer: 0
+  m_Name: TerrainProbes
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7627643669324245129
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3256994242523963378}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 5895918635799869457}
+  - {fileID: 7897804066165517094}
+  - {fileID: 5846442578165877461}
+  - {fileID: 3652444684870774519}
+  m_Father: {fileID: 400022}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

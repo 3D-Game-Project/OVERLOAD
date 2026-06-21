@@ -354,8 +354,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 400010}
+  - component: {fileID: 3934319898822910377}
   - component: {fileID: 6598452941318610522}
   - component: {fileID: -8368028830750297131}
+  - component: {fileID: 8269263017450174970}
+  - component: {fileID: -1347682071153940463}
   m_Layer: 0
   m_Name: Chassis_Tank_Lvl2
   m_TagString: Untagged
@@ -383,6 +386,28 @@ Transform:
   - {fileID: 400000}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &3934319898822910377
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100010}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: c9c5962cf1f611c41a384469283f965f, type: 3}
+  m_Controller: {fileID: 9100000, guid: 07ff31a514bd77a4088314f089daf41b, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &6598452941318610522
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -397,7 +422,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LegPartController
   _baseLegYawSpeed: 360
   _legForwardYawOffset: 0
+  _animationDriver: {fileID: 0}
   _ownerLayer: 0
+  _coreFollowTarget: {fileID: 0}
+  _useCoreVisualFollow: 1
+  _coreFollowWeight: 1
+  _coreFollowSmooth: 12
+  _coreFollowMaxOffset: 1
+  _terrainAdapter: {fileID: 0}
 --- !u!114 &-8368028830750297131
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -419,3 +451,55 @@ MonoBehaviour:
   _destroyedPartList: []
   _animator: {fileID: 0}
   _deathTrigger: Death
+--- !u!114 &8269263017450174970
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100010}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 797d2da707ab461449cadf59e30a3552, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LegAnimationDriver
+  _animator: {fileID: 0}
+  _moveParamSmooth: 10
+  _turnParamSmooth: 10
+  _movingThreshold: 0.1
+  _turningThreshold: 5
+--- !u!114 &-1347682071153940463
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100010}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d8c22bb179dd634b8aa96c3e5be5f9b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LegTerrainAdapter
+  _tiltRoot: {fileID: 0}
+  _terrainProbes: []
+  _groundLayer:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  _rayStartHeight: 1.5
+  _showDebugRay: 1
+  _logGroundHit: 0
+  _footIKPoints: []
+  _footRayStartHeight: 1.5
+  _footRayDistance: 3
+  _footIKSmooth: 20
+  _footPlantHeight: 0.12
+  _footReleaseHeight: 0.45
+  _footWeightSmooth: 12
+  _landingBlendInTime: 0.2
+  _useFootIK: 1
+  _animator: {fileID: 0}
+  _useAnimationFootWeight: 1
+  _useAirborneLegPose: 1
+  _airborneIKWeight: 0.5
+  _airborneFootDropDistance: 0.35
+  _airborneBlendSpeed: 8
