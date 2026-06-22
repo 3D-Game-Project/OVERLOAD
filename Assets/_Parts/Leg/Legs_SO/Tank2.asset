@@ -16,9 +16,11 @@ MonoBehaviour:
   _partsPrefab: {fileID: 100010, guid: 726a588522dc7384cb4ac3be6c762089, type: 3}
   _requiredLoad: 0
   _partsImage: {fileID: 0}
-  _maxDurability: 0
-  _price: 0
+  _maxDurability: 700
   _description: 
+  _buyCost:
+    Gear: 0
+    Scrap: 0
   _legTypeProfile: {fileID: 11400000, guid: 2dacd288b3403e4489fcb8270ef6d424, type: 2}
   _moveSpeed: 5
   _acceleration: 8

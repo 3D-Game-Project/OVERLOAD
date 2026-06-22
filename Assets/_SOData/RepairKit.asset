@@ -16,6 +16,8 @@ MonoBehaviour:
   _itemType: 0
   _description: Can restore the durability of installed equipment using a repair
     kit.
-  _price: 100
   _itemImage: {fileID: 21300000, guid: e59711057320b804caf9cdf8d0d4042c, type: 3}
+  _buyCost:
+    Gear: 20
+    Scrap: 20
   _repairAmount: 100
