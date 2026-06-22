@@ -20,8 +20,16 @@ public class EffectManager : MonoBehaviour
     [Header("부위 파괴 이펙트")]
     [SerializeField] private ParticleSystem _destroyParticle;
 
+    [Header("스파크 이펙트")]
+    [SerializeField] private ParticleSystem _sparkParticlePrefab;
+
+    [Header("파츠 파괴 후 연기 이펙트")]
+    [SerializeField] private ParticleSystem _smokeParticlePrefab;
+
     private Dictionary<WeaponType, ObjectPool<ParticleSystem>> _firePools = new Dictionary<WeaponType, ObjectPool<ParticleSystem>>();
     private Dictionary<WeaponType, ObjectPool<ParticleSystem>> _takeDamagePools = new Dictionary<WeaponType, ObjectPool<ParticleSystem>>();
+    private Dictionary<DurabilityController, ParticleSystem> _sparkParticles = new Dictionary<DurabilityController, ParticleSystem>();
+    private Dictionary<DurabilityController, ParticleSystem> _smokeParticles = new Dictionary<DurabilityController, ParticleSystem>();
 
     private void Awake()
     {
@@ -177,22 +185,88 @@ public class EffectManager : MonoBehaviour
             }
         }
     }
-
-    // 기존의 파츠 내구도 0이 되었을 때, Destroy처리로 임시 구현해두었던 사항에 대한 변경처리
-    // 파츠 내구도가 0이 되면 파티클을 생성하도록 구현.
-    // 무한정 부위파괴에 대한 이펙트를 나타내는것 보다 5초의 시간동안 파티클이 생성되었다 사라지도록 수정
-    public void PlayPartDestroyEffect(Vector3 position, Transform followTarget)
+    public void PlaySparkParticle(DurabilityController partDurability)
     {
+        if (partDurability == null) return;
+        if (_sparkParticlePrefab == null) return;
+
+        float durabilityRatio = partDurability.CurrentDurability / partDurability.MaxDurability;
+
+        if (partDurability.IsDestroyed || durabilityRatio >= 0.4f) return;
+
+        if (_sparkParticles.ContainsKey(partDurability)) return;
+
+        Transform targetPoint = partDurability.ParticlePos;
+
+        ParticleSystem sparkParticle = Instantiate(_sparkParticlePrefab, targetPoint.position, Quaternion.identity);
+        sparkParticle.transform.SetParent(targetPoint, true);
+
+        _sparkParticles.Add(partDurability, sparkParticle);
+    }
+
+    public void StopSparkParticle(DurabilityController partDurability)
+    {
+        if (_sparkParticles.TryGetValue(partDurability, out ParticleSystem sparkInstance))
+        {
+            if (sparkInstance != null)
+            {
+                sparkInstance.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+                Destroy(sparkInstance.gameObject, 1f);
+            }
+            _sparkParticles.Remove(partDurability);
+        }
+    }
+
+
+    /// <summary>
+    ///  코루틴으로 파괴에 대한 연출 처리
+    /// </summary>
+    public void PlayPartDestroyEffect(DurabilityController durabilityController, Vector3 explodePosition, Transform followTarget)
+    {
+        StartCoroutine(DestroyAndSmokeCoroutine(durabilityController, explodePosition, followTarget));
+    }
+
+    /// <summary>
+    /// 파괴 연출처리
+    /// 폭발 -> 대기 -> 연기생성으로 진행
+    /// 파츠가 사라지거나 내구도가 수리될 경우 파티클 끄기 진행
+    /// </summary>
+    private IEnumerator DestroyAndSmokeCoroutine(DurabilityController durabilityController, Vector3 explodePosition, Transform followTarget)
+    {
+        float explosionDuration = 0f;
+
         if (_destroyParticle != null)
         {
-            ParticleSystem destroyParticle = Instantiate(_destroyParticle, position, Quaternion.identity);
+            ParticleSystem explosion = Instantiate(_destroyParticle, explodePosition, Quaternion.identity);
+            if (followTarget != null) explosion.transform.SetParent(followTarget, true);
 
-            if (followTarget != null)
+            explosionDuration = explosion.main.duration;
+            Destroy(explosion.gameObject, explosionDuration);
+        }
+
+        yield return new WaitForSeconds(explosionDuration);
+
+        if (durabilityController == null || durabilityController.CurrentDurability > 0f) yield break;
+
+        if (_smokeParticlePrefab != null && durabilityController.ParticlePos != null)
+        {
+            ParticleSystem smoke = Instantiate(_smokeParticlePrefab, durabilityController.ParticlePos.position, Quaternion.identity);
+            smoke.transform.SetParent(durabilityController.ParticlePos, true);
+
+            _smokeParticles[durabilityController] = smoke;
+        }
+    }
+
+    public void StopSmokeParticle(DurabilityController durabilityController)
+    {
+        if (_smokeParticles.TryGetValue(durabilityController, out ParticleSystem smokeInstance))
+        {
+            if (smokeInstance != null)
             {
-                destroyParticle.transform.SetParent(followTarget, true);
+                smokeInstance.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+                Destroy(smokeInstance.gameObject, 2f);
             }
-
-            Destroy(destroyParticle.gameObject, 5f);
+            _smokeParticles.Remove(durabilityController);
         }
     }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Unity.Behavior;
 using Unity.Properties;
 using UnityEngine;
@@ -23,6 +24,10 @@ public partial class AttackTargetAction : Action
 
     private float _lastAnimTime;
 
+    private Transform _currentTargetPart;
+    private float _targetChangeTimer = 0f;
+    private float _targetChangeInterval = 1f;
+
     // 공격이 시작되면 agent의 움직임을 멈추고 FireManager가 연결된 모든 파츠를 찾기
     protected override Status OnStart()
     {
@@ -38,6 +43,8 @@ public partial class AttackTargetAction : Action
 
         _fireManagers = Self.Value.GetComponentsInChildren<FireManager>(false);
         _gimbals = Self.Value.GetComponentsInChildren<WeaponGimbalController>(false);
+
+        _targetChangeTimer = 0f;
 
         return Status.Running;
     }
@@ -62,7 +69,9 @@ public partial class AttackTargetAction : Action
             if (_fireManagers.Length == 0) return Status.Failure;
         }
 
-        Vector3 targetPos = Target.Value.transform.position;
+        UpdateTargetPart();
+
+        Vector3 targetPos = _currentTargetPart != null ? _currentTargetPart.position : Target.Value.transform.position;
         Vector3 myPos = Self.Value.transform.position;
         Vector3 dirToTarget = targetPos - myPos;
 
@@ -100,6 +109,41 @@ public partial class AttackTargetAction : Action
         return Status.Running;
     }
 
+    private void UpdateTargetPart()
+    {
+        _targetChangeTimer -= Time.deltaTime;
+
+        
+        if (_currentTargetPart == null || !_currentTargetPart.gameObject.activeInHierarchy || _targetChangeTimer <= 0f)
+        {
+            
+            DurabilityController[] allParts = Target.Value.GetComponentsInChildren<DurabilityController>(false);
+
+            List<Transform> aliveParts = new List<Transform>();
+
+            
+            foreach (DurabilityController part in allParts)
+            {
+                if (!part.IsDestroyed && part.CurrentDurability > 0f)
+                {
+                    aliveParts.Add(part.transform);
+                }
+            }
+
+            if (aliveParts.Count > 0)
+            {
+                int randomIdx = UnityEngine.Random.Range(0, aliveParts.Count);
+                _currentTargetPart = aliveParts[randomIdx];
+            }
+            else
+            {
+                _currentTargetPart = Target.Value.transform;
+            }
+            Debug.Log($"공격중인 파츠 확인하기: {_currentTargetPart.gameObject}");
+            _targetChangeTimer = _targetChangeInterval;
+        }
+    }
+
     private void FireAndAnimate(Vector3 targetPoint)
     {
         bool isWeaponReady = false;
@@ -110,15 +154,12 @@ public partial class AttackTargetAction : Action
             if (firemanager == null || !firemanager.enabled || firemanager.WeaponRuntime == null) continue;
 
 
-            firemanager.TryFire(targetPoint);
+            firemanager.TryFire(targetPoint, _currentTargetPart);
 
-            if (!firemanager.WeaponRuntime.IsReloading)
+            isWeaponReady = true;
+            if (firemanager.AttackPartsData != null)
             {
-                isWeaponReady = true;
-                if (firemanager.AttackPartsData != null)
-                {
-                    cooldownForAnim = firemanager.AttackPartsData.FireCooldown;
-                }
+                cooldownForAnim = firemanager.AttackPartsData.FireCooldown;
             }
         }
 

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c02bb70996b49eba31d0c206e28da24, type: 3}
   m_Name: Enemy_Black_Board
   m_EditorClassIdentifier: Unity.Behavior::Unity.Behavior.RuntimeBlackboardAsset
-  VersionTimestamp: 639169512478315452
+  VersionTimestamp: 639175682753512046
   AssetID:
     m_Value0: 10684893974597454238
     m_Value1: 464010002812289512
@@ -31,10 +31,10 @@ MonoBehaviour:
     - rid: 8016289986599452702
     - rid: 8016289986599452705
     - rid: 8016289986599452707
-    - rid: 8016289986599452709
     - rid: 8016289986599452711
     - rid: 8016289986599452713
     - rid: 8016289986599452917
+    - rid: 8016290147558490198
   m_SharedBlackboardVariableGuids: []
   references:
     version: 2
@@ -143,14 +143,6 @@ MonoBehaviour:
           m_Value1: 3503070089528039694
         Name: PlayerPos
         m_Value: {x: 0, y: 0, z: 0}
-    - rid: 8016289986599452709
-      type: {class: 'BlackboardVariable`1[[System.Collections.Generic.List`1[[UnityEngine.GameObject, UnityEngine.CoreModule]], mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
-      data:
-        GUID:
-          m_Value0: 14445253569474620771
-          m_Value1: 1746772388319090204
-        Name: PatrolPoints
-        m_Value: []
     - rid: 8016289986599452711
       type: {class: 'BlackboardVariable`1[[System.Single, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
       data:
@@ -174,6 +166,14 @@ MonoBehaviour:
           m_Value0: 14097772426390536611
           m_Value1: 9255521336951696047
         Name: CurrentPatrolIndex
+        m_Value: 0
+    - rid: 8016290147558490198
+      type: {class: 'BlackboardVariable`1[[System.Single, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 8643843776503461693
+          m_Value1: 10931937445113910389
+        Name: PatrolRadius
         m_Value: 0
 --- !u!114 &11400000
 MonoBehaviour:
@@ -204,11 +204,11 @@ MonoBehaviour:
   - rid: 8016289986599452701
   - rid: 8016289986599452704
   - rid: 8016289986599452706
-  - rid: 8016289986599452708
   - rid: 8016289986599452710
   - rid: 8016289986599452712
   - rid: 8016289986599452893
-  m_VersionTimestamp: 639169512478315452
+  - rid: 8016290147558490197
+  m_VersionTimestamp: 639175682753512046
   m_CommandBuffer:
     m_Commands: []
   m_RuntimeBlackboardAsset: {fileID: -2730647749203971753}
@@ -345,16 +345,6 @@ MonoBehaviour:
         IsExposed: 1
         m_IsShared: 0
         m_Value: {x: 0, y: 0, z: 0}
-    - rid: 8016289986599452708
-      type: {class: 'TypedVariableModel`1[[System.Collections.Generic.List`1[[UnityEngine.GameObject, UnityEngine.CoreModule]], mscorlib]]', ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
-      data:
-        ID:
-          m_Value0: 14445253569474620771
-          m_Value1: 1746772388319090204
-        Name: PatrolPoints
-        IsExposed: 1
-        m_IsShared: 0
-        m_Value: []
     - rid: 8016289986599452710
       type: {class: 'TypedVariableModel`1[[System.Single, mscorlib]]', ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
       data:
@@ -382,6 +372,16 @@ MonoBehaviour:
           m_Value0: 14097772426390536611
           m_Value1: 9255521336951696047
         Name: CurrentPatrolIndex
+        IsExposed: 1
+        m_IsShared: 0
+        m_Value: 0
+    - rid: 8016290147558490197
+      type: {class: 'TypedVariableModel`1[[System.Single, mscorlib]]', ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        ID:
+          m_Value0: 8643843776503461693
+          m_Value1: 10931937445113910389
+        Name: PatrolRadius
         IsExposed: 1
         m_IsShared: 0
         m_Value: 0

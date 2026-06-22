@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1b1fcedf4d30334f861d12febf4455f, type: 3}
+  m_Name: Weapon_ShotGun_Lv1
+  m_EditorClassIdentifier: Assembly-CSharp::AttackPartsData
+  _partsName: ShotGun_Lv1
+  _partsPrefab: {fileID: 100004, guid: 4fd536c6fbcd3b44d9cf2abb9cf1468b, type: 3}
+  _requiredLoad: 0
+  _partsImage: {fileID: 792796000, guid: 1f73fc51b0bf55c4cb10906b193d2a47, type: 3}
+  _maxDurability: 200
+  _price: 50
+  _description: 
+  _fireType: 1
+  _weaponType: 4
+  _damage: 25
+  _range: 20
+  _fireCooldown: 1.2
+  _fireEnergy: 8
+  _bulletPrefab: {fileID: 0}
+  _firePowerCost: 0

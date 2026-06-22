@@ -183,6 +183,13 @@ public class MenuController : MonoBehaviour
             {
                 crosshairTransform.gameObject.SetActive(false);
             }
+
+            Transform playerCircleBar = canvasObj.transform.Find("PlayerCircleBar");
+
+            if(playerCircleBar != null)
+            {
+                playerCircleBar.gameObject.SetActive(false);
+            }
         }
 
         GameObject playerRootObj = GameObject.Find("Crosshair");
@@ -228,6 +235,13 @@ public class MenuController : MonoBehaviour
             if (crosshairTransform != null)
             {
                 crosshairTransform.gameObject.SetActive(true);
+            }
+
+            Transform playerCircleBar = canvasObj.transform.Find("PlayerCircleBar");
+
+            if (playerCircleBar != null)
+            {
+                playerCircleBar.gameObject.SetActive(true);
             }
         }
 

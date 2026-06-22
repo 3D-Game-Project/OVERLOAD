@@ -32,6 +32,9 @@ public class CameraTargetRotator : MonoBehaviour
             transform.position = _followTarget.position + _targetOffset;
         }
 
+        if (Cursor.visible) 
+            return;
+
         if (Mouse.current == null)
             return;
 

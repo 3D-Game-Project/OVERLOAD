@@ -14,10 +14,10 @@ public class PartHoverInfoPopupUI : MonoBehaviour
     private bool _isPinned;
     private PartsData _currentPart;
 
-    private void Awake()
-    {
-        Hide();
-    }
+    //private void Awake()
+    //{
+    //    Hide();
+    //}
 
     // 기존 Show 호출이 있어도 깨지지 않도록 유지
     //public void Show(PartsData part)

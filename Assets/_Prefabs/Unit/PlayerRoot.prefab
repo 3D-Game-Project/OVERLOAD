@@ -1,106 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &347104341111006973
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 987595820539643713}
-  - component: {fileID: 2125093755547556318}
-  - component: {fileID: 5036551311882632265}
-  - component: {fileID: 5622976937627172173}
-  m_Layer: 5
-  m_Name: DurabilityUI
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &987595820539643713
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 347104341111006973}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0, y: 0, z: 0}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 5193953263454043114}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0, y: 0}
---- !u!223 &2125093755547556318
-Canvas:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 347104341111006973}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_RenderMode: 0
-  m_Camera: {fileID: 0}
-  m_PlaneDistance: 100
-  m_PixelPerfect: 0
-  m_ReceivesEvents: 1
-  m_OverrideSorting: 0
-  m_OverridePixelPerfect: 0
-  m_SortingBucketNormalizedSize: 0
-  m_VertexColorAlwaysGammaSpace: 0
-  m_AdditionalShaderChannelsFlag: 0
-  m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
-  m_TargetDisplay: 0
---- !u!114 &5036551311882632265
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 347104341111006973}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.CanvasScaler
-  m_UiScaleMode: 0
-  m_ReferencePixelsPerUnit: 100
-  m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
-  m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
-  m_PhysicalUnit: 3
-  m_FallbackScreenDPI: 96
-  m_DefaultSpriteDPI: 96
-  m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
---- !u!114 &5622976937627172173
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 347104341111006973}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.GraphicRaycaster
-  m_IgnoreReversedGraphics: 1
-  m_BlockingObjects: 0
-  m_BlockingMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
 --- !u!1 &377393574273067802
 GameObject:
   m_ObjectHideFlags: 0
@@ -590,6 +489,8 @@ GameObject:
   - component: {fileID: 8761703739823510939}
   - component: {fileID: 556890349594034095}
   - component: {fileID: 5597124523057592250}
+  - component: {fileID: 1834399571351232971}
+  - component: {fileID: 5199932046180643323}
   m_Layer: 6
   m_Name: PlayerRoot
   m_TagString: Player
@@ -606,11 +507,10 @@ Transform:
   m_GameObject: {fileID: 8597838465946235833}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.75, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 987595820539643713}
   - {fileID: 7093684061917546573}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -706,10 +606,10 @@ MonoBehaviour:
   _maxHeightFromGround: 10
   _heightSlowdownRange: 0.7
   _ceilingDamping: 20
-  _inputHandler: {fileID: 0}
-  _locomotionMotor: {fileID: 0}
-  _movementCoordinator: {fileID: 0}
-  _energyController: {fileID: 0}
+  _inputHandler: {fileID: 4076237846780034986}
+  _locomotionMotor: {fileID: 4422708280259257467}
+  _movementCoordinator: {fileID: 2524688153058945883}
+  _energyController: {fileID: 5828151810013284026}
 --- !u!114 &3849843715506601075
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -778,7 +678,7 @@ MonoBehaviour:
     slot: {fileID: 3856763888355474227}
   - partsData: {fileID: 11400000, guid: 69f87b8627a102c4d81027017bf203f6, type: 2}
     slot: {fileID: 2136488698899356764}
-  - partsData: {fileID: 11400000, guid: 49236d3d62f8a2b4686170eb125fdcfc, type: 2}
+  - partsData: {fileID: 11400000, guid: dff6889040ad84e41bfd0e18a87150e4, type: 2}
     slot: {fileID: 8864824620448983810}
   _attachmentSlots: []
   _coreLoadController: {fileID: 3148642964489722445}
@@ -786,8 +686,8 @@ MonoBehaviour:
   _inputHandler: {fileID: 4076237846780034986}
   _locomotionMotor: {fileID: 4422708280259257467}
   _movementCoordinator: {fileID: 2524688153058945883}
-  _coreMovementController: {fileID: 0}
-  _bodyShapeController: {fileID: 0}
+  _coreMovementController: {fileID: 757684422878102304}
+  _bodyShapeController: {fileID: 6642098441132586494}
   _cameraTransform: {fileID: 0}
   _coreYawRoot: {fileID: 4431234377021501362}
   _legYawRoot: {fileID: 4865652507706182167}
@@ -956,6 +856,7 @@ MonoBehaviour:
   _partsData: {fileID: 0}
   _unitData: {fileID: 11400000, guid: 9806c62939af4c348980b7080d5b0018, type: 2}
   _attachedSlotId: 
+  _particlePos: {fileID: 0}
   _destroyedPartList: []
   _animator: {fileID: 0}
   _deathTrigger: Death
@@ -976,6 +877,37 @@ MonoBehaviour:
   _partEquipActionController: {fileID: 0}
   _repairTimePer100Durability: 2
   _minimumRepairTime: 0.25
+--- !u!114 &1834399571351232971
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8597838465946235833}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9785cddb1c2c9c429b105e09b11faef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::OverheatController
+  _maxEnergy: 200
+  _currentEnergy: 0
+  _energyRecoveryRate: 80
+  _recoveryDelay: 1.5
+--- !u!114 &5199932046180643323
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8597838465946235833}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa8d74803b7d4fe4584299cbbe4620b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerCameraController
+  _normalCamera: {fileID: 0}
+  _aimCamera: {fileID: 0}
+  _crosshairUI: {fileID: 0}
 --- !u!1 &8709235386021125407
 GameObject:
   m_ObjectHideFlags: 0

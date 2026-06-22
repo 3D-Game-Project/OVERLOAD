@@ -12,6 +12,9 @@ public class DurabilityController : MonoBehaviour
     [SerializeField] private UnitData _unitData;
     [SerializeField] private string _attachedSlotId;
 
+    [Header("스파크, 연기 파티클이 생성될 위치. 무기마다 다름")]
+    [SerializeField] private Transform _particlePos;
+
     [SerializeField]private List<PartsData> _destroyedPartList = new List<PartsData>();
 
     private bool _isDestroyed = false;
@@ -21,8 +24,10 @@ public class DurabilityController : MonoBehaviour
 
     public float CurrentDurability => _currentDurability;
     public bool IsDestroyed => _isDestroyed;
+    public Transform ParticlePos => _particlePos != null ? _particlePos : transform;
     public DurabilityType DurabilityType => _durabilityType;
     public PartsData PartsData => _partsData;
+
 
     public float MaxDurability => _maxDurability;
 
@@ -30,6 +35,7 @@ public class DurabilityController : MonoBehaviour
     [SerializeField] private string _deathTrigger = "Death";
 
     public event Action<float, float> OnDurabilityChanged;
+    public event Action OnCoreDestroyed;
 
     /// <summary>
     /// 시작시 DurabilityType이 Core인지 Part인지 자동으로 파악하고 그거에 맞춰서 DurabilityType 수정
@@ -47,8 +53,13 @@ public class DurabilityController : MonoBehaviour
             _currentDurability = _maxDurability;
 
         }
-        else if(GetComponent<Collider>() != null)
+        else
         {
+            if (GetComponent<Collider>() == null)
+            {
+                GenerateCollider();
+            }
+
             Debug.Log("Collider 확인.");
             _durabilityType = DurabilityType.Part;
         }
@@ -74,6 +85,43 @@ public class DurabilityController : MonoBehaviour
                 InitializePart(_partsData, false);
             }
         }
+    }
+
+    // 콜라이더 생성 함수
+    // 오브젝트 하위에 있는 모델링 렌더러를 찾기
+    // 이후, 렌더러 영역을 기준으로 나머지 추가하여 스케일 크기 설정
+    // 최종 모델링사이즈에 추가적으로 사이즈조정(-0.5씩)
+    private void GenerateCollider()
+    {
+        Renderer[] renderers = GetComponentsInChildren<Renderer>();
+
+        if (renderers.Length == 0)
+        {
+            gameObject.AddComponent<BoxCollider>();
+            return;
+        }
+
+        Bounds bounds = renderers[0].bounds;
+        for (int i = 1; i < renderers.Length; i++)
+        {
+            bounds.Encapsulate(renderers[i].bounds);
+        }
+
+        BoxCollider boxCol = gameObject.AddComponent<BoxCollider>();
+
+        boxCol.center = transform.InverseTransformPoint(bounds.center);
+
+        Vector3 localSize = bounds.size;
+        if (transform.lossyScale != Vector3.zero)
+        {
+            localSize = new Vector3(
+                localSize.x / transform.lossyScale.x,
+                localSize.y / transform.lossyScale.y,
+                localSize.z / transform.lossyScale.z
+            );
+        }
+
+        boxCol.size = localSize + new Vector3(-0.5f, -0.5f, -0.5f);
     }
 
     /// <summary>
@@ -114,6 +162,8 @@ public class DurabilityController : MonoBehaviour
         _currentDurability = partItem.CurrentDurability;
 
         _isDestroyed = _currentDurability <= 0f;
+
+        CheckAndStopEffects();
     }
 
     private void SyncToInventoryItem()
@@ -155,10 +205,15 @@ public class DurabilityController : MonoBehaviour
             OnDurabilityChanged?.Invoke(_currentDurability, _maxDurability);
         }
 
-        if (_currentDurability <= 0f) 
+        float durabilityRatio = _currentDurability / _maxDurability;
+
+        // durabilityRatio가 40%미만일때 스파크 연출되도록 처리
+        if(durabilityRatio < 0.4f)
         {
-            DestroyPart();
+            if (_durabilityType == DurabilityType.Part) PlaySparkEffect();
         }
+
+        if(_currentDurability <= 0f) DestroyPart();
     }
 
     // 내구도가 0으로 감소되었을 때, 코어, 파츠별 파괴 분기처리
@@ -324,7 +379,7 @@ public class DurabilityController : MonoBehaviour
             _animator.SetTrigger(_deathTrigger);
         }
 
-        yield return new WaitForSeconds(2.0f);
+        yield return new WaitForSeconds(1.2f);
 
         // LEGACY
         //if(_unitData is EnemyData enemyData)
@@ -338,8 +393,11 @@ public class DurabilityController : MonoBehaviour
         {
             DropRuntime dropRuntime = new DropRuntime();
 
+            // 이 부분 수정.
+            // 수정 이유: dropPosition이 Enemy의 Root의 Pos를 받아오는식이었는데 현재 Monster Spawn Manager가 Root로 변경되어 드랍위치가 고정됨
+            // 그래서 코어 내구도 0 인경우에만 이 로직의 위치를 찾게 되니 gameObject로 처리하면 Core의 위치대로 생성되니 그렇게 수정.
             GameObject unitRoot = transform.root.gameObject;
-            Vector3 dropPosition = unitRoot.transform.position;
+            Vector3 dropPosition = gameObject.transform.position;
 
             dropRuntime.DropAttachedPartsFromUnit(
                 unitRoot,
@@ -348,8 +406,93 @@ public class DurabilityController : MonoBehaviour
             );
         }
 
-        Destroy(gameObject);
+        if(gameObject.layer == 7)
+        {
+            OnCoreDestroyed?.Invoke();
+        }
 
+        if (gameObject.layer == 6) Destroy(gameObject);
+
+
+    }
+
+    /// <summary>
+    /// 파츠가 교체되거나 수리가 진행되는정도에 따른 연출 제거함수
+    /// 0 이상이면 연기 끄기, 40이상이면 스파크도 끄기
+    /// </summary>
+    
+    private void CheckAndStopEffects()
+    {
+        if (_currentDurability > 0f)
+        {
+            _isDestroyed = false; 
+
+            if (EffectManager.instance != null)
+            {
+                EffectManager.instance.StopSmokeParticle(this);
+
+                float durabilityRatio = _currentDurability / _maxDurability;
+                if (durabilityRatio >= 0.4f)
+                {
+                    EffectManager.instance.StopSparkParticle(this);
+                }
+            }
+        }
+    }
+
+    // Pool로 저장한 몬스터가 죽었다가 다시 스폰될 때, 내구도 복원 및 꺼두었던 기능들 복원하는 함수
+    public void ResetDurability()
+    {
+        _isDestroyed = false;
+        _destroyedPartList.Clear();
+
+        if (_durabilityType == DurabilityType.Core)
+        {
+            _currentDurability = _maxDurability;
+            OnDurabilityChanged?.Invoke(_currentDurability, _maxDurability);
+
+            if (TryGetComponent(out UnityEngine.AI.NavMeshAgent agent)) agent.enabled = true;
+            if (TryGetComponent(out Collider collider)) collider.enabled = true;
+            if (TryGetComponent(out CharacterController cc)) cc.enabled = true;
+
+            if (_animator != null && !string.IsNullOrEmpty(_deathTrigger))
+            {
+                _animator.ResetTrigger(_deathTrigger);
+                _animator.Rebind(); 
+                _animator.Update(0f);
+            }
+
+            DurabilityController[] childParts = GetComponentsInChildren<DurabilityController>(true);
+            foreach (var part in childParts)
+            {
+                if (part != this && part.DurabilityType == DurabilityType.Part)
+                {
+                    part.ResetDurability();
+                }
+            }
+        }
+        else 
+        {
+            if (_partsData != null) _maxDurability = _partsData.MaxDurability;
+            _currentDurability = _maxDurability;
+
+            
+            if (TryGetComponent(out Collider col)) col.enabled = true;
+
+            MonoBehaviour[] components = GetComponentsInChildren<MonoBehaviour>(true);
+            foreach (var script in components)
+            {
+                if (script == null || script == this) continue;
+                string name = script.GetType().Name;
+                if (name == "WeaponGimbalController" || name == "FireManager" || name == "AttackPartController")
+                    script.enabled = true;
+            }
+
+            Animator[] animators = GetComponentsInChildren<Animator>(true);
+            foreach (Animator anim in animators) anim.enabled = true;
+
+            CheckAndStopEffects();
+        }
     }
 
     /// <summary>
@@ -362,7 +505,48 @@ public class DurabilityController : MonoBehaviour
         {
             Transform followTarget = _rootCoreController != null ? _rootCoreController.transform : transform.root;
 
-            EffectManager.instance.PlayPartDestroyEffect(transform.position, followTarget);
+            EffectManager.instance.PlayPartDestroyEffect(this, transform.position, followTarget);
+        }
+    }
+    private void PlaySparkEffect()
+    {
+        if (EffectManager.instance != null)
+        {
+            EffectManager.instance.PlaySparkParticle(this);
+        }
+    }
+
+    [ContextMenu("🧪 테스트: 데미지 테스트 (스파크 확인용)")]
+    public void TestTakeDamage()
+    {
+        if (Application.isPlaying)
+        {
+            float testDmg = _maxDurability * 0.7f;
+            Debug.Log($"[테스트] 50 데미지 피격! (현재 체력: {_currentDurability - testDmg})");
+            TakeDamage(50f); // 방어력 등 모든 연산이 포함된 공식 피격 루트를 탑니다.
+        }
+    }
+
+    [ContextMenu("🧪 테스트: 즉시 완전 파괴 (연기 확인용)")]
+    public void TestInstantDestroy()
+    {
+        if (Application.isPlaying)
+        {
+            Debug.Log("[테스트] 파츠 즉시 파괴 명령!");
+            TakeDamage(_currentDurability); // 남은 체력만큼 데미지를 줘서 0으로 만들어버림
+        }
+    }
+
+    [ContextMenu("🧪 테스트: 100% 완전 수리 (이펙트 꺼짐 확인용)")]
+    public void TestFullRepair()
+    {
+        if (Application.isPlaying)
+        {
+            _currentDurability = _maxDurability;
+            Debug.Log("[테스트] 체력 100% 수리 완료! 연기와 스파크가 꺼져야 합니다.");
+
+            // 아까 만든 수리 감지 함수를 강제 호출하여 이펙트를 끕니다.
+            CheckAndStopEffects();
         }
     }
 }

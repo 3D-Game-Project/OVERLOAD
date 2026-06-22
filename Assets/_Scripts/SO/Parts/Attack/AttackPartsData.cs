@@ -14,7 +14,7 @@ public class AttackPartsData : PartsData
     [SerializeField] private int _damage;
     [SerializeField] private float _range;
     [SerializeField] private float _fireCooldown;
-    [SerializeField] private int _maxMagazineSize;
+    [SerializeField] private float _fireEnergy;
     [SerializeField] private GameObject _bulletPrefab;
 
     // 부착시 파워와 소모하는 거를 다르게
@@ -25,7 +25,8 @@ public class AttackPartsData : PartsData
     public int Damage => _damage;
     public float Range => _range;
     public float FireCooldown => _fireCooldown;    
-    public int MaxMagazineSize => _maxMagazineSize;
+
+    public float FireEnergy => _fireEnergy;
     public GameObject BulletPrefab => _bulletPrefab;
     public FireType FireType => _fireType;
 

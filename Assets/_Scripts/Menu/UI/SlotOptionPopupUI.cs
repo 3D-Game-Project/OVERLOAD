@@ -59,7 +59,7 @@ public class SlotOptionPopupUI : MonoBehaviour
         if (_partRepairActionController == null)
             _partRepairActionController = FindFirstObjectByType<PartRepairActionController>();
 
-        Close();
+        //Close();
     }
 
     private void Update()
@@ -90,12 +90,12 @@ public class SlotOptionPopupUI : MonoBehaviour
             _equipOrUnequipText.text = isEquipped ? "Unequip" : "Equip";
         }
 
-        MoveNextToSlot(slot);
-
         gameObject.SetActive(true);
 
         if (_popupCloseArea != null)
             _popupCloseArea.SetActive(true);
+
+        MoveNextToSlot(slot);
     }
 
     public void Close()
@@ -120,6 +120,9 @@ public class SlotOptionPopupUI : MonoBehaviour
     private void MoveNextToSlot(InventorySlot slot)
     {
         RectTransform slotRect = slot.transform as RectTransform;
+
+        if (_rectTransform == null)
+            _rectTransform = GetComponent<RectTransform>();
 
         if (_rectTransform == null || slotRect == null)
             return;
