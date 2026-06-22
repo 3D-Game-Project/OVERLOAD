@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8466463294284100312}
   m_Layer: 5
-  m_Name: price
+  m_Name: scrapPrice
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -86,7 +86,7 @@ GameObject:
   - component: {fileID: 3233373703422780141}
   - component: {fileID: 1816479951428851603}
   m_Layer: 5
-  m_Name: Image
+  m_Name: scrapIcon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -282,7 +282,7 @@ GameObject:
   - component: {fileID: 7255118689253902622}
   - component: {fileID: 9050062580846451105}
   m_Layer: 5
-  m_Name: Image
+  m_Name: gearIcon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -714,9 +714,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ShopSlot
   _nameText: {fileID: 1904241927729401094}
   _descText: {fileID: 4159708601987238730}
-  _priceText: {fileID: 527721798669361180}
   _iconImage: {fileID: 6714609751882736006}
   _buyButton: {fileID: 6079438895482823079}
+  _gearPriceArea: {fileID: 7652010512880726885}
+  _gearPriceText: {fileID: 8846492658135584426}
+  _scrapPriceArea: {fileID: 195430111652503584}
+  _scrapPriceText: {fileID: 527721798669361180}
 --- !u!1 &3109160548523730754
 GameObject:
   m_ObjectHideFlags: 0
@@ -1251,7 +1254,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4915859283016018077}
   m_Layer: 5
-  m_Name: price (1)
+  m_Name: gearPrice
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

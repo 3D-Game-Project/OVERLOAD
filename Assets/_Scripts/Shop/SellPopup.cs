@@ -1,6 +1,7 @@
-using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
+using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class SellPopup : MonoBehaviour
 {
@@ -10,7 +11,7 @@ public class SellPopup : MonoBehaviour
     [SerializeField] private Button _yesButton;
     [SerializeField] private Button _noButton;
 
-    private PartsData _tempPart;
+    private InventoryPartItem _tempPartItem;
     private Shop _shop;
     private PlayerInventory _inventory;
 
@@ -21,43 +22,80 @@ public class SellPopup : MonoBehaviour
 
     }
 
-    // 판매 팝업창 열기
-    public void OpenPopup(PartsData part, Shop shop, PlayerInventory inventory)
-    {
-        if (part == null || shop == null || inventory == null) return;
+    //// 판매 팝업창 열기
+    //public void OpenPopup(PartsData part, Shop shop, PlayerInventory inventory)
+    //{
+    //    if (part == null || shop == null || inventory == null) return;
 
-        if (UnityEngine.EventSystems.EventSystem.current != null)
+    //    if (UnityEngine.EventSystems.EventSystem.current != null)
+    //    {
+    //        UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(null);
+    //    }
+
+    //    _tempPart = part;
+    //    _shop = shop;
+    //    _inventory = inventory;
+
+    //    if (_noticeText != null) _noticeText.text = "Do you want to sell?";
+    //    if (_targetNameText != null) _targetNameText.text = $"Part: <color=#FFCC00>{part.PartsName}</color>";
+
+    //    gameObject.SetActive(true);
+    //}
+
+    public void OpenPopup(InventoryPartItem partItem, Shop shop, PlayerInventory inventory)
+    {
+        if (partItem == null ||
+            partItem.PartsData == null ||
+            shop == null ||
+            inventory == null)
         {
-            UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(null);
+            return;
         }
 
-        _tempPart = part;
+        if (EventSystem.current != null)
+            EventSystem.current.SetSelectedGameObject(null);
+
+        _tempPartItem = partItem;
         _shop = shop;
         _inventory = inventory;
 
-        if (_noticeText != null) _noticeText.text = "Do you want to sell?";
-        if (_targetNameText != null) _targetNameText.text = $"Part: <color=#FFCC00>{part.PartsName}</color>";
+        PartsData part = partItem.PartsData;
+        CurrencyCost reward = shop.GetSellReward(part);
+
+        if (_noticeText != null)
+        {
+            _noticeText.text =
+                $"Sell for Gear {reward.Gear} / Scrap {reward.Scrap}?";
+        }
+
+        if (_targetNameText != null)
+        {
+            _targetNameText.text =
+                $"Part: <color=#FFCC00>{part.PartsName}</color>";
+        }
 
         gameObject.SetActive(true);
     }
 
-    // Y버튼 눌렀을 때 동작할 함수
+
     private void ExecuteSell()
     {
-        if (_shop != null && _tempPart != null && _inventory != null)
+        if (_shop != null &&
+            _tempPartItem != null &&
+            _inventory != null)
         {
-            _shop.SellPart(_tempPart, _inventory);
+            _shop.SellPart(_tempPartItem, _inventory);
         }
 
         ClosePopup();
     }
 
-    // 팝업창 닫기
     private void ClosePopup()
     {
-        _tempPart = null;
+        _tempPartItem = null;
         _shop = null;
         _inventory = null;
+
         gameObject.SetActive(false);
     }
 }

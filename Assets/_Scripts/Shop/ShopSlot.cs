@@ -8,13 +8,19 @@ public class ShopSlot : MonoBehaviour
     [Header("TextMeshPro 및 UI 컴포넌트 참조")]
     [SerializeField] private TextMeshProUGUI _nameText;
     [SerializeField] private TextMeshProUGUI _descText;
-    [SerializeField] private TextMeshProUGUI _priceText;
     [SerializeField] private Image _iconImage;
     [SerializeField] private Button _buyButton;
 
+    [Header("Gear Price")]
+    [SerializeField] private GameObject _gearPriceArea;
+    [SerializeField] private TextMeshProUGUI _gearPriceText;
+
+    [Header("Scrap Price")]
+    [SerializeField] private GameObject _scrapPriceArea;
+    [SerializeField] private TextMeshProUGUI _scrapPriceText;
+
     private PartsData _originPart;
     private ItemData _originItem;
-
     private Shop _shop;
     private PlayerInventory _playerInventory;
 
@@ -38,9 +44,9 @@ public class ShopSlot : MonoBehaviour
 
         if (_nameText != null) _nameText.text = part.PartsName;
         if (_descText != null) _descText.text = part.Description;
-        if (_priceText != null) _priceText.text = $"{part.Price} Scrap";
 
-        UpdateShopList(part.PartsImage);
+        UpdatePrice(part.BuyCost);
+        UpdateShopIcon(part.PartsImage);
     }
 
     // 아이템 정보 설정
@@ -55,29 +61,59 @@ public class ShopSlot : MonoBehaviour
 
         if (_nameText != null) _nameText.text = item.ItemName;
         if (_descText != null) _descText.text = item.Description;
-        if (_priceText != null) _priceText.text = $"{item.Price} Gear";
 
-        UpdateShopList(item.ItemImage);
+        UpdatePrice(item.BuyCost);
+        UpdateShopIcon(item.ItemImage);
     }
 
-    // List에 표시할 이미지 설정
-    private void UpdateShopList(Sprite targetSprite)
+    private void UpdatePrice(CurrencyCost cost)
     {
-        if (_iconImage == null) return;
-
-        if (targetSprite != null)
-        {
-            _iconImage.gameObject.SetActive(true);
-            _iconImage.sprite = targetSprite;
-            _iconImage.color = Color.white; 
-        }
-        else
-        {
-            _iconImage.gameObject.SetActive(true);
-            _iconImage.sprite = null;
-            _iconImage.color = Color.black;
-        }
+        SetPriceUI(_gearPriceArea, _gearPriceText, cost.Gear);
+        SetPriceUI(_scrapPriceArea, _scrapPriceText, cost.Scrap);
     }
+
+    private void SetPriceUI(
+    GameObject priceArea,
+    TextMeshProUGUI priceText,
+    int amount)
+    {
+        bool hasCost = amount > 0;
+
+        if (priceArea != null)
+            priceArea.SetActive(hasCost);
+
+        if (priceText != null)
+            priceText.text = amount.ToString();
+    }
+
+    private void UpdateShopIcon(Sprite targetSprite)
+    {
+        if (_iconImage == null)
+            return;
+
+        _iconImage.sprite = targetSprite;
+        _iconImage.color =
+            targetSprite != null ? Color.white : Color.black;
+    }
+
+    //// List에 표시할 이미지 설정
+    //private void UpdateShopList(Sprite targetSprite)
+    //{
+    //    if (_iconImage == null) return;
+
+    //    if (targetSprite != null)
+    //    {
+    //        _iconImage.gameObject.SetActive(true);
+    //        _iconImage.sprite = targetSprite;
+    //        _iconImage.color = Color.white; 
+    //    }
+    //    else
+    //    {
+    //        _iconImage.gameObject.SetActive(true);
+    //        _iconImage.sprite = null;
+    //        _iconImage.color = Color.black;
+    //    }
+    //}
 
     private void OnBuyButtonClicked()
     {

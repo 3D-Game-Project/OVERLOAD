@@ -40,7 +40,8 @@ public class PlayerInventory : MonoBehaviour
     public Dictionary<string, int> CurrencyList = new Dictionary<string, int>();
 
 
-    public event Action OnInventoryChanged; 
+    public event Action OnInventoryChanged;
+    public event Action OnCurrencyChanged;
 
     private PlayerInputHandler _inputHandler;
 
@@ -215,5 +216,42 @@ public class PlayerInventory : MonoBehaviour
         Debug.Log($"[Inventory] RepairKit 획득: {_repairKitCount}개 보유");
 
         OnInventoryChanged?.Invoke();
+    }
+
+    public int GetCurrency(string currencyKey)
+    {
+        if (CurrencyList.TryGetValue(currencyKey, out int amount))
+            return amount;
+
+        return 0;
+    }
+
+    public bool CanAfford(CurrencyCost cost)
+    {
+        int gearCost = Mathf.Max(0, cost.Gear);
+        int scrapCost = Mathf.Max(0, cost.Scrap);
+
+        return GetCurrency("Gear") >= gearCost &&
+               GetCurrency("Scrap") >= scrapCost;
+    }
+
+    public bool TrySpendCurrency(CurrencyCost cost)
+    {
+        if (!CanAfford(cost))
+            return false;
+
+        CurrencyList["Gear"] -= Mathf.Max(0, cost.Gear);
+        CurrencyList["Scrap"] -= Mathf.Max(0, cost.Scrap);
+
+        OnCurrencyChanged?.Invoke();
+        return true;
+    }
+
+    public void AddCurrency(CurrencyCost amount)
+    {
+        CurrencyList["Gear"] += Mathf.Max(0, amount.Gear);
+        CurrencyList["Scrap"] += Mathf.Max(0, amount.Scrap);
+
+        OnCurrencyChanged?.Invoke();
     }
 }

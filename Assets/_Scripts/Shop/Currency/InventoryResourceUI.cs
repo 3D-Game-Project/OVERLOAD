@@ -35,21 +35,22 @@ public class InventoryResourceUI : MonoBehaviour
         if (_inventory == null)
             _inventory = FindFirstObjectByType<PlayerInventory>();
 
-        if (_inventory != null)
-        {
-            _inventory.OnInventoryChanged -= RefreshResourceUI;
-            _inventory.OnInventoryChanged += RefreshResourceUI;
+        _inventory.OnInventoryChanged -= RefreshResourceUI;
+        _inventory.OnInventoryChanged += RefreshResourceUI;
 
-            RefreshResourceUI();
-        }
+        _inventory.OnCurrencyChanged -= RefreshResourceUI;
+        _inventory.OnCurrencyChanged += RefreshResourceUI;
+
+        RefreshResourceUI();
     }
 
     private void OnDisable()
     {
-        if (_inventory != null)
-        {
-            _inventory.OnInventoryChanged -= RefreshResourceUI;
-        }
+        if (_inventory == null)
+            return;
+
+        _inventory.OnInventoryChanged -= RefreshResourceUI;
+        _inventory.OnCurrencyChanged -= RefreshResourceUI;
     }
 
     // RefreshCurreny로 이동후 RefreshResourceUI에서 통합
@@ -81,15 +82,15 @@ public class InventoryResourceUI : MonoBehaviour
 
     private void RefreshCurrency()
     {
-        if (_scrapText != null && _inventory.CurrencyList.ContainsKey("Scrap"))
+        if (_scrapText != null)
         {
-            int scrap = _inventory.CurrencyList["Scrap"];
+            int scrap = _inventory.GetCurrency("Scrap");
             _scrapText.text = scrap.ToString("N0");
         }
 
-        if (_gearText != null && _inventory.CurrencyList.ContainsKey("Gear"))
+        if (_gearText != null)
         {
-            int gear = _inventory.CurrencyList["Gear"];
+            int gear = _inventory.GetCurrency("Gear");
             _gearText.text = gear.ToString("N0");
         }
     }
@@ -101,15 +102,15 @@ public class InventoryResourceUI : MonoBehaviour
         if (_repairKitText != null)
             _repairKitText.text = repairKitCount.ToString("N0");
 
-        if (_repairKitIcon != null && _inventory.RepairKitData != null)
-        {
-            _repairKitIcon.sprite = _inventory.RepairKitData.ItemImage;
-            _repairKitIcon.enabled = _inventory.RepairKitData.ItemImage != null;
-        }
+        // 아이콘 Sprite는 프리팹에서 설정한 것을 그대로 사용한다.
+        if (_repairKitIcon != null)
+            _repairKitIcon.enabled = true;
 
         if (_repairKitRoot != null)
         {
-            bool shouldShow = !_hideRepairKitWhenZero || repairKitCount > 0;
+            bool shouldShow =
+                !_hideRepairKitWhenZero || repairKitCount > 0;
+
             _repairKitRoot.SetActive(shouldShow);
         }
     }

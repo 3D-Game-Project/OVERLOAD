@@ -191,29 +191,63 @@ public class InventorySlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         bool isCurrentShopTab = (_menu.CurrentTabIndex == 1);
         bool isCurrentInventoryTab = (_menu.CurrentTabIndex == 2);
 
+        //if (isCurrentShopTab && _shop != null)
+        //{
+        //    if (currentPart != null)
+        //    {
+        //        SellPopup[] sellPopups = FindObjectsByType<SellPopup>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+
+        //        if (sellPopups.Length > 0)
+        //        {
+        //            foreach (var popup in sellPopups)
+        //            {
+        //                popup.OpenPopup(currentPart, _shop, inventory);
+        //            }
+        //        }
+        //        else
+        //        {
+        //            _shop.SellPart(currentPart, inventory);
+        //        }
+        //    }
+        //    else if (currentItem != null)
+        //    {
+        //        return;
+        //    }
+
         if (isCurrentShopTab && _shop != null)
         {
-            if (currentPart != null)
-            {
-                SellPopup[] sellPopups = FindObjectsByType<SellPopup>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-
-                if (sellPopups.Length > 0)
-                {
-                    foreach (var popup in sellPopups)
-                    {
-                        popup.OpenPopup(currentPart, _shop, inventory);
-                    }
-                }
-                else
-                {
-                    _shop.SellPart(currentPart, inventory);
-                }
-            }
-            else if (currentItem != null)
+            if (currentPartItem == null ||
+                currentPartItem.PartsData == null)
             {
                 return;
             }
+
+            if (_corePartsController != null &&
+                _corePartsController.IsEquipped(currentPartItem))
+            {
+                Debug.LogWarning(
+                    "[Shop] 장착 중인 파츠는 판매할 수 없습니다. 먼저 해제해주세요.");
+                return;
+            }
+
+            if (_sellPopup == null)
+            {
+                _sellPopup = FindFirstObjectByType<SellPopup>(
+                    FindObjectsInactive.Include);
+            }
+
+            if (_sellPopup == null)
+            {
+                Debug.LogWarning("[Shop] SellPopup을 찾을 수 없습니다.");
+                return;
+            }
+
+            _sellPopup.OpenPopup(
+                currentPartItem,
+                _shop,
+                inventory);
         }
+
         else if (isCurrentInventoryTab)
         {
             if (currentPartItem != null && currentPartItem.PartsData != null)
