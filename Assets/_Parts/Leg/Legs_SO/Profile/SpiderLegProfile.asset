@@ -19,5 +19,16 @@ MonoBehaviour:
   _maxClimbHeight: 1
   _slopeLimit: 50
   _dashMultiplier: 1.5
-  _turnSpeedMultiplier: 1
+  _turnSpeedMultiplier: 0.25
   _stability: 1
+  _yawControlMode: 0
+  _moveControlMode: 0
+  _turnStartAngle: 120
+  _turnStopAngle: 0
+  _hasStrafeAnimation: 1
+  _hasTurnAnimation: 1
+  _terrainAdaptMode: 2
+  _bodyTiltWeight: 0.5
+  _bodyTiltSmooth: 8
+  _maxBodyTiltAngle: 40
+  _terrainProbeDistance: 4

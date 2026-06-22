@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: Spider_Hvy
   m_EditorClassIdentifier: Assembly-CSharp::LegPartsData
   _partsName: SpiderLegHvy
-  _partsPrefab: {fileID: 100000, guid: 085eed3ac8b794a44ae39e24812996bf, type: 3}
+  _partsPrefab: {fileID: 100000, guid: aa412701a96e884478f9b491265b31f0, type: 3}
   _requiredLoad: 0
   _partsImage: {fileID: 0}
-  _maxDurability: 0
+  _maxDurability: 700
   _price: 0
   _description: 
   _legTypeProfile: {fileID: 11400000, guid: c78541e47dd59b044a76185612e811fa, type: 2}
@@ -24,3 +24,4 @@ MonoBehaviour:
   _acceleration: 12
   _decceleration: 16
   _dashEnergyCost: 0
+  _animatorController: {fileID: 9100000, guid: a7b6f14ae21d32a47a07570f0eeb8eef, type: 2}

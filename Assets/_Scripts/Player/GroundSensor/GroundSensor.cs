@@ -95,10 +95,7 @@ public class GroundSensor : MonoBehaviour
             // character controller의 가운데를 우선 잡기
             Vector3 center = transform.TransformPoint(_characterController.center);
 
-            // 캡슐 모양이기에 오차를 빼줌
-            float bottomOffset =
-                (_characterController.height * 0.5f) -
-                _characterController.radius;
+            float bottomOffset = _characterController.height * 0.5f;
 
             Vector3 bottom = center - Vector3.up * bottomOffset;
 

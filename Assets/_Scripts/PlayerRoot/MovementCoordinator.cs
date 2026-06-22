@@ -20,6 +20,15 @@ public class MovementCoordinator : MonoBehaviour
 
     private float _requestedHorizontalSpeedMultiplier = 1f;
 
+    private bool _isDashBoostingThisFrame;
+    private bool _wasDashBoostingLastFrame;
+
+    private Vector3 _resolvedMoveDirection;
+    private bool _hasResolvedMoveDirection;
+
+    public bool IsDashBoostingThisFrame => _isDashBoostingThisFrame;
+    public bool WasDashBoostingLastFrame => _wasDashBoostingLastFrame;
+
     private void Awake()
     {
         if (_locomotionMotor == null)
@@ -28,6 +37,9 @@ public class MovementCoordinator : MonoBehaviour
 
     public void BeginFrame()
     {
+        _wasDashBoostingLastFrame = _isDashBoostingThisFrame;
+        _isDashBoostingThisFrame = false;
+
         _groundHorizontalVelocitySum = Vector3.zero;
         _groundRequestCount = 0;
 
@@ -42,6 +54,9 @@ public class MovementCoordinator : MonoBehaviour
         _requestedFallSpeedLimit = 0f;
 
         _requestedHorizontalSpeedMultiplier = 1f;
+
+        _resolvedMoveDirection = Vector3.zero;
+        _hasResolvedMoveDirection = false;
     }
 
     public void SubmitGroundHorizontalVelocity(Vector3 velocity)
@@ -57,6 +72,11 @@ public class MovementCoordinator : MonoBehaviour
         velocity.y = 0f;
 
         _additionalHorizontalVelocity += velocity;
+    }
+
+    public void NotifyDashBoosting()
+    {
+        _isDashBoostingThisFrame = true;
     }
 
     public void SubmitVerticalVelocityChange(float velocityChange)
@@ -140,5 +160,25 @@ public class MovementCoordinator : MonoBehaviour
         {
             _locomotionMotor.SetHorizontalVelocity(Vector3.zero);
         }
+    }
+
+    public void SubmitResolvedMoveDirection(Vector3 direction)
+    {
+        direction.y = 0f;
+
+        if (direction.sqrMagnitude < 0.001f)
+            return;
+
+        _resolvedMoveDirection = direction.normalized;
+        _hasResolvedMoveDirection = true;
+    }
+
+    public bool TryGetResolvedMoveDirection(out Vector3 direction)
+    {
+        direction = _resolvedMoveDirection;
+
+        return
+            _hasResolvedMoveDirection &&
+            direction.sqrMagnitude > 0.001f;
     }
 }

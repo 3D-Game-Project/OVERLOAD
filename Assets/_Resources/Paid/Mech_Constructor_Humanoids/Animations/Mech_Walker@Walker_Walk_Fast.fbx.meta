@@ -1,7 +1,14 @@
 fileFormatVersion: 2
 guid: a202a90fd41e14341a0ed38f8dbabd24
+AssetOrigin:
+  serializedVersion: 1
+  productId: 80255
+  packageName: 'Mech Constructor: Humanoid Robots'
+  packageVersion: 2.1
+  assetPath: Assets/Mech_Constructor_Humanoids/Animations/Mech_Walker@Walker_Walk_Fast.fbx
+  uploadId: 609318
 ModelImporter:
-  serializedVersion: 20300
+  serializedVersion: 24200
   internalIDToNameTable:
   - first:
       1: 100000
@@ -308,11 +315,13 @@ ModelImporter:
     bakeSimulation: 0
     resampleCurves: 1
     optimizeGameObjects: 0
+    removeConstantScaleCurves: 0
     motionNodeName: 
-    rigImportErrors: 
-    rigImportWarnings: 
     animationImportErrors: 
-    animationImportWarnings: 
+    animationImportWarnings: "\nClip 'Take 001' has import animation warnings that
+      might lower retargeting quality:\nNote: Activate translation DOF on avatar
+      to improve retargeting quality.\n\t'Mech_Walker_Spine_2' has translation animation
+      that will be discarded.\n"
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
@@ -348,7 +357,102 @@ ModelImporter:
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-      curves: []
+      curves:
+      - name: FootIK_Left
+        curve:
+          serializedVersion: 2
+          curve:
+          - serializedVersion: 3
+            time: 0
+            value: 1
+            inSlope: 0.0000003532127
+            outSlope: 0.0000003532127
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.84481746
+          - serializedVersion: 3
+            time: 0.3994946
+            value: -0.000036239624
+            inSlope: 0.0018939133
+            outSlope: 0.0018939133
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 1
+          - serializedVersion: 3
+            time: 0.7015855
+            value: 0.00022456446
+            inSlope: 0.010847476
+            outSlope: 0.010847476
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0.2712825
+          - serializedVersion: 3
+            time: 1
+            value: 1
+            inSlope: -0.006693167
+            outSlope: -0.006693167
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0.5144304
+          preInfinity: 2
+          postInfinity: 2
+          rotationOrder: 4
+      - name: FootIK_Right
+        curve:
+          serializedVersion: 2
+          curve:
+          - serializedVersion: 3
+            time: 0
+            value: -0.000035668723
+            inSlope: 0.0000003532127
+            outSlope: 0.0000003532127
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.84481746
+          - serializedVersion: 3
+            time: 0.19949764
+            value: -0.000036239624
+            inSlope: 0.0018939133
+            outSlope: 0.0018939133
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 1
+          - serializedVersion: 3
+            time: 0.50002396
+            value: 1.0026939
+            inSlope: 0.0037955928
+            outSlope: 0.0037955928
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 0.9015824
+            value: 0.00021721539
+            inSlope: -0.007844928
+            outSlope: -0.007844928
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0.7277277
+          - serializedVersion: 3
+            time: 1
+            value: -0.000038146973
+            inSlope: -0.006693167
+            outSlope: -0.006693167
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0.5144304
+          preInfinity: 2
+          postInfinity: 2
+          rotationOrder: 4
       events: []
       transformMask:
       - path: 
@@ -449,7 +553,7 @@ ModelImporter:
         weight: 1
       maskType: 0
       maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
+      additiveReferencePoseFrame: 1
     isReadable: 1
   meshes:
     lODScreenPercentages: []
@@ -458,10 +562,12 @@ ModelImporter:
     addColliders: 0
     useSRGBMaterialColor: 1
     sortHierarchyByName: 1
+    importPhysicalCameras: 1
     importVisibility: 0
     importBlendShapes: 1
     importCameras: 0
     importLights: 0
+    nodeNameCollisionStrategy: 0
     fileIdsGeneration: 1
     swapUVChannels: 0
     generateSecondaryUV: 0
@@ -473,6 +579,10 @@ ModelImporter:
     skinWeightsMode: 0
     maxBonesPerVertex: 4
     minBoneWeight: 0.001
+    optimizeBones: 1
+    generateMeshLods: 0
+    meshLodGenerationFlags: 0
+    maximumMeshLod: -1
     meshOptimizationFlags: -1
     indexFormat: 1
     secondaryUVAngleDistortion: 8
@@ -483,6 +593,7 @@ ModelImporter:
     secondaryUVMinObjectScale: 1
     secondaryUVPackMargin: 4
     useFileScale: 0
+    strictVertexDataChecks: 0
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0
@@ -1152,22 +1263,15 @@ ModelImporter:
     hasTranslationDoF: 0
     hasExtraRoot: 0
     skeletonHasParents: 0
-  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 36424c03a63bae444ae179a3ea208814,
-    type: 3}
+  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 36424c03a63bae444ae179a3ea208814, type: 3}
   autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 3
   humanoidOversampling: 1
   avatarSetup: 2
   addHumanoidExtraRootOnlyWhenUsingAvatar: 0
+  importBlendShapeDeformPercent: 0
   remapMaterialsIfMaterialImportModeIsNone: 1
   additionalBone: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 80255
-  packageName: 'Mech Constructor: Humanoid Robots'
-  packageVersion: 2.1
-  assetPath: Assets/Mech_Constructor_Humanoids/Animations/Mech_Walker@Walker_Walk_Fast.fbx
-  uploadId: 609318
