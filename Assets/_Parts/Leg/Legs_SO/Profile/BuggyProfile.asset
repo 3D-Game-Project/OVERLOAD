@@ -21,7 +21,7 @@ MonoBehaviour:
   _dashMultiplier: 2
   _turnSpeedMultiplier: 1.2
   _stability: 0.35
-  _yawControlMode: 3
+  _yawControlMode: 4
   _moveControlMode: 2
   _turnStartAngle: 0
   _turnStopAngle: 0
