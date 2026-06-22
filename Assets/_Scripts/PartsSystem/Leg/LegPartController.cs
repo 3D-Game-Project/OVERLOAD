@@ -27,6 +27,13 @@ public class LegPartController : PartBehaviour, ILocomotionPart
     [Header("Terrain")]
     [SerializeField] private LegTerrainAdapter _terrainAdapter;
 
+    [Header("Car Steering")]
+    [SerializeField] private float _baseCarYawSpeed = 90f;
+
+    [Header("Buggy Wheel Visual")]
+    [SerializeField]
+    private BuggyWheelVisualController _buggyWheelVisualController;
+
     private Vector3 _currentHorizontalVelocity;
     private bool _isCameraFollowTurning;
 
@@ -78,6 +85,12 @@ public class LegPartController : PartBehaviour, ILocomotionPart
         if (_terrainAdapter != null)
             _terrainAdapter.Initialize(_profile, _context.LocomotionMotor);
 
+        if (_buggyWheelVisualController == null)
+        {
+            _buggyWheelVisualController =
+                GetComponentInChildren<BuggyWheelVisualController>();
+        }
+
         CacheCoreVisualFollowBase();
 
         Debug.Log(
@@ -118,6 +131,16 @@ public class LegPartController : PartBehaviour, ILocomotionPart
         // 다리 모듈에 따른 yaw 제어 다르게 하기 위해 새로운 함수 추가
         Vector3 finalMoveDirection = ResolveLegMoveDirection(command, deltaTime);
 
+        _context.MovementCoordinator.SubmitResolvedMoveDirection(
+            finalMoveDirection
+        );
+
+        UpdateMovement(
+            finalMoveDirection,
+            finalMoveDirection.sqrMagnitude > 0.001f,
+            deltaTime
+        );
+
         bool hasTranslationInput = finalMoveDirection.sqrMagnitude > 0.001f;
 
         // 실제 이동은 카메라 기준 WASD 이동 방향
@@ -131,6 +154,8 @@ public class LegPartController : PartBehaviour, ILocomotionPart
             _context.LocomotionMotor != null &&
             _context.LocomotionMotor.IsGrounded &&
             command.HasMoveInput;
+
+        UpdateBuggyWheelVisuals(); 
 
         // 이동 및 회전을 Animator에 전달
         UpdateAnimation(deltaTime);
@@ -146,6 +171,11 @@ public class LegPartController : PartBehaviour, ILocomotionPart
         if (_context != null && _context.MovementCoordinator != null)
         {
             _context.MovementCoordinator.StopAll();
+        }
+
+        if (_buggyWheelVisualController != null)
+        {
+            _buggyWheelVisualController.SetMotion(0f, 0f);
         }
     }
 
@@ -240,6 +270,10 @@ public class LegPartController : PartBehaviour, ILocomotionPart
 
             case LegYawControlMode.VehicleSteering:
                 UpdateVehicleSteeringYaw(command, deltaTime);
+                break;
+
+            case LegYawControlMode.CarSteering:
+                UpdateCarSteering(command, deltaTime);
                 break;
 
             case LegYawControlMode.None:
@@ -619,5 +653,99 @@ public class LegPartController : PartBehaviour, ILocomotionPart
             return Vector3.zero;
 
         return vehicleForward.normalized * forwardInput;
+    }
+
+    private void UpdateCarSteering(LocomotionCommand command, float deltaTime)
+    {
+        if (_context.LegYawRoot == null)
+            return;
+
+        Vector3 lookForward = command.LookDirection;
+        lookForward.y = 0f;
+
+        if (lookForward.sqrMagnitude < 0.001f)
+            return;
+
+        lookForward.Normalize();
+
+        Vector3 lookRight =
+            Vector3.Cross(Vector3.up, lookForward).normalized;
+
+        Vector3 inputDirection = command.MoveDirection;
+        inputDirection.y = 0f;
+
+        float throttle = Vector3.Dot(inputDirection, lookForward);
+        float steering = Vector3.Dot(inputDirection, lookRight);
+
+        _currentTurnInput = Mathf.Clamp(steering, -1f, 1f);
+        _isTurningThisFrame = Mathf.Abs(steering) > 0.01f;
+
+        // A/D만 누르면 바퀴 애니메이션만 움직이고 차체는 회전하지 않는다.
+        if (Mathf.Abs(throttle) < 0.01f ||
+            Mathf.Abs(steering) < 0.01f)
+        {
+            return;
+        }
+
+        float speedRatio = Mathf.Clamp01(
+            _currentHorizontalVelocity.magnitude /
+            Mathf.Max(_legData.MoveSpeed, 0.01f)
+        );
+
+        // 후진 중에는 조향에 따른 차체 회전 방향이 반대가 된다.
+        float yawDirection =
+            steering * Mathf.Sign(throttle);
+
+        float yawAmount =
+            yawDirection *
+            _baseCarYawSpeed *
+            _profile.TurnSpeedMultiplier *
+            speedRatio *
+            deltaTime;
+
+        _context.LegYawRoot.rotation =
+            Quaternion.AngleAxis(yawAmount, Vector3.up) *
+            _context.LegYawRoot.rotation;
+    }
+
+    private void UpdateBuggyWheelVisuals()
+    {
+        if (_buggyWheelVisualController == null)
+            return;
+
+        Transform yawRoot =
+            _context != null
+                ? _context.LegYawRoot
+                : null;
+
+        if (yawRoot == null)
+            return;
+
+        Vector3 forward = yawRoot.forward;
+        forward.y = 0f;
+
+        if (forward.sqrMagnitude < 0.001f)
+            return;
+
+        Vector3 velocity = _currentHorizontalVelocity;
+
+        // Motor의 값에는 부스터로 추가된 속도도 포함된다.
+        if (_context.LocomotionMotor != null)
+        {
+            velocity =
+                _context.LocomotionMotor.HorizontalVelocity;
+        }
+
+        velocity.y = 0f;
+
+        float signedSpeed = Vector3.Dot(
+            velocity,
+            forward.normalized
+        );
+
+        _buggyWheelVisualController.SetMotion(
+            signedSpeed,
+            _currentTurnInput
+        );
     }
 }

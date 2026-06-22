@@ -4,6 +4,7 @@ public enum LegYawControlMode
     MoveDirectionFollow,      // 이동방향과 차체 방향이 동일함 (Buggy, Tank, Tracks)
     MoveDirectionWithBackward,   // humanoid용
     VehicleSteering,
+    CarSteering,
     None
 }
 

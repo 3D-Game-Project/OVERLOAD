@@ -108,12 +108,14 @@ public class BoosterPartController : PartBehaviour, IBoosterPart
 
         if (_boostLockedUntilRelease)
             return;
-
+         
         if (!_boosterData.HasFunction(BoosterFunction.Dash))
             return;
 
-        if (command.MoveDirection.sqrMagnitude < 0.001f)
+        if (!_context.MovementCoordinator.TryGetResolvedMoveDirection(out Vector3 dashDirection))
+        {
             return;
+        }
 
         if (!TryUseEnergyPerSec(_boosterData.DashEnergyCostPerSec))
         {
@@ -121,8 +123,7 @@ public class BoosterPartController : PartBehaviour, IBoosterPart
             return;
         }
 
-        Vector3 dashVelocity =
-            command.MoveDirection.normalized * _boosterData.DashSpeed;
+        Vector3 dashVelocity = dashDirection * _boosterData.DashSpeed;
 
         _context.MovementCoordinator.NotifyDashBoosting();
 

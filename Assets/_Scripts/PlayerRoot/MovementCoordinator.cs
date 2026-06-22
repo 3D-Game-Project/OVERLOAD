@@ -23,6 +23,9 @@ public class MovementCoordinator : MonoBehaviour
     private bool _isDashBoostingThisFrame;
     private bool _wasDashBoostingLastFrame;
 
+    private Vector3 _resolvedMoveDirection;
+    private bool _hasResolvedMoveDirection;
+
     public bool IsDashBoostingThisFrame => _isDashBoostingThisFrame;
     public bool WasDashBoostingLastFrame => _wasDashBoostingLastFrame;
 
@@ -51,6 +54,9 @@ public class MovementCoordinator : MonoBehaviour
         _requestedFallSpeedLimit = 0f;
 
         _requestedHorizontalSpeedMultiplier = 1f;
+
+        _resolvedMoveDirection = Vector3.zero;
+        _hasResolvedMoveDirection = false;
     }
 
     public void SubmitGroundHorizontalVelocity(Vector3 velocity)
@@ -154,5 +160,25 @@ public class MovementCoordinator : MonoBehaviour
         {
             _locomotionMotor.SetHorizontalVelocity(Vector3.zero);
         }
+    }
+
+    public void SubmitResolvedMoveDirection(Vector3 direction)
+    {
+        direction.y = 0f;
+
+        if (direction.sqrMagnitude < 0.001f)
+            return;
+
+        _resolvedMoveDirection = direction.normalized;
+        _hasResolvedMoveDirection = true;
+    }
+
+    public bool TryGetResolvedMoveDirection(out Vector3 direction)
+    {
+        direction = _resolvedMoveDirection;
+
+        return
+            _hasResolvedMoveDirection &&
+            direction.sqrMagnitude > 0.001f;
     }
 }
