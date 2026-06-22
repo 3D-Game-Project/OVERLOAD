@@ -1,19 +1,24 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.InputSystem;
-using Unity.Cinemachine; // ½Ã³×¸Ó½Å 3.x ÇÊ¼ö
+using Unity.Cinemachine;
+using System; // ì‹œë„¤ë¨¸ì‹  3.x í•„ìˆ˜
 
 public class PlayerCameraController : MonoBehaviour
 {
-    [Header("½Ã³×¸Ó½Å Ä«¸Ş¶ó ¿¬°á")]
+    [Header("ì‹œë„¤ë¨¸ì‹  ì¹´ë©”ë¼ ì—°ê²°")]
     [SerializeField] private CinemachineCamera _normalCamera; 
     [SerializeField] private CinemachineCamera _aimCamera;    
 
-    [Header("UI ¿¬°á")]
-    [SerializeField] private GameObject _crosshairUI;         
+    [Header("UI ì—°ê²°")]
+    [SerializeField] private GameObject _crosshairUI;
+
+    public event Action<bool> OnAimStateChanged;
+
+    private bool _isAiming;
 
     private void Start()
     {
-        // °ÔÀÓ ½ÃÀÛ ½Ã ±âº» »óÅÂ·Î ÃÊ±âÈ­ (Æò»ó½Ã Ä«¸Ş¶ó°¡ ´õ ³ôÀº ¿ì¼±¼øÀ§)
+        // ê²Œì„ ì‹œì‘ ì‹œ ê¸°ë³¸ ìƒíƒœë¡œ ì´ˆê¸°í™” (í‰ìƒì‹œ ì¹´ë©”ë¼ê°€ ë” ë†’ì€ ìš°ì„ ìˆœìœ„)
         if (_normalCamera != null) _normalCamera.Priority = 10;
         if (_aimCamera != null) _aimCamera.Priority = 5;
 
@@ -24,19 +29,28 @@ public class PlayerCameraController : MonoBehaviour
     {
         if (Mouse.current == null) return;
 
-        bool isAiming = Mouse.current.rightButton.isPressed;
+        bool isCurrentlyAiming = Mouse.current.rightButton.isPressed;
 
+        if (_isAiming != isCurrentlyAiming)
+        {
+            _isAiming = isCurrentlyAiming;
+            ChangeAimState(_isAiming);
+        }
+    }
+
+    private void ChangeAimState(bool isAiming)
+    {
         if (isAiming)
         {
             if (_aimCamera != null) _aimCamera.Priority = 20;
-
             if (_crosshairUI != null) _crosshairUI.SetActive(true);
         }
         else
         {
             if (_aimCamera != null) _aimCamera.Priority = 5;
-
             if (_crosshairUI != null) _crosshairUI.SetActive(false);
         }
+
+        OnAimStateChanged?.Invoke(_isAiming);
     }
 }

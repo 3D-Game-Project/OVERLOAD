@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 
@@ -6,17 +6,21 @@ public class OverheatUI : MonoBehaviour
 {
     [SerializeField] private OverheatController _overheatController;
 
-    [SerializeField] private Slider _energyBarSlider;
+    [SerializeField] private GameObject _uiRoot; 
     [SerializeField] private Image _fillImage;
 
+    [Header("Colors")]
     [SerializeField] private Color _normalColor = new Color(0f, 0.8f, 1f);
     [SerializeField] private Color _overheatColor = Color.red;
 
-    private Tween _sliderTween;
+    private Tween _fillTween; 
     private Tween _blinkTween;
+    private bool _isFirstUpdate = true;
 
     private void OnEnable()
     {
+        _isFirstUpdate = true;
+
         if (_overheatController != null)
         {
             _overheatController.OnEnergyChanged += UpdateEnergyBar;
@@ -34,23 +38,31 @@ public class OverheatUI : MonoBehaviour
             _overheatController.OnOverHeated -= OverheatEnergyBar;
         }
 
-        _sliderTween?.Kill();
+        _fillTween?.Kill();
         _blinkTween?.Kill();
     }
 
-    // ¿¡³ÊÁö º¯È­¿¡ µû¸¥ UI¿¬Ãâ
+    // ì—ë„ˆì§€ ë³€í™”ì— ë”°ë¥¸ UI ì—°ì¶œ
+    // 0ì—ì„œë¶€í„° 1ë¡œ ì ì°¨ ì°¨ì˜¤ë¥´ê²Œ ì²˜ë¦¬í•˜ê¸°
     private void UpdateEnergyBar(float currentEnergy, float maxEnergy)
     {
-        if (_energyBarSlider == null) return;
+        if (_fillImage == null) return;
 
-        float targetRatio = currentEnergy / maxEnergy;
+        if (_isFirstUpdate)
+        {
+            if (_uiRoot != null) _uiRoot.SetActive(true);
+            _isFirstUpdate = false;
+        }
 
-        _sliderTween?.Kill();
+        
+        float targetRatio = 1f - (currentEnergy / maxEnergy);
 
-        _sliderTween = _energyBarSlider.DOValue(targetRatio, 0.2f).SetEase(Ease.OutCubic);
+        _fillTween?.Kill();
+
+        _fillTween = _fillImage.DOFillAmount(targetRatio, 0.2f).SetEase(Ease.OutCubic);
     }
 
-    // °ú¿­µÇ¾úÀ» ¶§, ¿¡³ÊÁö°¡ Â÷¿À¸£¸é ±ôºıÀÌ¸é¼­ Â÷¿À¸£µµ·Ï ¿¬Ãâ
+    // ê³¼ì—´ë˜ì—ˆì„ ë•Œ, ê¹œë¹¡ì´ë©´ì„œ ì°¨ì˜¤ë¥´ë„ë¡ ì—°ì¶œ
     private void OverheatEnergyBar(bool isOverheated)
     {
         if (_fillImage == null) return;
@@ -59,12 +71,13 @@ public class OverheatUI : MonoBehaviour
         {
             _fillImage.color = _overheatColor;
 
-            _blinkTween?.Kill(); 
+            _blinkTween?.Kill();
             _blinkTween = _fillImage.DOFade(0.3f, 0.25f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
         }
         else
         {
             _blinkTween?.Kill();
+            _blinkTween = null;
 
             _fillImage.DOFade(1f, 0.15f);
             _fillImage.DOColor(_normalColor, 0.3f);

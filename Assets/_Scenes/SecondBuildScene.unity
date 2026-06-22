@@ -418,15 +418,17 @@ MonoBehaviour:
   _maxAliveMonsters: 2
   _spawnDistance: 50
   _despawnDistance: 70
+  _pointCooldownTime: 60
+  _respawnDelayAfterDeath: 10
   _monsterPrefabs:
   - {fileID: 6732670513853421516, guid: 8fd11c456cf31574a896bbc4ecdbbf95, type: 3}
   - {fileID: 6732670513853421516, guid: 8ceec15cad406a843b0d3b41d0411121, type: 3}
   - {fileID: 6732670513853421516, guid: 5328938c2c2a94d4fb26657f4dabd35f, type: 3}
   - {fileID: 6732670513853421516, guid: 7ba777f2f68af9545bc8bcd9741834f0, type: 3}
-  - {fileID: 6732670513853421516, guid: 23f9337a4840b0249829225db1ea5000, type: 3}
-  - {fileID: 6732670513853421516, guid: b1d581180fe5e7746aa0ad081b3de7ca, type: 3}
-  - {fileID: 6732670513853421516, guid: 63a28ff5cc5e6ed40a05e5df1cc6f4a6, type: 3}
-  - {fileID: 6732670513853421516, guid: 60434e0c2189c6847ade37e42e638901, type: 3}
+  - {fileID: 6732670513853421516, guid: 94314cf0c211cca48b82a56099689cef, type: 3}
+  - {fileID: 6732670513853421516, guid: 78301f52d21bdf7449395c9ac0408d94, type: 3}
+  - {fileID: 6732670513853421516, guid: ea9ef1e8fc465eb4c91b3d6bb0092339, type: 3}
+  - {fileID: 6732670513853421516, guid: 823e64916eeef4d40ba80c4e1237dd4a, type: 3}
 --- !u!4 &465418263
 Transform:
   m_ObjectHideFlags: 0
@@ -1174,6 +1176,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1463171653595536808, guid: dc90b93142807b1428a67bfb3c59263b, type: 3}
+      propertyPath: m_DetailObjectDensity
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7028308593123321832, guid: dc90b93142807b1428a67bfb3c59263b, type: 3}
       propertyPath: m_Name
       value: TerrainHigh

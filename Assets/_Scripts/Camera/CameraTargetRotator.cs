@@ -32,7 +32,6 @@ public class CameraTargetRotator : MonoBehaviour
             transform.position = _followTarget.position + _targetOffset;
         }
 
-        // 마우스가 보일 때 (현재 게임 내에서는 상점이 열렸을 때만 마우스가 보이기 때문에) 회전 미처리
         if (Cursor.visible) 
             return;
 
