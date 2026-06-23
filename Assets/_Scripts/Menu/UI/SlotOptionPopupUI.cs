@@ -24,6 +24,9 @@ public class SlotOptionPopupUI : MonoBehaviour
     [SerializeField] private PartEquipActionController _partEquipActionController;
     [SerializeField] private PartRepairActionController _partRepairActionController;
 
+    [Header("Dismantle")]
+    [Range(0f, 1f)] [SerializeField] private float _dismantleRefundRate = 0.2f;
+
     private RectTransform _rectTransform;
 
     private InventorySlot _currentSlot;
@@ -214,15 +217,62 @@ public class SlotOptionPopupUI : MonoBehaviour
         }
     }
 
+
     private void OnDismantleClicked()
     {
-        if (_currentPart == null)
+        if (_currentPartItem == null ||
+            _currentPartItem.PartsData == null)
+        {
             return;
+        }
+
+        if (_inventory == null)
+        {
+            Debug.LogWarning(
+                "[SlotOptionPopup] PlayerInventory가 없습니다.");
+            return;
+        }
+
+        if (_corePartsController != null &&
+            _corePartsController.IsEquipped(_currentPartItem))
+        {
+            Debug.LogWarning(
+                "[SlotOptionPopup] 장착 중인 파츠는 분해할 수 없습니다. " +
+                "먼저 해제해주세요.");
+            return;
+        }
 
         if (IsAnyActionBusy())
             return;
 
-        Debug.Log($"[SlotOptionPopup] 분해 버튼 클릭: {_currentPart.PartsName}");
+        InventoryPartItem dismantledItem = _currentPartItem;
+        PartsData part = dismantledItem.PartsData;
+
+        CurrencyCost reward = new CurrencyCost
+        {
+            Gear = Mathf.FloorToInt(
+                part.BuyCost.Gear * _dismantleRefundRate),
+
+            Scrap = Mathf.FloorToInt(
+                part.BuyCost.Scrap * _dismantleRefundRate)
+        };
+
+        bool removed = _inventory.RemovePartItem(dismantledItem);
+
+        if (!removed)
+        {
+            Debug.LogWarning(
+                $"[SlotOptionPopup] 분해할 파츠를 찾지 못했습니다: " +
+                $"{part.PartsName}");
+            return;
+        }
+
+        _inventory.AddCurrency(reward);
+
+        Debug.Log(
+            $"[SlotOptionPopup] {part.PartsName} 분해 완료\n" +
+            $"획득 Gear: {reward.Gear}, Scrap: {reward.Scrap}"
+        );
 
         Close();
     }
