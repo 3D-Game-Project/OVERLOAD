@@ -12,13 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1b1fcedf4d30334f861d12febf4455f, type: 3}
   m_Name: Weapon_DoubleGun_Lv3
   m_EditorClassIdentifier: Assembly-CSharp::AttackPartsData
-  _partsName: DoubleGun_Lv3
+  _partsName: 'DoubleGun [lvl.2]'
   _partsPrefab: {fileID: 100014, guid: efcdfa6f9d71a7b449e7135d7f5d29f7, type: 3}
   _requiredLoad: 0
   _partsImage: {fileID: -781138579, guid: 90c7d3cbce0c87342ad4e169693f8974, type: 3}
   _maxDurability: 250
-  _price: 75
   _description: 
+  _buyCost:
+    Gear: 0
+    Scrap: 0
   _fireType: 1
   _weaponType: 0
   _damage: 15

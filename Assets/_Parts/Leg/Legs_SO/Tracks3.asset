@@ -12,17 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e29c905744c8acb4b8991a8175c732aa, type: 3}
   m_Name: Tracks3
   m_EditorClassIdentifier: Assembly-CSharp::LegPartsData
-  _partsName: Tracks0
+  _partsName: 'Tracks [lvl.3]'
   _partsPrefab: {fileID: 100022, guid: 4d87495369f46df4ba592aad58b6cfcf, type: 3}
   _requiredLoad: 0
-  _partsImage: {fileID: 0}
+  _partsImage: {fileID: -1385976864, guid: 90c7d3cbce0c87342ad4e169693f8974, type: 3}
   _maxDurability: 500
   _description: 
   _buyCost:
     Gear: 0
     Scrap: 0
   _legTypeProfile: {fileID: 11400000, guid: ad7ffecd5719ac24b869e0f1a5f71200, type: 2}
-  _moveSpeed: 3
+  _moveSpeed: 8
   _acceleration: 6
   _decceleration: 12
   _dashEnergyCost: 0

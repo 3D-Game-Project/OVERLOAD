@@ -12,13 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e29c905744c8acb4b8991a8175c732aa, type: 3}
   m_Name: Spider_Hvy
   m_EditorClassIdentifier: Assembly-CSharp::LegPartsData
-  _partsName: SpiderLegHvy
+  _partsName: 'Spider [hvy]'
   _partsPrefab: {fileID: 100000, guid: aa412701a96e884478f9b491265b31f0, type: 3}
   _requiredLoad: 0
-  _partsImage: {fileID: 0}
+  _partsImage: {fileID: 1241192219, guid: 90c7d3cbce0c87342ad4e169693f8974, type: 3}
   _maxDurability: 700
-  _price: 0
   _description: 
+  _buyCost:
+    Gear: 0
+    Scrap: 0
   _legTypeProfile: {fileID: 11400000, guid: c78541e47dd59b044a76185612e811fa, type: 2}
   _moveSpeed: 4
   _acceleration: 12

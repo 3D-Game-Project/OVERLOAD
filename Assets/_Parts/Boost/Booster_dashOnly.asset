@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Booster_dashOnly
   m_EditorClassIdentifier: Assembly-CSharp::BoosterPartsData
   _partsName: 
-  _partsPrefab: {fileID: 0}
+  _partsPrefab: {fileID: 100002, guid: 793bb50235118a7498aecb58e1958d83, type: 3}
   _requiredLoad: 0
   _partsImage: {fileID: 0}
   _maxDurability: 300
@@ -21,7 +21,7 @@ MonoBehaviour:
   _buyCost:
     Gear: 0
     Scrap: 0
-  _boosterFunction: 0
+  _boosterFunction: 2
   _jumpVelocity: 8
   _jumpEnergyCost: 15
   _dashSpeed: 12

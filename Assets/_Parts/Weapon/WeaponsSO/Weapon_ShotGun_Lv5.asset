@@ -12,13 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1b1fcedf4d30334f861d12febf4455f, type: 3}
   m_Name: Weapon_ShotGun_Lv5
   m_EditorClassIdentifier: Assembly-CSharp::AttackPartsData
-  _partsName: ShotGun_Lv5
+  _partsName: ShotGun
   _partsPrefab: {fileID: 100004, guid: 9ebffaa3cf81be44b957b4333019950c, type: 3}
   _requiredLoad: 0
   _partsImage: {fileID: 2030689153, guid: 1f73fc51b0bf55c4cb10906b193d2a47, type: 3}
   _maxDurability: 300
-  _price: 100
   _description: 
+  _buyCost:
+    Gear: 0
+    Scrap: 0
   _fireType: 1
   _weaponType: 4
   _damage: 35

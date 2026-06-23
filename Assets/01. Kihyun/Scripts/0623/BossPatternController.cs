@@ -21,11 +21,17 @@ public class BossPatternController : MonoBehaviour
 
     private void Awake()
     {
-        if (_attackPatterns.Count == 0)
+        BossAttackPatternBase[] foundPatterns = GetComponentsInChildren<BossAttackPatternBase>(true);
+
+        foreach (BossAttackPatternBase pattern in foundPatterns)
         {
-            _attackPatterns.AddRange(
-                GetComponentsInChildren<BossAttackPatternBase>(true)
-            );
+            if (pattern == null)
+                continue;
+
+            if (!_attackPatterns.Contains(pattern))
+            {
+                _attackPatterns.Add(pattern);
+            }
         }
 
         ValidatePatterns();

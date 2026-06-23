@@ -5,8 +5,8 @@ using UnityEngine;
 public class BossShockwavePattern : BossAttackPatternBase
 {
     [Header("References")]
-    [SerializeField] private MovementCoordinator _movementCoordinator;
     [SerializeField] private Transform _shockwaveOrigin;
+    [SerializeField] private BossMovementController _movementController;
 
     [Header("Pattern Timing")]
     [SerializeField] private float _chargeDuration = 1.5f;
@@ -29,14 +29,14 @@ public class BossShockwavePattern : BossAttackPatternBase
 
     private void Awake()
     {
-        if (_movementCoordinator == null)
-        {
-            _movementCoordinator =
-                GetComponentInParent<MovementCoordinator>();
-        }
-
         if (_shockwaveOrigin == null)
             _shockwaveOrigin = transform;
+
+        if (_movementController == null)
+        {
+            _movementController =
+                GetComponentInParent<BossMovementController>();
+        }
     }
 
     protected override bool CheckRequirements(Transform target)
@@ -54,7 +54,7 @@ public class BossShockwavePattern : BossAttackPatternBase
 
     protected override IEnumerator ExecutePattern(Transform target)
     {
-        _movementCoordinator?.StopAll();
+        StopBossMovement();
 
         PlayEffect(_chargeEffect);
 
@@ -66,7 +66,7 @@ public class BossShockwavePattern : BossAttackPatternBase
                 yield break;
 
             // 충전 중에는 이동하지 않는다.
-            _movementCoordinator?.StopAll();
+            StopBossMovement();
 
             chargeTimer += Time.deltaTime;
             yield return null;
@@ -84,7 +84,7 @@ public class BossShockwavePattern : BossAttackPatternBase
             if (ShouldStop(target))
                 yield break;
 
-            _movementCoordinator?.StopAll();
+            StopBossMovement();
 
             recoveryTimer += Time.deltaTime;
             yield return null;
@@ -95,7 +95,7 @@ public class BossShockwavePattern : BossAttackPatternBase
     {
         StopEffect(_chargeEffect);
 
-        _movementCoordinator?.StopAll();
+        StopBossMovement();
     }
 
     private void ApplyShockwaveDamage()
@@ -151,6 +151,15 @@ public class BossShockwavePattern : BossAttackPatternBase
             true,
             ParticleSystemStopBehavior.StopEmittingAndClear
         );
+    }
+
+    private void StopBossMovement()
+    {
+        if (_movementController == null)
+            return;
+
+        _movementController.StopMovement();
+        _movementController.ClearLookTarget();
     }
 
     private void OnDrawGizmosSelected()
