@@ -63,6 +63,9 @@ public class AttackPartController : PartBehaviour, IAttackPart
 
     public void HandleAttack(bool isAttackPressed)
     {
+        if (!IsOperational)
+            return;
+
         if (!isAttackPressed)
             return;
 

@@ -5,10 +5,15 @@ public abstract class PartBehaviour : MonoBehaviour, IPart
     protected PartsData _data;
     protected CorePartContext _context;
     protected AttachmentSlot _slot;
+    protected DurabilityController _durability;
 
     public PartsData Data => _data;
     public CorePartContext Context => _context;
     public AttachmentSlot Slot => _slot;
+
+    public bool IsOperational =>
+        isActiveAndEnabled &&
+        (_durability == null || !_durability.IsDestroyed);
 
     public virtual void Initialize(PartsData data, CorePartContext context)
     {
