@@ -751,7 +751,7 @@ MonoBehaviour:
           m_Value0: 8643843776503461693
           m_Value1: 10931937445113910389
         Name: PatrolRadius
-        m_Value: 10
+        m_Value: 20
 --- !u!95 &7594687230554148796
 Animator:
   serializedVersion: 7
@@ -761,8 +761,8 @@ Animator:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6732670513853421516}
   m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 3c0b8de62637d574c924cac3350db78b, type: 3}
-  m_Controller: {fileID: 9100000, guid: 06535db2cd9c4a340b7e1d35a34ce7b4, type: 2}
+  m_Avatar: {fileID: 9000000, guid: c9c5962cf1f611c41a384469283f965f, type: 3}
+  m_Controller: {fileID: 9100000, guid: 07ff31a514bd77a4088314f089daf41b, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

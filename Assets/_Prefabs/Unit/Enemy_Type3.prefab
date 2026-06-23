@@ -771,7 +771,7 @@ MonoBehaviour:
           m_Value0: 8643843776503461693
           m_Value1: 10931937445113910389
         Name: PatrolRadius
-        m_Value: 10
+        m_Value: 20
 --- !u!95 &7594687230554148796
 Animator:
   serializedVersion: 7
