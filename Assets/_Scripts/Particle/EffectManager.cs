@@ -26,6 +26,9 @@ public class EffectManager : MonoBehaviour
     [Header("파츠 파괴 후 연기 이펙트")]
     [SerializeField] private ParticleSystem _smokeParticlePrefab;
 
+    [Header("몬스터 사망 이펙트")]
+    [SerializeField] private ParticleSystem _deathParticlePrefab;
+
     private Dictionary<WeaponType, ObjectPool<ParticleSystem>> _firePools = new Dictionary<WeaponType, ObjectPool<ParticleSystem>>();
     private Dictionary<WeaponType, ObjectPool<ParticleSystem>> _takeDamagePools = new Dictionary<WeaponType, ObjectPool<ParticleSystem>>();
     private Dictionary<DurabilityController, ParticleSystem> _sparkParticles = new Dictionary<DurabilityController, ParticleSystem>();
@@ -284,5 +287,18 @@ public class EffectManager : MonoBehaviour
             {
             }
         }
+    }
+
+    public void PlayDeathParticle(Vector3 position)
+    {
+        if (_deathParticlePrefab == null)
+        {
+            Debug.LogWarning("사망 파티클 프리팹이 할당되지 않았습니다.");
+            return;
+        }
+
+        ParticleSystem deathParticle = Instantiate(_deathParticlePrefab, position, Quaternion.identity);
+
+        Destroy(deathParticle.gameObject, 2f);
     }
 }

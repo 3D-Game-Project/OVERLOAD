@@ -20,7 +20,16 @@ public partial class CheckDistanceCondition : Condition
         }
         if (Target == null || Target.Value == null)
         {
-            return false;
+            GameObject foundPlayer = GameObject.FindWithTag("Player");
+
+            if (foundPlayer != null)
+            {
+                Target.Value = foundPlayer;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         float distance = Vector3.Distance(Self.Value.transform.position, Target.Value.transform.position);

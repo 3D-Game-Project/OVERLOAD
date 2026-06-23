@@ -38,7 +38,7 @@ public class PlayerAimController : MonoBehaviour, IAimProvider
         Vector3 screenCenter = new Vector3(Screen.width / 2f, Screen.height / 2f, 0f);
         Ray ray = _mainCamera.ScreenPointToRay(screenCenter);
 
-        float finalRayDistance = _maxAimDistance;
+        float finalRayDistance = _maxAimDistance; 
 
         if (Physics.Raycast(ray, out RaycastHit hit, _maxAimDistance, ~_aimLayerMask))
         {
@@ -47,12 +47,11 @@ public class PlayerAimController : MonoBehaviour, IAimProvider
             if (distanceToPlayer < _closeFadeDistance)
             {
                 float distanceRatio = Mathf.Clamp01(distanceToPlayer / _closeFadeDistance);
-
                 finalRayDistance = Mathf.Lerp(_virtualDistance, hit.distance, distanceRatio);
             }
             else
             {
-                finalRayDistance = hit.distance;
+                finalRayDistance = 20f;
             }
         }
         else

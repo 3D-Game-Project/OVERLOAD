@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.AI;
 using Unity.Behavior;
+using System.Collections;
 
 public class MonsterLifecycle : MonoBehaviour
 {
@@ -46,7 +47,6 @@ public class MonsterLifecycle : MonoBehaviour
 
         if (_behaviorAgent != null && targetPlayer != null)
         {
-            // 타입 명시: <GameObject>를 반드시 넣어야 오류가 발생하지 않습니다!
             bool success = _behaviorAgent.BlackboardReference.SetVariableValue<GameObject>("Target", targetPlayer);
 
             if (success)

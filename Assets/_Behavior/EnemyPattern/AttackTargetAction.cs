@@ -31,7 +31,21 @@ public partial class AttackTargetAction : Action
     // 공격이 시작되면 agent의 움직임을 멈추고 FireManager가 연결된 모든 파츠를 찾기
     protected override Status OnStart()
     {
-        if (Self?.Value == null || Target?.Value == null) return Status.Failure;
+        if (Self?.Value == null) return Status.Failure;
+
+        if(Target?.Value == null)
+        {
+            GameObject foundPlayer = GameObject.FindWithTag("Player");
+
+            if (foundPlayer != null)
+            {
+                Target.Value = foundPlayer;
+            }
+            else
+            {
+                return Status.Failure;
+            }
+        }
 
         _agent = Self.Value.GetComponent<NavMeshAgent>();
         if (_agent != null && _agent.isActiveAndEnabled && _agent.isOnNavMesh)

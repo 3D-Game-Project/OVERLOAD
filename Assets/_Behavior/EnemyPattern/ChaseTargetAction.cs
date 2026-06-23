@@ -26,7 +26,16 @@ public partial class ChaseTargetAction : Action
         }
         if (Target?.Value == null)
         {
-            return Status.Failure;
+            GameObject foundPlayer = GameObject.FindWithTag("Player");
+
+            if (foundPlayer != null)
+            {
+                Target.Value = foundPlayer;
+            }
+            else
+            {
+                return Status.Failure;
+            }
         }
 
         _agent = Self.Value.GetComponent<NavMeshAgent>();
