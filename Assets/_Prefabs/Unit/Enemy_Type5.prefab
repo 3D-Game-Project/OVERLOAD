@@ -1032,7 +1032,7 @@ MonoBehaviour:
     slot: {fileID: 8959084602277851344}
   - partsData: {fileID: 11400000, guid: 23e1da69b43d5fe4d90d8324c0e49e6d, type: 2}
     slot: {fileID: 6999799309414237791}
-  - partsData: {fileID: 11400000, guid: eb1a254bec5fb6f4d81d6f755dc315d7, type: 2}
+  - partsData: {fileID: 11400000, guid: 0b2bcc177a83a9f43901dbd1034ee6f5, type: 2}
     slot: {fileID: 8270253581132282145}
   _attachmentSlots: []
   _coreLoadController: {fileID: 4491043938584476629}

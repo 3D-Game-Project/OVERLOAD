@@ -129,7 +129,7 @@ public class DurabilityController : MonoBehaviour
             );
         }
 
-        boxCol.size = localSize + new Vector3(-0.5f, -0.5f, -0.5f);
+        boxCol.size = localSize + new Vector3(-0.5f, 0f, -0.5f);
     }
 
     /// <summary>

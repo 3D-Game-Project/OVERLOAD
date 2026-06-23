@@ -943,7 +943,7 @@ NavMeshAgent:
   m_AutoBraking: 1
   m_AutoRepath: 1
   m_Height: 2
-  m_BaseOffset: 1.1
+  m_BaseOffset: 2
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
 --- !u!114 &8456555655149077608
@@ -1030,7 +1030,7 @@ MonoBehaviour:
     slot: {fileID: 7680721664655559648}
   - partsData: {fileID: 11400000, guid: acea059fd1aa49a4b966f70c8ec4592b, type: 2}
     slot: {fileID: 8959084602277851344}
-  - partsData: {fileID: 11400000, guid: eb1a254bec5fb6f4d81d6f755dc315d7, type: 2}
+  - partsData: {fileID: 11400000, guid: 29bf5870e9f360b46b1c1cab4d44d281, type: 2}
     slot: {fileID: 8270253581132282145}
   _attachmentSlots: []
   _coreLoadController: {fileID: 4491043938584476629}
