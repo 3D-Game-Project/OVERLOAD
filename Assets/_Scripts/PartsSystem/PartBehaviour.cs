@@ -13,12 +13,31 @@ public abstract class PartBehaviour : MonoBehaviour, IPart
 
     public bool IsOperational =>
         isActiveAndEnabled &&
-        (_durability == null || !_durability.IsDestroyed);
+        _durability != null &&
+        !_durability.IsDestroyed &&
+        _durability.CurrentDurability > 0f;
 
     public virtual void Initialize(PartsData data, CorePartContext context)
     {
         _data = data;
         _context = context;
+
+        _durability =
+            GetComponent<DurabilityController>();
+
+        if (_durability == null)
+        {
+            _durability =
+                GetComponentInChildren<DurabilityController>(true);
+        }
+
+        if (_durability == null)
+        {
+            Debug.LogError(
+                $"{gameObject.name}에 " +
+                "DurabilityController가 없습니다."
+            );
+        }
     }
 
     public virtual void OnAttached(AttachmentSlot slot)

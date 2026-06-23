@@ -16,11 +16,12 @@ MonoBehaviour:
   _partsPrefab: {fileID: 6334753824334438413, guid: 7438ffa1bbad0ac4998448507f67c84c, type: 3}
   _requiredLoad: 0
   _partsImage: {fileID: 0}
+  _partsIcon: {fileID: 0}
   _maxDurability: 300
   _description: 
   _buyCost:
     Gear: 0
     Scrap: 0
-  _missilePrefab: {fileID: 0}
+  _missilePrefab: {fileID: 100002, guid: 4de20f85cb31bfd4fb166520c0be8beb, type: 3}
   _damage: 15
   _launchInterval: 0.15

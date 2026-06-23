@@ -886,6 +886,9 @@ public class CorePartsController : MonoBehaviour
             {
                 foreach (ILocomotionPart locomotionPart in _locomotionParts)
                 {
+                    if (!locomotionPart.IsOperational)
+                        continue;
+
                     locomotionPart.HandleLocomotion(
                         locomotionCommand,
                         Time.deltaTime
@@ -899,6 +902,9 @@ public class CorePartsController : MonoBehaviour
 
                 foreach (IBoosterPart boosterPart in _boosterParts)
                 {
+                    if (!boosterPart.IsOperational)
+                        continue;
+
                     boosterPart.HandleBooster(
                         boosterCommand,
                         Time.deltaTime
@@ -965,6 +971,9 @@ public class CorePartsController : MonoBehaviour
 
         foreach (IAttackPart attackPart in _attackParts)
         {
+            if (!attackPart.IsOperational)
+                continue;
+
             attackPart.HandleAttack(_inputHandler.IsFire);
         }
 
@@ -972,7 +981,10 @@ public class CorePartsController : MonoBehaviour
         {
             foreach (IAttackPart attackPart in _attackParts)
             {
-                attackPart.HandleReload(true);
+                if (!attackPart.IsOperational)
+                    continue;
+
+                attackPart.HandleAttack(_inputHandler.IsFire);
             }
 
             _inputHandler.ReloadTriggered = false;

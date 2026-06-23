@@ -13,6 +13,8 @@ public class StatusPanel : MonoBehaviour
 
     [SerializeField] private GameObject _durabilityRowPrefab;
 
+    [SerializeField] private Sprite _coreIcon;
+
     private List<GameObject> _rows = new List<GameObject>();
 
     private void OnEnable()
@@ -69,68 +71,83 @@ public class StatusPanel : MonoBehaviour
     /// </summary>
     private void RefreshDurabilitySection()
     {
-        if (_contentContainer == null || _durabilityRowPrefab == null) return;
-
-        foreach (var row in _rows)
+        if (_contentContainer == null ||
+            _durabilityRowPrefab == null)
         {
-            if (row != null) Destroy(row);
+            return;
         }
+
+        foreach (GameObject row in _rows)
+        {
+            if (row != null)
+                Destroy(row);
+        }
+
         _rows.Clear();
 
         GameObject playerRoot = GameObject.FindWithTag("Player");
-        if (playerRoot == null) return;
 
-        DurabilityController[] equippedParts = playerRoot.GetComponentsInChildren<DurabilityController>(true);
+        if (playerRoot == null)
+            return;
 
-        foreach (DurabilityController equippedPart in equippedParts)
+        DurabilityController[] equippedParts =
+            playerRoot.GetComponentsInChildren<DurabilityController>(true);
+
+        foreach (DurabilityController durability in equippedParts)
         {
-            GameObject durabilityRow = Instantiate(_durabilityRowPrefab, _contentContainer);
-            _rows.Add(durabilityRow);
+            if (durability == null)
+                continue;
 
-            durabilityRow.SetActive(true);
+            GameObject rowObject = Instantiate(
+                _durabilityRowPrefab,
+                _contentContainer);
 
-            TextMeshProUGUI partNameText = durabilityRow.transform.Find("PartName")?.GetComponent<TextMeshProUGUI>();
-            Image gaugeImage = durabilityRow.transform.Find("Slider/Gauge")?.GetComponent<Image>();
-            TextMeshProUGUI valueText = durabilityRow.transform.Find("DurabilityRatio")?.GetComponent<TextMeshProUGUI>();
+            _rows.Add(rowObject);
+            rowObject.SetActive(true);
 
-            if (partNameText != null)
+            DurabilityRowUI rowUI =
+                rowObject.GetComponent<DurabilityRowUI>();
+
+            if (rowUI == null)
             {
-                string rawName = equippedPart.gameObject.name;
-                string processedName = rawName;
+                Debug.LogWarning(
+                    $"[StatusPanel] {rowObject.name}에 " +
+                    "DurabilityRowUI가 없습니다.");
 
-                if (equippedPart.gameObject == playerRoot)
-                {
-                    processedName = "Core";
-                }
-                else if (rawName.StartsWith("Weapon_"))
-                {
-                    processedName = rawName.Replace("Weapon_", "");
-                }
-
-                if (processedName.Contains("(Clone)"))
-                {
-                    processedName = processedName.Replace("(Clone)", "").Trim();
-                }
-
-                partNameText.text = processedName;
+                continue;
             }
 
-            float current = equippedPart.CurrentDurability;
-            float max = equippedPart.MaxDurability;
+            bool isCore =
+                durability.DurabilityType == DurabilityType.Core;
 
-            if (valueText != null)
+            PartsData partData = durability.PartsData;
+
+            Sprite icon;
+            string partName;
+
+            if (isCore)
             {
-                valueText.text = $"{current} / {max}";
+                icon = _coreIcon;
+                partName = "Core";
+            }
+            else if (partData != null)
+            {
+                icon = partData.PartsIcon;
+                partName = partData.PartsName;
+            }
+            else
+            {
+                icon = null;
+                partName = durability.gameObject.name
+                    .Replace("(Clone)", "")
+                    .Trim();
             }
 
-            float ratio = Mathf.Clamp01(current / max);
-
-            if (gaugeImage != null)
-            {
-                gaugeImage.fillAmount = 0f;
-
-                gaugeImage.DOFillAmount(ratio, 0.3f).SetEase(Ease.OutCubic);
-            }
+            rowUI.Setup(
+                icon,
+                partName,
+                durability.CurrentDurability,
+                durability.MaxDurability);
         }
     }
 }
