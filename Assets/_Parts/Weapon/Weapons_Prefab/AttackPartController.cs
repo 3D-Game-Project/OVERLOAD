@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class AttackPartController : PartBehaviour, IAttackPart
+public class AttackPartController : PartBehaviour, IAttackPart, ITargetedAttackPart
 {
     [Header("Fire")]
     [SerializeField] private FireManager _fireManager;
@@ -63,18 +63,35 @@ public class AttackPartController : PartBehaviour, IAttackPart
 
     public void HandleAttack(bool isAttackPressed)
     {
+        if (!IsOperational)
+            return;
+
         if (!isAttackPressed)
             return;
 
-        if (_fireManager == null)
-            return;
+        //if (_fireManager == null)
+        //    return;
 
-        if (_attackData == null)
-            return;
+        //if (_attackData == null)
+        //    return;
 
         Vector3 targetPoint = GetTargetPoint();
 
         _fireManager.TryFire(targetPoint);
+    }
+
+    public bool TryFireAt(Vector3 targetPoint, bool consumeOverheat)
+    {
+        if (!IsOperational)
+            return false;
+
+        if (_fireManager == null)
+            return false;
+
+        if (_attackData == null)
+            return false;
+
+        return _fireManager.TryFire(targetPoint, null, consumeOverheat);
     }
 
     public void HandleReload(bool isReloadPressed)

@@ -40,6 +40,13 @@ public class WeaponGimbalController : MonoBehaviour
             return;
         }
 
+        if (aimProvider is IAimStateProvider stateProvider && !stateProvider.IsAiming)
+        {
+            ResetToDefault();
+            return;
+        }
+
+
         Vector3 targetWorldPoint = aimProvider.GetAimPoint();
 
         ExecuteGimbalRotation(targetWorldPoint);

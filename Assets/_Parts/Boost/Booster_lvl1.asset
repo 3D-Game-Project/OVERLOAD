@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42f49db9aa69f5a4c838e2be92e1ed3b, type: 3}
+  m_Name: Booster_lvl1
+  m_EditorClassIdentifier: Assembly-CSharp::BoosterPartsData
+  _partsName: 
+  _partsPrefab: {fileID: 100000, guid: c7452c041a8e6334ea1c86249c6fc4af, type: 3}
+  _requiredLoad: 0
+  _partsImage: {fileID: 0}
+  _partsIcon: {fileID: 21300000, guid: 9667604b8df457142b7954a0c3bee4d4, type: 3}
+  _maxDurability: 300
+  _description: 
+  _buyCost:
+    Gear: 0
+    Scrap: 0
+  _boosterFunction: 3
+  _jumpVelocity: 8
+  _jumpEnergyCost: 15
+  _dashSpeed: 12
+  _dashEnergyCostPerSec: 20
+  _flightVerticalAcceleration: 25
+  _flightHorizontalSpeed: 4
+  _flightEnergyCostPerSec: 20
+  _glideFallSpeedLimit: -3
+  _glideEnergyCostPerSec: 5

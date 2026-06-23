@@ -5,6 +5,7 @@ public class BossAI : MonoBehaviour
 {
     [Header("컴포넌트 연결")]
     [SerializeField] private Transform _player;
+    [SerializeField] private BossPatternController _patternController;
 
     private BossMovementController _movementController;
     private DurabilityController _durability;
@@ -26,6 +27,9 @@ public class BossAI : MonoBehaviour
     {
         _movementController = GetComponent<BossMovementController>();
         _durability = GetComponent<DurabilityController>();
+
+        if (_patternController == null)
+            _patternController = GetComponent<BossPatternController>();
     }
 
     private void Start()
@@ -50,6 +54,8 @@ public class BossAI : MonoBehaviour
             if (_player == null)
             {
                 _player = GameObject.FindWithTag("Player")?.transform;
+
+                yield return null;
                 continue;
             }
 
@@ -121,7 +127,7 @@ public class BossAI : MonoBehaviour
                 if (Random.Range(0, 2) == 0)
                 {
                     patternResult = "무빙 사격 (거리 10~20)";
-                    selectedPattern = AllOutAttackPattern();
+                    selectedPattern = GunAttackPattern();
                 }
                 else
                 {
@@ -180,30 +186,103 @@ public class BossAI : MonoBehaviour
     }
 
     // 후퇴하며 사격 (20f까지 뒤로 빠지기)
+    //private IEnumerator RetreatPattern()
+    //{
+    //    // 여기서 사격 처리(애니메이션, 발사로직 등)
+
+    //    float timer = 0f;
+    //    while (timer < _retreatDuration)
+    //    {
+    //        if (_player != null && _movementController != null)
+    //        {
+    //            Vector3 retreatDir = (transform.position - _player.position).normalized;
+    //            retreatDir.y = 0f;
+    //            _movementController.MoveToTarget(transform.position + retreatDir * 5f);
+    //            _movementController.LookAtTarget(_player.position);
+    //            // 사격 호출
+    //        }
+
+    //        float currentDist = Vector3.Distance(transform.position, _player.position);
+    //        if (currentDist >= _approachRange) break;
+
+    //        timer += Time.deltaTime;
+    //        yield return null;
+    //    }
+
+    //    if (_movementController != null) _movementController.StopMovement();
+    //}
+
     private IEnumerator RetreatPattern()
     {
-        // 여기서 사격 처리(애니메이션, 발사로직 등)
+        if (_patternController == null ||
+            _movementController == null ||
+            _player == null)
+        {
+            yield break;
+        }
+
+        if (!_patternController.CanExecuteAttack(
+                BossAttackPatternType.Gun,
+                _player))
+        {
+            Debug.Log(
+                "[BossAI] 후퇴 사격 사용 불가: " +
+                "작동 가능한 총기가 없습니다."
+            );
+
+            yield break;
+        }
+
+        Coroutine gunRoutine = StartCoroutine(
+            _patternController.ExecuteAttackPattern(
+                BossAttackPatternType.Gun,
+                _player
+            )
+        );
 
         float timer = 0f;
+
         while (timer < _retreatDuration)
         {
-            if (_player != null && _movementController != null)
-            {
-                Vector3 retreatDir = (transform.position - _player.position).normalized;
-                retreatDir.y = 0f;
-                _movementController.MoveToTarget(transform.position + retreatDir * 5f);
-                _movementController.LookAtTarget(_player.position);
-                // 사격 호출
-            }
+            if (_player == null)
+                break;
 
-            float currentDist = Vector3.Distance(transform.position, _player.position);
-            if (currentDist >= _approachRange) break;
+            Vector3 retreatDirection =
+                transform.position - _player.position;
+
+            retreatDirection.y = 0f;
+
+            if (retreatDirection.sqrMagnitude > 0.001f)
+                retreatDirection.Normalize();
+
+            // 이동은 플레이어 반대 방향
+            Vector3 destination =
+                transform.position +
+                retreatDirection * 5f;
+
+            _movementController.MoveToTarget(destination);
+
+            // 기체는 플레이어를 바라봄
+            _movementController.LookAtTarget(
+                _player.position
+            );
+
+            float currentDistance = Vector3.Distance(
+                transform.position,
+                _player.position
+            );
+
+            if (currentDistance >= _approachRange)
+                break;
 
             timer += Time.deltaTime;
             yield return null;
         }
 
-        if (_movementController != null) _movementController.StopMovement();
+        _movementController.StopMovement();
+        _movementController.ClearLookTarget();
+
+        yield return gunRoutine;
     }
 
     // 원거리 범위/유도 공격
@@ -238,95 +317,230 @@ public class BossAI : MonoBehaviour
         }
     }
 
-    // [패턴] 총 공격 (무빙 사격)
-    private IEnumerator AllOutAttackPattern()
+    //// [패턴] 총 공격 (무빙 사격)
+    //private IEnumerator AllOutAttackPattern()
+    //{
+    //    float timer = 0f;
+
+    //    Vector3 lastPlayerPos = _player != null ? _player.position : transform.position;
+
+    //    while (timer < _allOutAttackDuration)
+    //    {
+    //        if (_player != null && _movementController != null)
+    //        {
+    //            _movementController.LookAtTarget(_player.position);
+
+    //            Vector3 playerMoveDelta = _player.position - lastPlayerPos;
+    //            playerMoveDelta.y = 0f; 
+
+    //            if (playerMoveDelta.sqrMagnitude > 0.001f)
+    //            {
+    //                float dot = Vector3.Dot(playerMoveDelta.normalized, transform.right);
+
+    //                Vector3 strafeDir = Vector3.zero;
+
+    //                if (dot > 0.1f)
+    //                {
+    //                    strafeDir = transform.right;
+    //                }
+    //                else if (dot < -0.1f)
+    //                {
+    //                    strafeDir = -transform.right;
+    //                }
+
+    //                if (strafeDir != Vector3.zero)
+    //                {
+    //                    _movementController.MoveToTarget(transform.position + strafeDir * 5f);
+    //                }
+    //            }
+    //            else
+    //            {
+    //                _movementController.StopMovement();
+    //            }
+
+    //            lastPlayerPos = _player.position;
+
+    //            // TODO: 공격 호출
+    //        }
+
+    //        timer += Time.deltaTime;
+    //        yield return null;
+    //    }
+
+    //    if (_movementController != null) _movementController.StopMovement();
+    //}
+
+    private IEnumerator GunAttackPattern()
     {
+        if (_patternController == null ||
+            _player == null)
+        {
+            yield break;
+        }
+
+        if (!_patternController.CanExecuteAttack(
+                BossAttackPatternType.Gun,
+                _player))
+        {
+            Debug.Log(
+                "[BossAI] 총기 공격 사용 불가: " +
+                "작동 가능한 총기가 없습니다."
+            );
+
+            yield break;
+        }
+
+        // 총기 패턴을 별도 코루틴으로 시작한다.
+        Coroutine gunRoutine = StartCoroutine(
+            _patternController.ExecuteAttackPattern(
+                BossAttackPatternType.Gun,
+                _player
+            )
+        );
+
         float timer = 0f;
+        Vector3 lastPlayerPosition = _player.position;
 
-        Vector3 lastPlayerPos = _player != null ? _player.position : transform.position;
-
+        // 총기 공격과 동시에 이동한다.
         while (timer < _allOutAttackDuration)
         {
-            if (_player != null && _movementController != null)
+            if (_player == null)
+                break;
+
+            _movementController.LookAtTarget(
+                _player.position
+            );
+
+            Vector3 playerMoveDelta =
+                _player.position - lastPlayerPosition;
+
+            playerMoveDelta.y = 0f;
+
+            if (playerMoveDelta.sqrMagnitude > 0.001f)
             {
-                _movementController.LookAtTarget(_player.position);
+                float dot = Vector3.Dot(
+                    playerMoveDelta.normalized,
+                    transform.right
+                );
 
-                Vector3 playerMoveDelta = _player.position - lastPlayerPos;
-                playerMoveDelta.y = 0f; 
+                Vector3 strafeDirection =
+                    dot >= 0f
+                        ? transform.right
+                        : -transform.right;
 
-                if (playerMoveDelta.sqrMagnitude > 0.001f)
-                {
-                    float dot = Vector3.Dot(playerMoveDelta.normalized, transform.right);
+                Vector3 destination =
+                    transform.position +
+                    strafeDirection * 5f;
 
-                    Vector3 strafeDir = Vector3.zero;
-
-                    if (dot > 0.1f)
-                    {
-                        strafeDir = transform.right;
-                    }
-                    else if (dot < -0.1f)
-                    {
-                        strafeDir = -transform.right;
-                    }
-
-                    if (strafeDir != Vector3.zero)
-                    {
-                        _movementController.MoveToTarget(transform.position + strafeDir * 5f);
-                    }
-                }
-                else
-                {
-                    _movementController.StopMovement();
-                }
-
-                lastPlayerPos = _player.position;
-
-                // TODO: 공격 호출
+                _movementController.MoveToTarget(
+                    destination
+                );
             }
+            else
+            {
+                _movementController.StopMovement();
+            }
+
+            lastPlayerPosition = _player.position;
 
             timer += Time.deltaTime;
             yield return null;
         }
 
-        if (_movementController != null) _movementController.StopMovement();
+        _movementController.StopMovement();
+        _movementController.ClearLookTarget();
+
+        // 총기 공격이 아직 끝나지 않았다면 기다린다.
+        yield return gunRoutine;
     }
 
     // 돌진
+    //private IEnumerator DashPattern()
+    //{
+    //    float timer = 0f;
+    //    // _movementController.SetSpeed()로 돌진 속도 증가
+
+    //    while (timer < _dashDuration)
+    //    {
+    //        if (_player != null && _movementController != null)
+    //        {
+    //            _movementController.LookAtTarget(_player.position); 
+
+    //            // 돌진 처리
+
+    //        }
+    //        timer += Time.deltaTime;
+    //        yield return null;
+    //    }
+
+    //    // _movementController.ResetSpeed()로 속도 복구
+    //    if (_movementController != null) _movementController.StopMovement();
+    //}
+
     private IEnumerator DashPattern()
     {
-        float timer = 0f;
-        // _movementController.SetSpeed()로 돌진 속도 증가
-
-        while (timer < _dashDuration)
+        if (_patternController == null ||
+            _player == null)
         {
-            if (_player != null && _movementController != null)
-            {
-                _movementController.LookAtTarget(_player.position); 
-
-                // 돌진 처리
-
-            }
-            timer += Time.deltaTime;
-            yield return null;
+            yield break;
         }
 
-        // _movementController.ResetSpeed()로 속도 복구
-        if (_movementController != null) _movementController.StopMovement();
+        if (!_patternController.CanExecuteAttack(
+                BossAttackPatternType.Charge,
+                _player))
+        {
+            Debug.Log(
+                "[BossAI] 돌진 사용 불가: " +
+                "작동 가능한 부스터가 없습니다."
+            );
+
+            yield break;
+        }
+
+        yield return _patternController.ExecuteAttackPattern(
+            BossAttackPatternType.Charge,
+            _player
+        );
     }
 
     // 충격파 패턴
+    //private IEnumerator ShockwavePattern()
+    //{
+    //    float timer = 0f;
+    //    while (timer < _shockwaveDuration)
+    //    {
+    //        if (_player != null)
+    //        {
+    //            if (_movementController != null) _movementController.LookAtTarget(_player.position);
+    //            // TODO: 충격파 공격
+    //        }
+    //        timer += Time.deltaTime;
+    //        yield return null;
+    //    }
+    //}
+
     private IEnumerator ShockwavePattern()
     {
-        float timer = 0f;
-        while (timer < _shockwaveDuration)
+        if (_patternController == null ||
+            _player == null)
         {
-            if (_player != null)
-            {
-                if (_movementController != null) _movementController.LookAtTarget(_player.position);
-                // TODO: 충격파 공격
-            }
-            timer += Time.deltaTime;
-            yield return null;
+            yield break;
         }
+
+        if (!_patternController.CanExecuteAttack(
+                BossAttackPatternType.Shockwave,
+                _player))
+        {
+            Debug.Log(
+                "[BossAI] 충격파 사용 범위가 아닙니다."
+            );
+
+            yield break;
+        }
+
+        yield return _patternController.ExecuteAttackPattern(
+            BossAttackPatternType.Shockwave,
+            _player
+        );
     }
 }

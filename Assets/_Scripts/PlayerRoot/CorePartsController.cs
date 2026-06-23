@@ -56,10 +56,10 @@ public class CorePartsController : MonoBehaviour
     // 개별 인벤토리 파츠 기준 장착 추적.
     private readonly Dictionary<InventoryPartItem, AttachmentSlot> _equippedSlotByPartItem = new();
 
-    public bool HasLocomotionPart => _locomotionParts.Count > 0;
-    public bool HasBoosterPart => _boosterParts.Count > 0;
-    public bool HasAttackPart => _attackParts.Count > 0;
-    public bool HasAnyPart => _allParts.Count > 0;
+    public bool HasLocomotionPart => HasOperationalPart<ILocomotionPart>();
+    public bool HasBoosterPart => HasOperationalPart<IBoosterPart>();
+    public bool HasAttackPart => HasOperationalPart<IAttackPart>();
+    public bool HasAnyPart => HasOperationalPart<IPart>();
 
     private void Awake()
     {
@@ -886,6 +886,9 @@ public class CorePartsController : MonoBehaviour
             {
                 foreach (ILocomotionPart locomotionPart in _locomotionParts)
                 {
+                    if (!locomotionPart.IsOperational)
+                        continue;
+
                     locomotionPart.HandleLocomotion(
                         locomotionCommand,
                         Time.deltaTime
@@ -899,6 +902,9 @@ public class CorePartsController : MonoBehaviour
 
                 foreach (IBoosterPart boosterPart in _boosterParts)
                 {
+                    if (!boosterPart.IsOperational)
+                        continue;
+
                     boosterPart.HandleBooster(
                         boosterCommand,
                         Time.deltaTime
@@ -965,6 +971,9 @@ public class CorePartsController : MonoBehaviour
 
         foreach (IAttackPart attackPart in _attackParts)
         {
+            if (!attackPart.IsOperational)
+                continue;
+
             attackPart.HandleAttack(_inputHandler.IsFire);
         }
 
@@ -972,7 +981,10 @@ public class CorePartsController : MonoBehaviour
         {
             foreach (IAttackPart attackPart in _attackParts)
             {
-                attackPart.HandleReload(true);
+                if (!attackPart.IsOperational)
+                    continue;
+
+                attackPart.HandleAttack(_inputHandler.IsFire);
             }
 
             _inputHandler.ReloadTriggered = false;
@@ -1035,5 +1047,47 @@ public class CorePartsController : MonoBehaviour
             scale.x = Mathf.Abs(scale.x);
 
         mirrorTarget.transform.localScale = scale;
+    }
+
+    public bool HasOperationalPart<T>() where T : class, IPart
+    {
+        foreach (IPart part in _allParts)
+        {
+            if (part is MonoBehaviour behaviour &&
+                behaviour == null)
+            {
+                continue;
+            }
+
+            if (part is T typedPart &&
+                typedPart.IsOperational)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public List<T> GetOperationalParts<T>() where T : class, IPart
+    {
+        List<T> result = new();
+
+        foreach (IPart part in _allParts)
+        {
+            if (part is MonoBehaviour behaviour &&
+                behaviour == null)
+            {
+                continue;
+            }
+
+            if (part is T typedPart &&
+                typedPart.IsOperational)
+            {
+                result.Add(typedPart);
+            }
+        }
+
+        return result;
     }
 }

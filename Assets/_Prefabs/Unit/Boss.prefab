@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &636087302440259974
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8552123390021556230}
+  m_Layer: 7
+  m_Name: BossShockwaveOrigin
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8552123390021556230
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 636087302440259974}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2974896939227849988}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &697662580967117744
 GameObject:
   m_ObjectHideFlags: 0
@@ -96,6 +127,68 @@ MonoBehaviour:
   _allowedPartsTypes: 02000000040000000000000003000000
   _mirrorVisualX: 0
   _attachPoint: {fileID: 0}
+--- !u!1 &1001518148474871833
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7197367076833831298}
+  m_Layer: 7
+  m_Name: BossChargeOrigin
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7197367076833831298
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1001518148474871833}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -1, z: 2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2974896939227849988}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1242408190673134406
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1695488228509881759}
+  m_Layer: 7
+  m_Name: BossAimOrigin
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1695488228509881759
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1242408190673134406}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 9193597355506574384}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1412470191303679564
 GameObject:
   m_ObjectHideFlags: 0
@@ -245,12 +338,61 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7367102000369758102}
+  - {fileID: 8369759194153366475}
   - {fileID: 2283048495190299992}
   - {fileID: 3908468349415598516}
   - {fileID: 7525643382725744499}
   - {fileID: 2558266142894896767}
   m_Father: {fileID: 9193597355506574384}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &3530846425261506499
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8369759194153366475}
+  - component: {fileID: 6238455024923167164}
+  m_Layer: 7
+  m_Name: Mount_HomingMissile
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8369759194153366475
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3530846425261506499}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.711221, z: -0.443058}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2346897606824897526}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6238455024923167164
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3530846425261506499}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0101ac9f847ef564bbb2d901cd21d304, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AttachmentSlot
+  _slotId: 
+  _allowedPartsTypes: 02000000040000000000000003000000
+  _mirrorVisualX: 0
+  _attachPoint: {fileID: 0}
 --- !u!1 &3550193287022333992
 GameObject:
   m_ObjectHideFlags: 0
@@ -318,7 +460,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &8479844155586907037
 RectTransform:
   m_ObjectHideFlags: 0
@@ -645,10 +787,17 @@ GameObject:
   - component: {fileID: 7065049905996459357}
   - component: {fileID: 2520600512865832682}
   - component: {fileID: 5533905722739377326}
-  - component: {fileID: 3253978195402184444}
   - component: {fileID: 5512166293504854187}
   - component: {fileID: 3753686600309284937}
   - component: {fileID: 895686393185249137}
+  - component: {fileID: 4519246669561015794}
+  - component: {fileID: 8784402079574840111}
+  - component: {fileID: 6652644905612055174}
+  - component: {fileID: 4827195167285556638}
+  - component: {fileID: 2644021232442108376}
+  - component: {fileID: 686557033273232310}
+  - component: {fileID: 8000017475965422333}
+  - component: {fileID: 3197601243126901006}
   m_Layer: 7
   m_Name: Boss
   m_TagString: Enemy
@@ -671,6 +820,8 @@ Transform:
   m_Children:
   - {fileID: 8479844155586907037}
   - {fileID: 4451067202786788363}
+  - {fileID: 8552123390021556230}
+  - {fileID: 7197367076833831298}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!143 &6082074957988303154
@@ -808,6 +959,10 @@ MonoBehaviour:
     slot: {fileID: 2842997009782292065}
   - partsData: {fileID: 11400000, guid: eb1a254bec5fb6f4d81d6f755dc315d7, type: 2}
     slot: {fileID: 1190623783346233014}
+  - partsData: {fileID: 11400000, guid: 4a1faaf5e6d2ab548b68c15de821b943, type: 2}
+    slot: {fileID: 509493609612648197}
+  - partsData: {fileID: 11400000, guid: c34bbd08d81a797459026c163281892f, type: 2}
+    slot: {fileID: 6238455024923167164}
   _attachmentSlots: []
   _coreLoadController: {fileID: 7065049905996459357}
   _coreEnergyController: {fileID: 8243505242050902605}
@@ -873,23 +1028,6 @@ MonoBehaviour:
   _currentEnergy: 0
   _energyRecoveryRate: 80
   _recoveryDelay: 1.5
---- !u!114 &3253978195402184444
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8152066459892416290}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c4de84f8f117bf148aea39cdbb9547ef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyLocomotionMotor
-  _characterController: {fileID: 6082074957988303154}
-  _agent: {fileID: 0}
-  _gravity: -20
-  _groundedForce: -2
-  _maxFallSpeed: -25
 --- !u!114 &5512166293504854187
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -903,6 +1041,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BossAI
   _player: {fileID: 0}
+  _patternController: {fileID: 0}
   _approachRange: 20
   _closeRange: 10
   _approachMaxDuration: 3
@@ -941,6 +1080,250 @@ MonoBehaviour:
   _gravity: -20
   _groundedForce: -2
   _maxFallSpeed: -25
+--- !u!114 &4519246669561015794
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8152066459892416290}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2f2083aeb4cb30498032e6af2c4d1ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BossPatternController
+  _attackPatterns: []
+--- !u!120 &8784402079574840111
+LineRenderer:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8152066459892416290}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 0
+  m_LightProbeUsage: 0
+  m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_Positions:
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 1}
+  m_Parameters:
+    serializedVersion: 3
+    widthMultiplier: 1
+    widthCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    colorGradient:
+      serializedVersion: 2
+      key0: {r: 1, g: 1, b: 1, a: 1}
+      key1: {r: 1, g: 1, b: 1, a: 1}
+      key2: {r: 0, g: 0, b: 0, a: 0}
+      key3: {r: 0, g: 0, b: 0, a: 0}
+      key4: {r: 0, g: 0, b: 0, a: 0}
+      key5: {r: 0, g: 0, b: 0, a: 0}
+      key6: {r: 0, g: 0, b: 0, a: 0}
+      key7: {r: 0, g: 0, b: 0, a: 0}
+      ctime0: 0
+      ctime1: 65535
+      ctime2: 0
+      ctime3: 0
+      ctime4: 0
+      ctime5: 0
+      ctime6: 0
+      ctime7: 0
+      atime0: 0
+      atime1: 65535
+      atime2: 0
+      atime3: 0
+      atime4: 0
+      atime5: 0
+      atime6: 0
+      atime7: 0
+      m_Mode: 0
+      m_ColorSpace: -1
+      m_NumColorKeys: 2
+      m_NumAlphaKeys: 2
+    numCornerVertices: 0
+    numCapVertices: 0
+    alignment: 0
+    textureMode: 0
+    textureScale: {x: 1, y: 1}
+    shadowBias: 0.5
+    generateLightingData: 0
+  m_UseWorldSpace: 1
+  m_Loop: 0
+  m_ApplyActiveColorSpace: 1
+--- !u!114 &6652644905612055174
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8152066459892416290}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01a7c95fa3a8ea6468fc558de563d6aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BossAimController
+  _aimOrigin: {fileID: 1695488228509881759}
+  _coreYawRoot: {fileID: 9193597355506574384}
+  _trackingSpeed: 60
+  _aimDistance: 100
+  _targetOffset: {x: 0, y: 0, z: 0}
+  _coreForwardYawOffset: 0
+  _lineHitMask:
+    serializedVersion: 2
+    m_Bits: 0
+--- !u!114 &4827195167285556638
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8152066459892416290}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24f42a54b10288d45b1bee2e431dc2b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BossGunAttackPattern
+  _corePartsController: {fileID: 3712040216336745735}
+  _aimController: {fileID: 6652644905612055174}
+  _aimDuration: 1.5
+  _fireDuration: 3
+  _recoveryDuration: 0.75
+--- !u!114 &2644021232442108376
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8152066459892416290}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d3100effa9d7214585afef5fef84138, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BossShockwavePattern
+  _shockwaveOrigin: {fileID: 8552123390021556230}
+  _movementController: {fileID: 3753686600309284937}
+  _chargeDuration: 1.5
+  _recoveryDuration: 1
+  _activationRange: 6
+  _damageRadius: 8
+  _damage: 30
+  _targetLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  _chargeEffect: {fileID: 0}
+  _releaseEffect: {fileID: 0}
+--- !u!114 &686557033273232310
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8152066459892416290}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 932d7b2a320187e4cbb8f20261c3a041, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BossChargePattern
+  _corePartsController: {fileID: 3712040216336745735}
+  _movementController: {fileID: 3753686600309284937}
+  _chargeOrigin: {fileID: 7197367076833831298}
+  _aimDuration: 1.2
+  _chargeSpeed: 20
+  _chargeDuration: 1.2
+  _hitRadius: 5
+  _damage: 40
+  _targetLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  _recoveryDuration: 1
+--- !u!114 &8000017475965422333
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8152066459892416290}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ddbfe24f2db91d43a40f583d39d99f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BossHomingMissilePattern
+  _corePartsController: {fileID: 3712040216336745735}
+  _prepareDuration: 0.7
+  _volleyCount: 3
+  _volleyInterval: 0.5
+  _recoveryDuration: 1
+  _targetLayer:
+    serializedVersion: 2
+    m_Bits: 64
+--- !u!114 &3197601243126901006
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8152066459892416290}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bd6cee6bd2028447be368e562cb4c04, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BossPatternDebugTester
+  _patternController: {fileID: 4519246669561015794}
+  _aimController: {fileID: 6652644905612055174}
+  _target: {fileID: 0}
 --- !u!1 &8213577477162688194
 GameObject:
   m_ObjectHideFlags: 0
@@ -1045,6 +1428,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1695488228509881759}
   - {fileID: 2346897606824897526}
   - {fileID: 7255762801483906578}
   m_Father: {fileID: 4451067202786788363}

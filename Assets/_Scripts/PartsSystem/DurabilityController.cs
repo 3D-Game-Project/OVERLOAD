@@ -23,7 +23,7 @@ public class DurabilityController : MonoBehaviour
     private InventoryPartItem _linkedPartItem;
 
     public float CurrentDurability => _currentDurability;
-    public bool IsDestroyed => _isDestroyed;
+    public bool IsDestroyed => _isDestroyed || _currentDurability <= 0f;
     public Transform ParticlePos => _particlePos != null ? _particlePos : transform;
     public DurabilityType DurabilityType => _durabilityType;
     public PartsData PartsData => _partsData;
@@ -151,6 +151,8 @@ public class DurabilityController : MonoBehaviour
         {
             _currentDurability = _maxDurability;
         }
+
+        _isDestroyed = _currentDurability <= 0f;
     }
 
 

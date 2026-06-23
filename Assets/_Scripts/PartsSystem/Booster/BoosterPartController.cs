@@ -42,6 +42,9 @@ public class BoosterPartController : PartBehaviour, IBoosterPart
 
     public void HandleBooster(BoosterCommand command, float deltaTime)
     {
+        if (!IsOperational)
+            return;
+
         if (!IsInitialized())
             return;
 

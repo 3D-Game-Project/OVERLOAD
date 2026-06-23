@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e29c905744c8acb4b8991a8175c732aa, type: 3}
   m_Name: Tracks0
   m_EditorClassIdentifier: Assembly-CSharp::LegPartsData
-  _partsName: Tracks0
+  _partsName: 'Tracks [lvl.0]'
   _partsPrefab: {fileID: 100022, guid: 9d08c28920097aa4cbe17ed78584ff5e, type: 3}
   _requiredLoad: 0
-  _partsImage: {fileID: 0}
+  _partsImage: {fileID: 782451917, guid: 90c7d3cbce0c87342ad4e169693f8974, type: 3}
+  _partsIcon: {fileID: 21300000, guid: a994c4533bff1e249ab03866670c4682, type: 3}
   _maxDurability: 200
   _description: 
   _buyCost:

@@ -16,9 +16,12 @@ MonoBehaviour:
   _partsPrefab: {fileID: 100000, guid: 6d7b1abb1830156429bca819127ed590, type: 3}
   _requiredLoad: 0
   _partsImage: {fileID: 1470559847, guid: 90c7d3cbce0c87342ad4e169693f8974, type: 3}
+  _partsIcon: {fileID: 21300000, guid: 0acf504dc096ccf4daef5b5b80c3b1cc, type: 3}
   _maxDurability: 200
-  _price: 50
   _description: 
+  _buyCost:
+    Gear: 0
+    Scrap: 0
   _fireType: 1
   _weaponType: 3
   _damage: 40

@@ -87,6 +87,7 @@ GameObject:
   - component: {fileID: 1825658792562968015}
   - component: {fileID: 164965893086564863}
   - component: {fileID: 4389444115040649904}
+  - component: {fileID: 7968011571901634971}
   m_Layer: 5
   m_Name: DurabilityRow
   m_TagString: Untagged
@@ -180,6 +181,22 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &7968011571901634971
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1015155547567495020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d42b124bae36ef48be1315acbc07a81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DurabilityRowUI
+  _partIcon: {fileID: 5871099953490397429}
+  _partNameText: {fileID: 4477378379037985055}
+  _gaugeImage: {fileID: 244501910654778405}
+  _durabilityRatioText: {fileID: 198400293210230461}
 --- !u!1 &1184399673317460657
 GameObject:
   m_ObjectHideFlags: 0

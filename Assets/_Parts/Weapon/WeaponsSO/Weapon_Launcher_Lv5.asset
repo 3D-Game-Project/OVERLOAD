@@ -12,13 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1b1fcedf4d30334f861d12febf4455f, type: 3}
   m_Name: Weapon_Launcher_Lv5
   m_EditorClassIdentifier: Assembly-CSharp::AttackPartsData
-  _partsName: Launcher_Lv5
+  _partsName: 'GLauncher [lvl.3]'
   _partsPrefab: {fileID: 100000, guid: 2ba7bc8aecc63ed4e93956ed01a6ab6f, type: 3}
   _requiredLoad: 0
   _partsImage: {fileID: 137958651, guid: 90c7d3cbce0c87342ad4e169693f8974, type: 3}
+  _partsIcon: {fileID: 21300000, guid: 2ecbbc1db90ca59438259c9bf1ff4f8a, type: 3}
   _maxDurability: 300
-  _price: 100
   _description: 
+  _buyCost:
+    Gear: 0
+    Scrap: 0
   _fireType: 0
   _weaponType: 1
   _damage: 90

@@ -16,13 +16,14 @@ MonoBehaviour:
   _partsPrefab: {fileID: 100030, guid: 9ef36d7143f95ff4081b83c153ac032e, type: 3}
   _requiredLoad: 0
   _partsImage: {fileID: 782451917, guid: 90c7d3cbce0c87342ad4e169693f8974, type: 3}
+  _partsIcon: {fileID: 21300000, guid: 7eef8b171391dda45ab9bb91a7756384, type: 3}
   _maxDurability: 400
   _description: 
   _buyCost:
-    Gear: 0
-    Scrap: 0
+    Gear: 20
+    Scrap: 100
   _legTypeProfile: {fileID: 11400000, guid: b50dd01f13ca5c44281f0812ed009875, type: 2}
-  _moveSpeed: 10
+  _moveSpeed: 5
   _acceleration: 20
   _decceleration: 12
   _dashEnergyCost: 0
