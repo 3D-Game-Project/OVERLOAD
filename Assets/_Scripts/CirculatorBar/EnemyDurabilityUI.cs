@@ -1,8 +1,8 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 
-public class CoreDurabilityUI : MonoBehaviour
+public class EnemyDurabilityUI : MonoBehaviour
 {
     [SerializeField] private DurabilityController _targetCore;
     [SerializeField] private GameObject _uiRoot; 
@@ -16,11 +16,15 @@ public class CoreDurabilityUI : MonoBehaviour
     private Tween _blinkTween;
     private bool _isFirstUpdate = true;
 
+    private Camera _mainCamera;
+
     private void OnEnable()
     {
         _isFirstUpdate = true;
         if (_targetCore != null) _targetCore.OnDurabilityChanged += UpdateGauge;
         if (_fillImage != null) _fillImage.color = _normalColor;
+
+        //if (_uiRoot != null) _uiRoot.SetActive(false);
     }
 
     private void OnDisable()
@@ -30,11 +34,13 @@ public class CoreDurabilityUI : MonoBehaviour
         _blinkTween?.Kill();
     }
 
+    
+
     private void UpdateGauge(float currentDurability, float maxDurability)
     {
         if (_fillImage == null) return;
 
-        if (_isFirstUpdate && currentDurability > 0f)
+        if (_isFirstUpdate && currentDurability < maxDurability)
         {
             if (_uiRoot != null) _uiRoot.SetActive(true);
             _isFirstUpdate = false;
@@ -49,7 +55,7 @@ public class CoreDurabilityUI : MonoBehaviour
         {
             _blinkTween?.Kill();
             _blinkTween = null;
-            //if (_uiRoot != null) _uiRoot.SetActive(false);
+            if (_uiRoot != null) _uiRoot.SetActive(false);
             return;
         }
 

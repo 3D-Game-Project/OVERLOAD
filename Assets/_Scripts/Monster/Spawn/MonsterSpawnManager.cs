@@ -9,10 +9,10 @@ public class MonsterSpawnManager : MonoBehaviour
 
     [Header("스폰 설정")]
     [SerializeField] private Transform _player;
-    [SerializeField] private int _maxAliveMonsters = 2; 
-    [SerializeField] private float _spawnDistance = 50f; 
-    [SerializeField] private float _despawnDistance = 70f;
-    [SerializeField] private float _pointCooldownTime = 60f;
+    [SerializeField] private int _maxAliveMonsters = 5;       
+    [SerializeField] private float _spawnDistance = 100f;     
+    [SerializeField] private float _despawnDistance = 150f;   
+    [SerializeField] private float _pointCooldownTime = 30f;  
     [SerializeField] private float _respawnDelayAfterDeath = 10f;
 
     private float _lastDeathTime = -999f;
@@ -23,7 +23,7 @@ public class MonsterSpawnManager : MonoBehaviour
     private List<MonsterSpawnPoint> _spawnPoints = new List<MonsterSpawnPoint>();
     private List<MonsterLifecycle> _aliveMonsters = new List<MonsterLifecycle>();
 
-    // 오브젝트 풀 (프리팹 인덱스별로 큐를 관리)
+
     private Dictionary<int, Queue<MonsterLifecycle>> _monsterPool = new Dictionary<int, Queue<MonsterLifecycle>>();
     private Dictionary<MonsterSpawnPoint, float> _pointCooldowns = new Dictionary<MonsterSpawnPoint, float>();
 
@@ -66,14 +66,12 @@ public class MonsterSpawnManager : MonoBehaviour
     public void RegisterSpawnPoint(MonsterSpawnPoint point) => _spawnPoints.Add(point);
     public void UnregisterSpawnPoint(MonsterSpawnPoint point) => _spawnPoints.Remove(point);
 
-    // 풀링 생성.
-    // 같은 종류를 2마리씩 생성
     private void InitializePool()
     {
         for (int i = 0; i < _monsterPrefabs.Count; i++)
         {
             _monsterPool[i] = new Queue<MonsterLifecycle>();
-            for (int j = 0; j < _maxAliveMonsters; j++)
+            for (int j = 0; j < _maxAliveMonsters + 2; j++)
             {
                 GameObject obj = Instantiate(_monsterPrefabs[i], transform);
                 obj.SetActive(false);
@@ -87,8 +85,6 @@ public class MonsterSpawnManager : MonoBehaviour
         }
     }
 
-    // 디스폰.
-    // 70f 이상 멀어지면 Pool로 반환
     private void HandleDespawn()
     {
         for (int i = _aliveMonsters.Count - 1; i >= 0; i--)
@@ -96,7 +92,7 @@ public class MonsterSpawnManager : MonoBehaviour
             MonsterLifecycle monster = _aliveMonsters[i];
             if (Vector3.Distance(_player.position, monster.transform.position) > _despawnDistance)
             {
-                Debug.Log($"[🔵 디스폰 작동] 몬스터가 플레이어와 너무 멉니다. 풀로 반환합니다.");
+                Debug.Log($"[🔵 디스폰 작동] 몬스터가 플레이어와 150 이상 멀어졌습니다. 풀로 반환합니다.");
                 ReturnToPool(monster);
             }
         }
@@ -104,15 +100,15 @@ public class MonsterSpawnManager : MonoBehaviour
 
     private void CheckSpawnCondition()
     {
-        if (_aliveMonsters.Count >= _maxAliveMonsters) return;
+        if (_aliveMonsters.Count >= _maxAliveMonsters) return; 
         if (_spawnPoints.Count == 0) return;
 
         if (Time.time - _lastDeathTime < _respawnDelayAfterDeath) return;
 
         List<MonsterSpawnPoint> validPoints = _spawnPoints
-            .Where(p => Vector3.Distance(_player.position, p.transform.position) <= _spawnDistance)
-            .Where(p => !_pointCooldowns.ContainsKey(p) || Time.time - _pointCooldowns[p] >= _pointCooldownTime)
-            .OrderBy(p => Vector3.Distance(_player.position, p.transform.position))
+            .Where(p => Vector3.Distance(_player.position, p.transform.position) <= _spawnDistance) 
+            .Where(p => !_pointCooldowns.ContainsKey(p) || Time.time - _pointCooldowns[p] >= _pointCooldownTime) 
+            .OrderBy(p => Vector3.Distance(_player.position, p.transform.position)) 
             .ToList();
 
         if (validPoints.Count == 0) return;
@@ -127,20 +123,38 @@ public class MonsterSpawnManager : MonoBehaviour
     {
         int targetIndex = GetMonsterPrefabIndex();
 
-        if (_monsterPool[targetIndex].Count > 0)
+        if (_monsterPool.TryGetValue(targetIndex, out Queue<MonsterLifecycle> pool) && pool.Count > 0)
         {
-            MonsterLifecycle monster = _monsterPool[targetIndex].Dequeue();
+            MonsterLifecycle monster = pool.Dequeue();
             _aliveMonsters.Add(monster);
 
-            Vector3 basePos = point.transform.position - (point.transform.forward * 3f);
+            Renderer[] renderers = monster.GetComponentsInChildren<Renderer>(true);
+            foreach (Renderer ren in renderers) ren.enabled = true;
 
+            Collider[] colliders = monster.GetComponentsInChildren<Collider>(true);
+            foreach (Collider col in colliders) col.enabled = true;
+
+            
+            Vector3 basePos = point.transform.position; 
             Vector2 randomOffset = Random.insideUnitCircle * 4f;
-            Vector3 spawnPos = basePos + new Vector3(randomOffset.x, 0f, randomOffset.y);
+            Vector3 rayStartPos = basePos + new Vector3(randomOffset.x, 0f, randomOffset.y); 
 
-            if (NavMesh.SamplePosition(spawnPos, out NavMeshHit hit, 5f, NavMesh.AllAreas))
+            Vector3 spawnPos = rayStartPos;
+
+            if (Physics.Raycast(rayStartPos, Vector3.down, out RaycastHit hit, 50f, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))
             {
-                spawnPos = hit.position;
+                spawnPos = hit.point; 
             }
+            else
+            {
+                Debug.LogWarning($"[스폰 경고] {point.gameObject.name} 아래로 바닥을 찾지 못했습니다. 허공에 생성될 수 있습니다.");
+            }
+
+            if (NavMesh.SamplePosition(spawnPos, out NavMeshHit navHit, 5f, NavMesh.AllAreas))
+            {
+                spawnPos = navHit.position;
+            }
+            
             if (monster.TryGetComponent(out NavMeshAgent agent)) agent.enabled = false;
 
             monster.transform.position = spawnPos;
@@ -157,7 +171,6 @@ public class MonsterSpawnManager : MonoBehaviour
         }
     }
 
-    // 몬스터가 죽거나 멀어지면 매니저가 다시 큐에 집어넣음
     public void ReturnToPool(MonsterLifecycle monster)
     {
         monster.gameObject.SetActive(false);
@@ -167,8 +180,6 @@ public class MonsterSpawnManager : MonoBehaviour
         _lastDeathTime = Time.time;
     }
 
-    // 플레이어 총 공격력에 따른 생성시킬 몬스터 정하는 함수
-    // 공격력관계없이 플레이어가 이미 공격 파츠를 3개 장착했다면 관계없이 고레벨 몬스터 스폰
     private int GetMonsterPrefabIndex()
     {
         if (_monsterPrefabs.Count == 0) return 0;
@@ -182,20 +193,8 @@ public class MonsterSpawnManager : MonoBehaviour
             return Random.Range(5, maxIdx + 1);
         }
 
-        float totalAttackPower = 0f;
-        foreach (var fm in fireManagers)
-        {
-            if (fm.AttackPartsData != null) totalAttackPower += fm.AttackPartsData.Damage;
-        }
+        List<int> spawnMonsterList = new List<int> { Random.Range(0, 3) };
 
-        List<int> spawnMonsterList = new List<int>();
-        //if (totalAttackPower < 20f) spawnMonsterList = new List<int> { 0, 1, 2 };
-        //else if (totalAttackPower < 40f) spawnMonsterList = new List<int> { 1, 2, 3 };
-        //else if (totalAttackPower < 60f) spawnMonsterList = new List<int> { 3, 4, 5 };
-        //else spawnMonsterList = new List<int> { 5, 6, 7 };
-        spawnMonsterList = new List<int> { Random.Range(0, 3) };
-
-        // 혹시나 인스펙터에 실제 해당 리스트가 없는데 생성시키는 것을 방지시키기 위한 처리
         List<int> realSpawnMonsterList = spawnMonsterList.Where(idx => idx < _monsterPrefabs.Count).ToList();
         if (realSpawnMonsterList.Count == 0) return 0;
 

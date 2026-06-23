@@ -55,7 +55,8 @@ public class PlayerDefaultAttack : MonoBehaviour
         if(_inputHandler.IsFire && CanFire())
         {
             Vector3 crosshairTarget = _aimProvider != null ? _aimProvider.GetAimPoint() : Camera.main.transform.position + Camera.main.transform.forward * _range;
-
+            string result = _aimProvider != null ? "_aimProvider 찾음" : "_aimProvider 못찾음";
+            Debug.Log(result);
             Fire(crosshairTarget);
         }
 

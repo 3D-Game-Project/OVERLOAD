@@ -729,10 +729,6 @@ PrefabInstance:
       propertyPath: _crosshairImage
       value: 
       objectReference: {fileID: 0}
-    - target: {fileID: 1496748039727934879, guid: 31807b93534bc8841a4b9c03f8f07af3, type: 3}
-      propertyPath: _range
-      value: 20
-      objectReference: {fileID: 0}
     - target: {fileID: 5193953263454043114, guid: 31807b93534bc8841a4b9c03f8f07af3, type: 3}
       propertyPath: m_LocalPosition.x
       value: 700

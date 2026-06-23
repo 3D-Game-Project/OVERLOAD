@@ -365,62 +365,121 @@ public class DurabilityController : MonoBehaviour
     /// <returns></returns>
     private IEnumerator CoreDestroySequence()
     {
-        if (TryGetComponent(out UnityEngine.AI.NavMeshAgent agent))
-        {
-            agent.isStopped = true;
-            agent.enabled = false;
-        }
-
+        if (TryGetComponent(out UnityEngine.AI.NavMeshAgent agent)) { agent.isStopped = true; agent.enabled = false; }
         if (TryGetComponent(out Collider collider)) collider.enabled = false;
         if (TryGetComponent(out CharacterController characterController)) characterController.enabled = false;
 
-        if (_animator != null && !string.IsNullOrEmpty(_deathTrigger))
+        if (_animator != null && !string.IsNullOrEmpty(_deathTrigger)) _animator.SetTrigger(_deathTrigger);
+
+        
+        if (gameObject.layer == 6)
         {
-            _animator.SetTrigger(_deathTrigger);
+            if (PlayerDeathUI.Instance != null) PlayerDeathUI.Instance.PlayGlitchEffect();
+
+            yield return new WaitForSeconds(1.5f);
+
+            if (EffectManager.instance != null) EffectManager.instance.PlayDeathParticle(transform.position);
+
+            float fadeDuration = 2.0f; 
+            if (PlayerDeathUI.Instance != null) PlayerDeathUI.Instance.StartBlackFade(fadeDuration);
+
+            yield break;
         }
 
-        yield return new WaitForSeconds(1.2f);
+        Renderer[] mobRenderers = GetComponentsInChildren<Renderer>();
+        foreach (Renderer ren in mobRenderers) ren.enabled = false;
 
-        // LEGACY
-        //if(_unitData is EnemyData enemyData)
-        //{
-        //    DropRuntime dropRuntime = new DropRuntime();
-        //    dropRuntime.DropParts(enemyData, transform.root.transform.position, _destroyedPartList);
-        //}
+        if (EffectManager.instance != null) EffectManager.instance.PlayDeathParticle(transform.position);
 
-        // 새로 만든 DropAttachedPartsFromUnit을 기준으로 drop하도록 수정
+        yield return new WaitForSeconds(2f);
+
         if (_unitData is EnemyData enemyData)
         {
             DropRuntime dropRuntime = new DropRuntime();
 
-            // 이 부분 수정.
-            // 수정 이유: dropPosition이 Enemy의 Root의 Pos를 받아오는식이었는데 현재 Monster Spawn Manager가 Root로 변경되어 드랍위치가 고정됨
-            // 그래서 코어 내구도 0 인경우에만 이 로직의 위치를 찾게 되니 gameObject로 처리하면 Core의 위치대로 생성되니 그렇게 수정.
-            GameObject unitRoot = transform.root.gameObject;
+            MonsterLifecycle monsterRoot = GetComponentInParent<MonsterLifecycle>();
+            GameObject unitRoot = null;
+
+            if (monsterRoot != null)
+                unitRoot = monsterRoot.gameObject; 
+            else
+                unitRoot = this.gameObject; 
+
             Vector3 dropPosition = gameObject.transform.position;
 
-            dropRuntime.DropAttachedPartsFromUnit(
-                unitRoot,
-                enemyData,
-                dropPosition
-            );
+            if (unitRoot != null)
+            {
+                dropRuntime.DropAttachedPartsFromUnit(unitRoot, enemyData, dropPosition);
+            }
         }
 
-        if(gameObject.layer == 7)
+        if (gameObject.layer == 7) OnCoreDestroyed?.Invoke();
+    }
+
+    public void RespawnNearPoint()
+    {
+        Shop[] shops = UnityEngine.Object.FindObjectsByType<Shop>(FindObjectsSortMode.None);
+
+        Vector3 respawnPos = Vector3.zero;
+
+        if (shops.Length == 0)
         {
-            OnCoreDestroyed?.Invoke();
+            Debug.LogWarning("Shop 미검색됨. 플레이어를 원점(0,0,0)으로 부활시킵니다.");
+            respawnPos = Vector3.zero; 
+        }
+        else
+        {
+            Shop nearestShop = null;
+            float minDistance = float.MaxValue;
+            Vector3 deathPosition = transform.position;
+
+            foreach (Shop shop in shops)
+            {
+                float distance = Vector3.Distance(deathPosition, shop.transform.position);
+                if (distance < minDistance)
+                {
+                    minDistance = distance;
+                    nearestShop = shop;
+                }
+            }
+
+            Vector2 randomPos = UnityEngine.Random.insideUnitCircle.normalized * 10f;
+            Vector3 offset = new Vector3(randomPos.x, 1f, randomPos.y);
+            respawnPos = nearestShop.transform.position + offset;
+
+            Debug.Log($"가장 가까운 상점 '{nearestShop.gameObject.name}' 근처에서 부활하였습니다.");
         }
 
-        if (gameObject.layer == 6) Destroy(gameObject);
+        if (TryGetComponent(out CharacterController cc)) cc.enabled = false;
+        if (TryGetComponent(out UnityEngine.AI.NavMeshAgent nav)) nav.enabled = false;
 
+        transform.position = respawnPos;
+        Physics.SyncTransforms();
 
+        if (cc != null) cc.enabled = true;
+        if (TryGetComponent(out Collider col)) col.enabled = true;
+
+        if (nav != null)
+        {
+            nav.enabled = true;
+            nav.Warp(respawnPos); 
+            nav.isStopped = false;
+        }
+
+        if (_animator != null)
+        {
+            _animator.Rebind();
+            _animator.Update(0f);
+        }
+        _currentDurability = _maxDurability;
+        OnDurabilityChanged?.Invoke(_currentDurability, _maxDurability);
     }
 
     /// <summary>
     /// 파츠가 교체되거나 수리가 진행되는정도에 따른 연출 제거함수
     /// 0 이상이면 연기 끄기, 40이상이면 스파크도 끄기
     /// </summary>
-    
+
     private void CheckAndStopEffects()
     {
         if (_currentDurability > 0f)
