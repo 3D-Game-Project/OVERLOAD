@@ -13,8 +13,6 @@ MonoBehaviour:
   m_Name: Drop_Item_Gear
   m_EditorClassIdentifier: Assembly-CSharp::DropItem
   _currencyType: 1
-  _minAmount: 10
-  _maxAmount: 10
-  _dropChance: 40
+  _dropChance: 70
   _itemPrefab: {fileID: 919132149155446097, guid: 59c617f6713637840bfa6b9787da16cb, type: 3}
   _itemImage: {fileID: 21300000, guid: 61bfc68d6e999b04d914d94485ea2d55, type: 3}

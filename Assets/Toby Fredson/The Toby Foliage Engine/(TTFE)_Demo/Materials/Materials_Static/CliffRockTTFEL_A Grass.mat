@@ -9,17 +9,20 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: CliffRockTTFEL_A Grass
   m_Shader: {fileID: 4800000, guid: 40281aef83c984b4b9afe49e6e17271e, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords:
   - _METALLICGLOSSMAP
   - _NORMALMAP
   - _PRESERVESCALING_ON
   m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
+  m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
+  m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -165,3 +168,4 @@ Material:
     - _RockOffset: {r: 1, g: 1, b: 0, a: 0}
     - _RockTiling: {r: 1, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []
+  m_AllowLocking: 1

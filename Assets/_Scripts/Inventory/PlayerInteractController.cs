@@ -244,7 +244,7 @@ public class PlayerInteractController : MonoBehaviour
         }
         else if (type == "Gear")
         {
-            finalAmount = 10;
+            finalAmount = Random.Range(5, 11);
         }
 
         if (_inventory.CurrencyList.ContainsKey(type))

@@ -39,7 +39,7 @@ Material:
   - _WINDMOTIONSCALEMASK_ON
   - _WORLDUP_ON
   m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
+  m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
@@ -189,7 +189,9 @@ Material:
     - _0: 0.52
     - _ADVANCEDSETTINGS: 0
     - _AlbedoLightness: 1
+    - _AlphaClip: 0
     - _AlphaClipThreshold: 0.3
+    - _AlphaClipping: 0.4
     - _AlphaCutoff: 0.5
     - _AlphalOD: 0.9
     - _AmbientOcclusion: 1
@@ -251,6 +253,7 @@ Material:
     - _EmissionIntensity: 0
     - _EnableLeafTurbulence: 0
     - _EnableTransFade: 0
+    - _EnvironmentReflections: 1
     - _FACERENDERING: 0
     - _FadeOnOff: 1
     - _FadeOutWind: 0
@@ -337,6 +340,7 @@ Material:
     - _Radius2: 1
     - _RandomColorScale: 1
     - _RandomContrast: 0.3
+    - _ReceiveShadows: 1
     - _RootsHardness: 1
     - _RootsPosition: 0
     - _RootsRadius: 2
