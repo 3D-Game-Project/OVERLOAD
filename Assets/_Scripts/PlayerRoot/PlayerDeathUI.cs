@@ -106,6 +106,6 @@ public class PlayerDeathUI : MonoBehaviour
 
     private void OnClickMainMenu()
     {
-        SceneManager.LoadScene("MainMenuScene");
+        SceneManager.LoadScene("TitleScene");
     }
 }

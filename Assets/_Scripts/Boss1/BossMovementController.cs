@@ -6,42 +6,53 @@ public class BossMovementController : MonoBehaviour
 
     [Header("이동 속도 설정")]
     [SerializeField] private float _baseSpeed = 10f;
+    [SerializeField] private float _acceleration = 15f; 
+    [SerializeField] private float _deceleration = 20f; 
+
     private float _currentSpeed;
+
+    private Vector3 _targetVelocity;  
+    private Vector3 _currentVelocity; 
 
     private void Awake()
     {
-        if(_motor == null) _motor = GetComponent<BossLocomotionMotor>();
+        if (_motor == null) _motor = GetComponent<BossLocomotionMotor>();
         _currentSpeed = _baseSpeed;
     }
 
-    /// <summary>
-    /// 플레이어의 위치를 목표로 처리하여 방향 계산
-    /// </summary>
-    public void MoveToTarget(Vector3 destination)
+    private void Update()
     {
         if (_motor == null) return;
 
+        
+        float speedChangeRate = _targetVelocity.sqrMagnitude > 0.01f ? _acceleration : _deceleration;
+
+        _currentVelocity = Vector3.MoveTowards(_currentVelocity, _targetVelocity, speedChangeRate * Time.deltaTime);
+
+        _motor.SetMoveVelocity(_currentVelocity);
+    }
+
+    /// <summary>
+    /// 플레이어의 위치를 목표로 처리하여 방향 계산 (목표 속도만 설정)
+    /// </summary>
+    public void MoveToTarget(Vector3 destination)
+    {
         Vector3 direction = (destination - transform.position);
         direction.y = 0f;
 
-        Vector3 velocity = direction.normalized * _currentSpeed;
-
-        _motor.SetMoveVelocity(velocity);
+        _targetVelocity = direction.normalized * _currentSpeed;
     }
 
     /// <summary>
-    /// 보스의 움직임을 즉각 중지시키기
+    /// 보스의 움직임을 부드럽게 중지시키기
     /// </summary>
     public void StopMovement()
     {
-        if (_motor != null)
-        {
-            _motor.SetMoveVelocity(Vector3.zero);
-        }
+        _targetVelocity = Vector3.zero;
     }
 
     /// <summary>
-    /// 보스의 돌진패턴에 대하여 속도를 수정
+    /// 보스의 돌진 패턴 등에 대하여 일시적으로 속도를 덮어씀
     /// </summary>
     public void SetSpeed(float newSpeed)
     {

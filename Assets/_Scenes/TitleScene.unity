@@ -6231,7 +6231,7 @@ MonoBehaviour:
   _waveSpeed: 4
   _waveHeight: 8
   _waveSpacing: 0.5
-  _nextSceneName: MainPlayScene
+  _nextSceneName: PlayScene
 --- !u!1 &1344300896
 GameObject:
   m_ObjectHideFlags: 0

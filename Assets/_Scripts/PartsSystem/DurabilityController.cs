@@ -49,7 +49,15 @@ public class DurabilityController : MonoBehaviour
             Debug.Log("CharacterController 확인.");
             _durabilityType = DurabilityType.Core;
 
-            _maxDurability = 300f;
+            if(gameObject.layer == 6)
+            {
+                _maxDurability = 2000f;
+            }
+
+            if(gameObject.layer == 7)
+            {
+                _maxDurability = 300f;
+            }
             _currentDurability = _maxDurability;
 
         }
@@ -369,7 +377,7 @@ public class DurabilityController : MonoBehaviour
         if (TryGetComponent(out Collider collider)) collider.enabled = false;
         if (TryGetComponent(out CharacterController characterController)) characterController.enabled = false;
 
-        if (_animator != null && !string.IsNullOrEmpty(_deathTrigger)) _animator.SetTrigger(_deathTrigger);
+        //if (_animator != null && !string.IsNullOrEmpty(_deathTrigger)) _animator.SetTrigger(_deathTrigger);
 
         
         if (gameObject.layer == 6)
@@ -471,6 +479,13 @@ public class DurabilityController : MonoBehaviour
             _animator.Rebind();
             _animator.Update(0f);
         }
+
+        Animator[] allAnimators = GetComponentsInChildren<Animator>(true);
+        foreach (Animator anim in allAnimators)
+        {
+            anim.enabled = true;
+        }
+
         _currentDurability = _maxDurability;
         OnDurabilityChanged?.Invoke(_currentDurability, _maxDurability);
     }

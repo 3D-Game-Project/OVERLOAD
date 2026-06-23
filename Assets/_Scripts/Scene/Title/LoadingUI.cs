@@ -211,7 +211,7 @@ public class LoadingUI : MonoBehaviour
     [SerializeField] private float _waveHeight = 8f;
     [SerializeField] private float _waveSpacing = 0.5f;
 
-    [SerializeField] private string _nextSceneName = "MainPlayScene";
+    [SerializeField] private string _nextSceneName = "PlayScene";
 
     private AsyncOperation _asyncOperation;
     private bool _isLoadingComplete = false;

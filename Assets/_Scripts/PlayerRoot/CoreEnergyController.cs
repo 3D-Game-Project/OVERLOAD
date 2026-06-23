@@ -6,9 +6,9 @@ using UnityEngine;
 public class CoreEnergyController : MonoBehaviour
 {
     [Header("Energy")]
-    [SerializeField] private float _maxEnergy = 100f;
-    [SerializeField] private float _currentEnergy = 100f;
-    [SerializeField] private float _recoverEnergyPerSec = 15f;
+    [SerializeField] private float _maxEnergy = 250f;
+    [SerializeField] private float _currentEnergy = 250f;
+    [SerializeField] private float _recoverEnergyPerSec = 30f;
     [SerializeField] private float _recoverDelayAfterUse = 0.5f;
 
     private float _lastEnergyUsedTime = -999f;
