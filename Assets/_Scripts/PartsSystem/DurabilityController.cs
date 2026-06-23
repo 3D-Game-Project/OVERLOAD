@@ -391,7 +391,7 @@ public class DurabilityController : MonoBehaviour
 
         if (EffectManager.instance != null) EffectManager.instance.PlayDeathParticle(transform.position);
 
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(0.5f);
 
         if (_unitData is EnemyData enemyData)
         {
