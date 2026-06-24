@@ -564,9 +564,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerLocomotionMotor
   _characterController: {fileID: 740640444176647557}
+  _groundSensor: {fileID: 0}
   _gravity: -20
   _groundedForce: -2
   _maxFallSpeed: -25
+  _groundSnapDistance: 0.3
+  _groundSnapContactOffset: 0.02
 --- !u!114 &2524688153058945883
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -709,7 +712,7 @@ MonoBehaviour:
   _visualRoot: {fileID: 7093684061917546573}
   _heightPadding: 0.05
   _minHeight: 0.5
-  _autoRadius: 0
+  _autoRadius: 1
   _fixedRadius: 0.45
   _radiusPadding: 0.05
   _minRadius: 0.2

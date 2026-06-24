@@ -98,13 +98,25 @@ public class PlayerBodyShapeController : MonoBehaviour
 
         foreach (Renderer renderer in renderers)
         {
-            if (renderer == null)
+            if (renderer == null || !renderer.enabled)
                 continue;
 
-            if (!renderer.enabled)
+            // 실제 모델 메시만 크기 계산에 포함
+            bool isBodyMesh =
+                renderer is MeshRenderer ||
+                renderer is SkinnedMeshRenderer;
+
+            if (!isBodyMesh)
                 continue;
 
             Bounds worldBounds = renderer.bounds;
+
+            Debug.Log(
+                $"[Body Bounds] {renderer.name} / " +
+                $"Type: {renderer.GetType().Name} / " +
+                $"Center: {worldBounds.center} / " +
+                $"Size: {worldBounds.size}"
+            );
 
             Vector3 min = worldBounds.min;
             Vector3 max = worldBounds.max;
@@ -132,6 +144,15 @@ public class PlayerBodyShapeController : MonoBehaviour
 
             EncapsulateWorldPoint(ref localBounds, ref hasBounds,
                 new Vector3(max.x, max.y, max.z));
+        }
+
+        if (hasBounds)
+        {
+            Debug.Log(
+                $"[Final Body Bounds] " +
+                $"Center: {localBounds.center} / " +
+                $"Size: {localBounds.size}"
+            );
         }
 
         return hasBounds;

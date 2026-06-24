@@ -1266,7 +1266,7 @@ MonoBehaviour:
   _targetLayer:
     serializedVersion: 2
     m_Bits: 64
-  _chargeEffect: {fileID: 0}
+  _chargeEffect: {fileID: 3404286690265130463, guid: 4d786f4875ddcba4197a2a7fc2ce3476, type: 3}
   _releaseEffect: {fileID: 0}
 --- !u!114 &686557033273232310
 MonoBehaviour:

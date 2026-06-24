@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Boss_Legs_Spider_Hvy
   m_EditorClassIdentifier: Assembly-CSharp::LegPartsData
   _partsName: 'Spider [hvy]'
-  _partsPrefab: {fileID: 100000, guid: aa412701a96e884478f9b491265b31f0, type: 3}
+  _partsPrefab: {fileID: 100000, guid: 25e95a21dbbfcab4a8f3173681faf662, type: 3}
   _requiredLoad: 0
   _partsImage: {fileID: 1241192219, guid: 90c7d3cbce0c87342ad4e169693f8974, type: 3}
   _partsIcon: {fileID: 21300000, guid: e948d8f170f9895419520190102e9dd8, type: 3}

@@ -17,6 +17,10 @@ public class Shop : MonoBehaviour
     public event Action ShopListUpdated;
     //public event Action<int> CurrencyUpdated;
 
+    private void Start()
+    {
+        AddShopList();
+    }
     public void CheckExistParts(PartsData part)
     {
         if (part == null) return;

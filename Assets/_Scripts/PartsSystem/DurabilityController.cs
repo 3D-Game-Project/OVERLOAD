@@ -51,7 +51,7 @@ public class DurabilityController : MonoBehaviour
 
             if(gameObject.layer == 6)
             {
-                _maxDurability = 2000f;
+                _maxDurability = 1000f;
             }
 
             if(gameObject.layer == 7)

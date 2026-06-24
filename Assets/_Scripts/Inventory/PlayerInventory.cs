@@ -49,8 +49,8 @@ public class PlayerInventory : MonoBehaviour
     // 재화 초기 설정 수정
     private void Awake()
     {
-        if (!CurrencyList.ContainsKey("Gear")) CurrencyList.Add("Gear", 100);
-        if (!CurrencyList.ContainsKey("Scrap")) CurrencyList.Add("Scrap", 50);
+        if (!CurrencyList.ContainsKey("Gear")) CurrencyList.Add("Gear", 1000);
+        if (!CurrencyList.ContainsKey("Scrap")) CurrencyList.Add("Scrap", 1000);
     }
 
     // 파츠 추가 함수 - PlayerInteractionController의 Pickup시 호출
