@@ -1,7 +1,8 @@
 fileFormatVersion: 2
-guid: 1f1179185c289b3408b8311c5b1c2649
+guid: c816e65dac7b29a44b283e8d262011d5
 labels:
 - Mech
+- droids
 - Robot
 - Constructor
 - Modular
@@ -13,8 +14,8 @@ labels:
 - lowpoly
 - low-poly
 - handpainted
-- hand-painted
 - scifi
+- hand-painted
 - sci-fi
 - mobile
 - animated
@@ -22,8 +23,8 @@ labels:
 - battle
 - military
 - unit
-- armed
 - multilevel
+- armed
 - light
 - heavy
 - harvester
@@ -31,7 +32,6 @@ labels:
 - porter
 - melee
 - gun
-- droids
 - robots
 - androids
 - mechs

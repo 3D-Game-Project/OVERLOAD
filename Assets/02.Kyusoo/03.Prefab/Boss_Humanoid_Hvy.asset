@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e29c905744c8acb4b8991a8175c732aa, type: 3}
+  m_Name: Boss_Humanoid_Hvy
+  m_EditorClassIdentifier: Assembly-CSharp::LegPartsData
+  _partsName: HumanoidHvy
+  _partsPrefab: {fileID: 100000, guid: 9a6fd102bb511384a8813625481beb63, type: 3}
+  _requiredLoad: 0
+  _partsImage: {fileID: 0}
+  _partsIcon: {fileID: 21300000, guid: 4df359932c23d194b83eb1e1aa38d333, type: 3}
+  _maxDurability: 600
+  _description: 
+  _buyCost:
+    Gear: 10
+    Scrap: 10
+  _legTypeProfile: {fileID: 11400000, guid: 97d947647cd77114b9ddd35abeed7609, type: 2}
+  _moveSpeed: 3.5
+  _acceleration: 12
+  _decceleration: 16
+  _dashEnergyCost: 0
+  _animatorController: {fileID: 9100000, guid: cdc006f4e3548c744a097d64f05672c4, type: 2}
