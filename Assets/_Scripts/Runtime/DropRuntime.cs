@@ -123,7 +123,12 @@ public class DropRuntime
 
         Vector3 finalGroundPos = GetSpawnDropPos(scatterPosition);
 
-        currencyObj.transform.position = finalGroundPos + new Vector3(0f, 0.4f, 0f);
+        currencyObj.transform.position = finalGroundPos + new Vector3(0f, 0.8f, 0f);
+
+        if (currencyObj.GetComponent<ItemFloatingEffect>() == null)
+        {
+            currencyObj.AddComponent<ItemFloatingEffect>();
+        }
     }
 
 
@@ -211,6 +216,10 @@ public class DropRuntime
 
         dropPart.transform.localScale = Vector3.one;
 
+        WeaponGimbalController gimbal = dropPart.GetComponent<WeaponGimbalController>();
+        if (gimbal == null) gimbal = dropPart.GetComponentInChildren<WeaponGimbalController>();
+        if (gimbal != null) gimbal.enabled = false;
+
         DurabilityController durability =
             dropPart.GetComponent<DurabilityController>();
 
@@ -235,7 +244,12 @@ public class DropRuntime
         Vector3 scatterPosition = centerPosition + randomOffset;
         Vector3 finalGroundPos = GetSpawnDropPos(scatterPosition);
 
-        dropPart.transform.position = finalGroundPos + new Vector3(0f, 0.6f, 0f);
+        dropPart.transform.position = finalGroundPos + new Vector3(0f, 0.8f, 0f);
+
+        if (dropPart.GetComponent<ItemFloatingEffect>() == null)
+        {
+            dropPart.AddComponent<ItemFloatingEffect>();
+        }
 
         Debug.Log(
             $"[DropRuntime] 인벤토리 파츠 드랍: {partsData.PartsName} / Durability: {currentDurability}"
