@@ -242,7 +242,7 @@ public class HomingMissileProjectile : MonoBehaviour
 
         int otherLayer = other.gameObject.layer;
 
-        bool isTargetLayer = (_targetLayer.value & (1 << otherLayer)) != 0;
+        bool isTargetLayer = otherLayer == 6;
         bool isGroundLayer = otherLayer == 31;
 
 
