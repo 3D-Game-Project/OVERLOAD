@@ -18,9 +18,18 @@ public class BossShockwavePattern : BossAttackPatternBase
     [SerializeField] private float _damage = 30f;
     [SerializeField] private LayerMask _targetLayer;
 
-    [Header("Optional Effects")]
-    [SerializeField] private ParticleSystem _chargeEffect;
-    [SerializeField] private ParticleSystem _releaseEffect;
+    [Header("Optional Effect")]
+    [SerializeField] private ParticleSystem _shockwaveEffectPrefab;
+    [SerializeField] private float _effectLifetime = 5f;
+
+    [Header("Effect Ground Placement")]
+    [SerializeField] private LayerMask _groundLayer;
+    [SerializeField] private float _groundRayHeight = 5f;
+    [SerializeField] private float _groundRayDistance = 20f;
+    [SerializeField] private float _groundOffset = 0.05f;
+    [SerializeField] private bool _alignEffectToGround = true;
+
+    private ParticleSystem _activeShockwaveEffect;
 
     public override BossAttackPatternType PatternType =>
         BossAttackPatternType.Shockwave;
@@ -56,7 +65,7 @@ public class BossShockwavePattern : BossAttackPatternBase
     {
         StopBossMovement();
 
-        PlayEffect(_chargeEffect);
+        SpawnShockwaveEffect();
 
         float chargeTimer = 0f;
 
@@ -65,16 +74,13 @@ public class BossShockwavePattern : BossAttackPatternBase
             if (ShouldStop(target))
                 yield break;
 
-            // 충전 중에는 이동하지 않는다.
             StopBossMovement();
 
             chargeTimer += Time.deltaTime;
             yield return null;
         }
 
-        StopEffect(_chargeEffect);
-        PlayEffect(_releaseEffect);
-
+        // 이펙트는 정지하지 않고 계속 재생한다.
         ApplyShockwaveDamage();
 
         float recoveryTimer = 0f;
@@ -91,10 +97,74 @@ public class BossShockwavePattern : BossAttackPatternBase
         }
     }
 
+    private void SpawnShockwaveEffect()
+    {
+        if (_shockwaveEffectPrefab == null ||
+            _shockwaveOrigin == null)
+        {
+            return;
+        }
+
+        Vector3 rayOrigin =
+            _shockwaveOrigin.position +
+            Vector3.up * _groundRayHeight;
+
+        Vector3 spawnPosition =
+            _shockwaveOrigin.position;
+
+        Quaternion spawnRotation =
+            Quaternion.identity;
+
+        if (Physics.Raycast(
+                rayOrigin,
+                Vector3.down,
+                out RaycastHit hit,
+                _groundRayDistance,
+                _groundLayer,
+                QueryTriggerInteraction.Ignore))
+        {
+            spawnPosition =
+                hit.point + hit.normal * _groundOffset;
+
+            if (_alignEffectToGround)
+            {
+                spawnRotation = Quaternion.FromToRotation(
+                    Vector3.up,
+                    hit.normal
+                );
+            }
+        }
+        else
+        {
+            Debug.LogWarning(
+                "충격파 이펙트를 생성할 지면을 찾지 못했습니다."
+            );
+        }
+
+        // 보스의 자식으로 두지 않아 보스가 움직여도 이펙트가 고정된다.
+        _activeShockwaveEffect = Instantiate(
+            _shockwaveEffectPrefab,
+            spawnPosition,
+            spawnRotation
+        );
+
+        _activeShockwaveEffect.Play(true);
+
+        Destroy(
+            _activeShockwaveEffect.gameObject,
+            _effectLifetime
+        );
+    }
+
     protected override void OnPatternEnded(bool wasCancelled)
     {
-        StopEffect(_chargeEffect);
+        if (wasCancelled &&
+            _activeShockwaveEffect != null)
+        {
+            Destroy(_activeShockwaveEffect.gameObject);
+        }
 
+        _activeShockwaveEffect = null;
         StopBossMovement();
     }
 
