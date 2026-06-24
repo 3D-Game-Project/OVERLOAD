@@ -27,6 +27,8 @@ public class HomingMissileProjectile : MonoBehaviour
     [SerializeField] private float _homingDuration = 5f;
     [SerializeField] private float _lifeTime = 8f;
 
+    [SerializeField] private GameObject _explosionParticlePrefab;
+
     [Header("Target")]
     [SerializeField]
     private Vector3 _targetOffset =
@@ -240,22 +242,30 @@ public class HomingMissileProjectile : MonoBehaviour
 
         int otherLayer = other.gameObject.layer;
 
-        bool isTargetLayer =
-            (_targetLayer.value &
-             (1 << otherLayer)) != 0;
+        bool isTargetLayer = (_targetLayer.value & (1 << otherLayer)) != 0;
+        bool isGroundLayer = otherLayer == 31;
 
-        if (isTargetLayer)
+
+
+        if (isTargetLayer || isGroundLayer)
         {
-            DurabilityController durability =
-                other.GetComponentInParent<
-                    DurabilityController>();
-
-            if (durability != null)
+            if (_explosionParticlePrefab != null)
             {
-                durability.TakeDamage(_damage);
-                DestroyMissile();
+                Instantiate(_explosionParticlePrefab, transform.position, Quaternion.identity);
             }
 
+            if (isTargetLayer)
+            {
+                DurabilityController durability = other.GetComponentInParent<DurabilityController>();
+
+                if (durability != null)
+                {
+                    durability.TakeDamage(_damage);
+                }
+            }
+
+            // 미사일 파괴
+            DestroyMissile();
             return;
         }
 

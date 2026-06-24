@@ -9,6 +9,7 @@ public class BossAI : MonoBehaviour
 
     private BossMovementController _movementController;
     private DurabilityController _durability;
+    private bool isBroken = false;
 
     [Header("거리 기준 설정")]
     [SerializeField] private float _approachRange = 20f;
@@ -86,21 +87,21 @@ public class BossAI : MonoBehaviour
                 // 조건 2. 체력이 50이상인가?(접근과 공격에 대한 우선순위 설정을 위해)
                 if (hpRatio >= 0.5f)
                 {
-                    if (randomValue < 60)
+                    if (randomValue < 55)
                     {
-                        patternResult = "접근 (HP 50% 이상, 확률 60%)";
+                        patternResult = "접근 (HP 50% 이상, 확률 55%)";
                         selectedPattern = ApproachPattern();
-                    }
-                    else if (randomValue < 80)
-                    {
-                        patternResult = "유도 공격 (HP 50% 이상, 확률 20%)";
-                        selectedPattern = GuidedAttackPattern();
                     }
                     else
                     {
-                        patternResult = "장판 공격 (HP 50% 이상, 확률 20%)";
-                        selectedPattern = AoeAttackPattern();
+                        patternResult = "유도 공격 (HP 50% 이상, 확률 45%)";
+                        selectedPattern = GuidedAttackPattern();
                     }
+                    //else
+                    //{
+                        //patternResult = "장판 공격 (HP 50% 이상, 확률 20%)";
+                        //selectedPattern = AoeAttackPattern();
+                    //}
                 }
                 else // 체력이 50 미만
                 {
@@ -116,8 +117,8 @@ public class BossAI : MonoBehaviour
                     }
                     else
                     {
-                        patternResult = "장판 공격 (HP 50% 미만, 확률 35%)";
-                        selectedPattern = AoeAttackPattern();
+                        //patternResult = "장판 공격 (HP 50% 미만, 확률 35%)";
+                        //selectedPattern = AoeAttackPattern();
                     }
                 }
             }
@@ -156,8 +157,17 @@ public class BossAI : MonoBehaviour
                 yield return StartCoroutine(selectedPattern);
             }
 
-            float randomCooldown = Random.Range(2f, 4f);
-            yield return new WaitForSeconds(randomCooldown);
+            if (isBroken)
+            {
+                Debug.Log($"부위파괴로 인한 {patternResult}패턴 스킵");
+                isBroken = false;
+                yield return null;
+            }
+            else
+            {
+                float randomCooldown = Random.Range(1f, 2f);
+                yield return new WaitForSeconds(randomCooldown);
+            }
         }
     }
 
@@ -229,7 +239,7 @@ public class BossAI : MonoBehaviour
                 "[BossAI] 후퇴 사격 사용 불가: " +
                 "작동 가능한 총기가 없습니다."
             );
-
+            isBroken = true;
             yield break;
         }
 
@@ -288,13 +298,35 @@ public class BossAI : MonoBehaviour
     // 원거리 범위/유도 공격
     private IEnumerator GuidedAttackPattern()
     {
+        if (_patternController == null ||
+            _player == null)
+        {
+            yield break;
+        }
+
+        if (!_patternController.CanExecuteAttack(
+                BossAttackPatternType.HomingMissile,
+                _player))
+        {
+            Debug.Log(
+                "[BossAI] 돌진 사용 불가: " +
+                "작동 가능한 부스터가 없습니다."
+            );
+            isBroken = true;
+            yield break;
+        }
+
+        yield return _patternController.ExecuteAttackPattern(
+            BossAttackPatternType.HomingMissile,
+            _player
+        );
+
         float timer = 0f;
         while (timer < _guidedAttackDuration)
         {
             if (_player != null)
             {
                 if (_movementController != null) _movementController.LookAtTarget(_player.position);
-                // 유도공격 호출
             }
             timer += Time.deltaTime;
             yield return null;
@@ -386,7 +418,7 @@ public class BossAI : MonoBehaviour
                 "[BossAI] 총기 공격 사용 불가: " +
                 "작동 가능한 총기가 없습니다."
             );
-
+            isBroken = true;
             yield break;
         }
 
@@ -493,7 +525,7 @@ public class BossAI : MonoBehaviour
                 "[BossAI] 돌진 사용 불가: " +
                 "작동 가능한 부스터가 없습니다."
             );
-
+            isBroken = true;
             yield break;
         }
 
@@ -534,7 +566,7 @@ public class BossAI : MonoBehaviour
             Debug.Log(
                 "[BossAI] 충격파 사용 범위가 아닙니다."
             );
-
+            isBroken = true;
             yield break;
         }
 
