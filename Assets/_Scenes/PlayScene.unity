@@ -14046,7 +14046,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5193953263454043114, guid: 31807b93534bc8841a4b9c03f8f07af3, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 740
+      value: -190
       objectReference: {fileID: 0}
     - target: {fileID: 5193953263454043114, guid: 31807b93534bc8841a4b9c03f8f07af3, type: 3}
       propertyPath: m_LocalPosition.y
@@ -23384,9 +23384,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MonsterSpawnManager
   _player: {fileID: 513126607}
   _maxAliveMonsters: 5
-  _spawnDistance: 100
+  _spawnDistance: 70
+  _safeDistance: 20
+  _pointCooldownTime: 300
   _despawnDistance: 150
-  _pointCooldownTime: 30
   _respawnDelayAfterDeath: 10
   _monsterPrefabs:
   - {fileID: 6732670513853421516, guid: 8fd11c456cf31574a896bbc4ecdbbf95, type: 3}
@@ -33947,7 +33948,7 @@ MonoBehaviour:
   m_OverrideVoxelSize: 0
   m_VoxelSize: 0.16666667
   m_MinRegionArea: 2
-  m_NavMeshData: {fileID: 23800000, guid: 860bb5c260f74fe49aecd8a618872f32, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: c7b6ed5f948a79a4ab784b546aae2f5b, type: 2}
   m_BuildHeightMesh: 0
 --- !u!4 &1161079775
 Transform:
@@ -43980,10 +43981,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.CanvasScaler
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3

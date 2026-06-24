@@ -854,7 +854,7 @@ MonoBehaviour:
   _radiusPadding: 0.05
   _minRadius: 0.2
   _maxRadius: 1
-  _useVisualCenterXZ: 1
+  _useVisualCenterXZ: 0
   _snapToGroundAfterApply: 1
   _groundLayer:
     serializedVersion: 2
@@ -880,7 +880,7 @@ MonoBehaviour:
     slot: {fileID: 7680721664655559648}
   - partsData: {fileID: 11400000, guid: db799709083c3204b9bc4527a32fffc6, type: 2}
     slot: {fileID: 8959084602277851344}
-  - partsData: {fileID: 11400000, guid: 3773e78c9290a8d46bf52fbf8de7bb09, type: 2}
+  - partsData: {fileID: 11400000, guid: 0b2bcc177a83a9f43901dbd1034ee6f5, type: 2}
     slot: {fileID: 8270253581132282145}
   _attachmentSlots: []
   _coreLoadController: {fileID: 4491043938584476629}

@@ -874,7 +874,7 @@ MonoBehaviour:
   _radiusPadding: 0.05
   _minRadius: 0.2
   _maxRadius: 1
-  _useVisualCenterXZ: 1
+  _useVisualCenterXZ: 0
   _snapToGroundAfterApply: 1
   _groundLayer:
     serializedVersion: 2
