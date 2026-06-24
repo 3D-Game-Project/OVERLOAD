@@ -1170,8 +1170,12 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6642098441132586494, guid: 31807b93534bc8841a4b9c03f8f07af3, type: 3}
-      propertyPath: _useVisualCenterXZ
+      propertyPath: _autoRadius
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6642098441132586494, guid: 31807b93534bc8841a4b9c03f8f07af3, type: 3}
+      propertyPath: _useVisualCenterXZ
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8597838465946235833, guid: 31807b93534bc8841a4b9c03f8f07af3, type: 3}
       propertyPath: m_Name
