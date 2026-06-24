@@ -16,9 +16,12 @@ MonoBehaviour:
   _partsPrefab: {fileID: 8397542037179671392, guid: 76bb3994dee75d842bffe2efec8500de, type: 3}
   _requiredLoad: 0
   _partsImage: {fileID: 0}
-  _maxDurability: 100
-  _price: 0
+  _partsIcon: {fileID: 0}
+  _maxDurability: 300
   _description: 
+  _buyCost:
+    Gear: 0
+    Scrap: 0
   _boosterFunction: 11
   _jumpVelocity: 8
   _jumpEnergyCost: 15

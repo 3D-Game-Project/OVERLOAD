@@ -14046,7 +14046,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5193953263454043114, guid: 31807b93534bc8841a4b9c03f8f07af3, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -190
+      value: 750
       objectReference: {fileID: 0}
     - target: {fileID: 5193953263454043114, guid: 31807b93534bc8841a4b9c03f8f07af3, type: 3}
       propertyPath: m_LocalPosition.y
@@ -42297,8 +42297,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Shop
   _existParts: []
-  _existItems: []
-  _shopListParts: []
+  _existItems:
+  - {fileID: 11400000, guid: f164eaf5ed62b4142a3eb25aa1072a6b, type: 2}
+  _shopListParts:
+  - {fileID: 11400000, guid: 0ec19d76f2fa8264c85aa44c5fdf009f, type: 2}
+  - {fileID: 11400000, guid: a0516634d067e8f42bbe2b78a09f11a9, type: 2}
+  - {fileID: 11400000, guid: d47aa8250597ae84f9fc5599c57165ca, type: 2}
+  - {fileID: 11400000, guid: df38097fb43eba84ca26a8982b01719e, type: 2}
+  - {fileID: 11400000, guid: 4a1faaf5e6d2ab548b68c15de821b943, type: 2}
+  - {fileID: 11400000, guid: 69f87b8627a102c4d81027017bf203f6, type: 2}
   _sellRefundRate: 0.5
 --- !u!65 &1449309724
 BoxCollider:
@@ -42806,8 +42813,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Shop
   _existParts: []
-  _existItems: []
-  _shopListParts: []
+  _existItems:
+  - {fileID: 11400000, guid: f164eaf5ed62b4142a3eb25aa1072a6b, type: 2}
+  _shopListParts:
+  - {fileID: 11400000, guid: 0ec19d76f2fa8264c85aa44c5fdf009f, type: 2}
+  - {fileID: 11400000, guid: a0516634d067e8f42bbe2b78a09f11a9, type: 2}
+  - {fileID: 11400000, guid: d47aa8250597ae84f9fc5599c57165ca, type: 2}
+  - {fileID: 11400000, guid: df38097fb43eba84ca26a8982b01719e, type: 2}
+  - {fileID: 11400000, guid: 4a1faaf5e6d2ab548b68c15de821b943, type: 2}
+  - {fileID: 11400000, guid: 69f87b8627a102c4d81027017bf203f6, type: 2}
   _sellRefundRate: 0.5
 --- !u!65 &1474448968
 BoxCollider:
@@ -55281,8 +55295,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Shop
   _existParts: []
-  _existItems: []
-  _shopListParts: []
+  _existItems:
+  - {fileID: 11400000, guid: f164eaf5ed62b4142a3eb25aa1072a6b, type: 2}
+  _shopListParts:
+  - {fileID: 11400000, guid: 0ec19d76f2fa8264c85aa44c5fdf009f, type: 2}
+  - {fileID: 11400000, guid: a0516634d067e8f42bbe2b78a09f11a9, type: 2}
+  - {fileID: 11400000, guid: d47aa8250597ae84f9fc5599c57165ca, type: 2}
+  - {fileID: 11400000, guid: df38097fb43eba84ca26a8982b01719e, type: 2}
+  - {fileID: 11400000, guid: 4a1faaf5e6d2ab548b68c15de821b943, type: 2}
+  - {fileID: 11400000, guid: 69f87b8627a102c4d81027017bf203f6, type: 2}
   _sellRefundRate: 0.5
 --- !u!65 &1904844829
 BoxCollider:
@@ -62319,6 +62340,10 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 2386215568949793898, guid: 62d8637d6f765d54790c8cc2c125f1d0, type: 3}
+      propertyPath: _groundLayer.m_Bits
+      value: 2147483648
+      objectReference: {fileID: 0}
     - target: {fileID: 2974896939227849988, guid: 62d8637d6f765d54790c8cc2c125f1d0, type: 3}
       propertyPath: m_LocalScale.x
       value: 2
@@ -62376,6 +62401,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3197601243126901006, guid: 62d8637d6f765d54790c8cc2c125f1d0, type: 3}
+      propertyPath: _target
+      value: 
+      objectReference: {fileID: 513126607}
+    - target: {fileID: 3197601243126901006, guid: 62d8637d6f765d54790c8cc2c125f1d0, type: 3}
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
@@ -62402,11 +62431,19 @@ PrefabInstance:
     - target: {fileID: 3712040216336745735, guid: 62d8637d6f765d54790c8cc2c125f1d0, type: 3}
       propertyPath: _initialParts.Array.data[3].partsData
       value: 
-      objectReference: {fileID: 11400000, guid: 717c1af7478bd564a970f7cf8e8391e5, type: 2}
+      objectReference: {fileID: 11400000, guid: 344a8bd453c8ae34ba16f307d77cfe81, type: 2}
     - target: {fileID: 3712040216336745735, guid: 62d8637d6f765d54790c8cc2c125f1d0, type: 3}
       propertyPath: _initialParts.Array.data[4].partsData
       value: 
       objectReference: {fileID: 11400000, guid: 15b70971eccbc064f950c059b5712cfb, type: 2}
+    - target: {fileID: 3819089787808338467, guid: 62d8637d6f765d54790c8cc2c125f1d0, type: 3}
+      propertyPath: _useVisualCenterXZ
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3819089787808338467, guid: 62d8637d6f765d54790c8cc2c125f1d0, type: 3}
+      propertyPath: _snapToGroundAfterApply
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5512166293504854187, guid: 62d8637d6f765d54790c8cc2c125f1d0, type: 3}
       propertyPath: _player
       value: 
@@ -62430,6 +62467,26 @@ PrefabInstance:
     - target: {fileID: 8152066459892416290, guid: 62d8637d6f765d54790c8cc2c125f1d0, type: 3}
       propertyPath: m_Name
       value: Boss
+      objectReference: {fileID: 0}
+    - target: {fileID: 8784402079574840111, guid: 62d8637d6f765d54790c8cc2c125f1d0, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 606058ccb90c29c49a4341b034acf35b, type: 2}
+    - target: {fileID: 8784402079574840111, guid: 62d8637d6f765d54790c8cc2c125f1d0, type: 3}
+      propertyPath: m_Parameters.colorGradient.key0.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8784402079574840111, guid: 62d8637d6f765d54790c8cc2c125f1d0, type: 3}
+      propertyPath: m_Parameters.colorGradient.key0.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8784402079574840111, guid: 62d8637d6f765d54790c8cc2c125f1d0, type: 3}
+      propertyPath: m_Parameters.colorGradient.key0.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8784402079574840111, guid: 62d8637d6f765d54790c8cc2c125f1d0, type: 3}
+      propertyPath: m_Parameters.colorGradient.m_ColorSpace
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9193597355506574384, guid: 62d8637d6f765d54790c8cc2c125f1d0, type: 3}
       propertyPath: m_LocalScale.x

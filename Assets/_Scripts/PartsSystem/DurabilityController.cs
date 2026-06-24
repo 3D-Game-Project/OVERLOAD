@@ -422,8 +422,13 @@ public class DurabilityController : MonoBehaviour
                 dropRuntime.DropAttachedPartsFromUnit(unitRoot, enemyData, dropPosition);
             }
         }
-
+        
         if (gameObject.layer == 7) OnCoreDestroyed?.Invoke();
+
+        if (TryGetComponent(out BossAI bossAI))
+        {
+            Destroy(gameObject);
+        }
     }
 
     public void RespawnNearPoint()

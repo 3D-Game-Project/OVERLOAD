@@ -9,10 +9,14 @@ public class MonsterSpawnManager : MonoBehaviour
 
     [Header("스폰 설정")]
     [SerializeField] private Transform _player;
-    [SerializeField] private int _maxAliveMonsters = 5;       
-    [SerializeField] private float _spawnDistance = 100f;     
-    [SerializeField] private float _despawnDistance = 150f;   
-    [SerializeField] private float _pointCooldownTime = 30f;  
+    [SerializeField] private int _maxAliveMonsters = 5;
+    [SerializeField] private float _spawnDistance = 70f;
+
+    [SerializeField] private float _safeDistance = 20f;
+
+    [SerializeField] private float _pointCooldownTime = 300f;
+    [SerializeField] private float _despawnDistance = 100f;
+
     [SerializeField] private float _respawnDelayAfterDeath = 10f;
 
     private float _lastDeathTime = -999f;
@@ -22,7 +26,6 @@ public class MonsterSpawnManager : MonoBehaviour
 
     private List<MonsterSpawnPoint> _spawnPoints = new List<MonsterSpawnPoint>();
     private List<MonsterLifecycle> _aliveMonsters = new List<MonsterLifecycle>();
-
 
     private Dictionary<int, Queue<MonsterLifecycle>> _monsterPool = new Dictionary<int, Queue<MonsterLifecycle>>();
     private Dictionary<MonsterSpawnPoint, float> _pointCooldowns = new Dictionary<MonsterSpawnPoint, float>();
@@ -92,7 +95,7 @@ public class MonsterSpawnManager : MonoBehaviour
             MonsterLifecycle monster = _aliveMonsters[i];
             if (Vector3.Distance(_player.position, monster.transform.position) > _despawnDistance)
             {
-                Debug.Log($"[🔵 디스폰 작동] 몬스터가 플레이어와 150 이상 멀어졌습니다. 풀로 반환합니다.");
+                Debug.Log($"[🔵 디스폰 작동] 몬스터가 플레이어와 {_despawnDistance} 이상 멀어졌습니다. 풀로 반환합니다.");
                 ReturnToPool(monster);
             }
         }
@@ -100,15 +103,18 @@ public class MonsterSpawnManager : MonoBehaviour
 
     private void CheckSpawnCondition()
     {
-        if (_aliveMonsters.Count >= _maxAliveMonsters) return; 
+        if (_aliveMonsters.Count >= _maxAliveMonsters) return;
         if (_spawnPoints.Count == 0) return;
 
         if (Time.time - _lastDeathTime < _respawnDelayAfterDeath) return;
 
         List<MonsterSpawnPoint> validPoints = _spawnPoints
-            .Where(p => Vector3.Distance(_player.position, p.transform.position) <= _spawnDistance) 
-            .Where(p => !_pointCooldowns.ContainsKey(p) || Time.time - _pointCooldowns[p] >= _pointCooldownTime) 
-            .OrderBy(p => Vector3.Distance(_player.position, p.transform.position)) 
+            .Where(p => {
+                float dist = Vector3.Distance(_player.position, p.transform.position);
+                return dist <= _spawnDistance && dist > _safeDistance;
+            })
+            .Where(p => !_pointCooldowns.ContainsKey(p) || Time.time - _pointCooldowns[p] >= _pointCooldownTime) // 3. 쿨타임(5분)이 지났는지 확인
+            .OrderBy(p => Vector3.Distance(_player.position, p.transform.position))
             .ToList();
 
         if (validPoints.Count == 0) return;
@@ -134,16 +140,15 @@ public class MonsterSpawnManager : MonoBehaviour
             Collider[] colliders = monster.GetComponentsInChildren<Collider>(true);
             foreach (Collider col in colliders) col.enabled = true;
 
-            
-            Vector3 basePos = point.transform.position; 
+            Vector3 basePos = point.transform.position;
             Vector2 randomOffset = Random.insideUnitCircle * 4f;
-            Vector3 rayStartPos = basePos + new Vector3(randomOffset.x, 0f, randomOffset.y); 
+            Vector3 rayStartPos = basePos + new Vector3(randomOffset.x, 0f, randomOffset.y);
 
             Vector3 spawnPos = rayStartPos;
 
             if (Physics.Raycast(rayStartPos, Vector3.down, out RaycastHit hit, 50f, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))
             {
-                spawnPos = hit.point; 
+                spawnPos = hit.point;
             }
             else
             {
@@ -154,7 +159,7 @@ public class MonsterSpawnManager : MonoBehaviour
             {
                 spawnPos = navHit.position;
             }
-            
+
             if (monster.TryGetComponent(out NavMeshAgent agent)) agent.enabled = false;
 
             monster.transform.position = spawnPos;
