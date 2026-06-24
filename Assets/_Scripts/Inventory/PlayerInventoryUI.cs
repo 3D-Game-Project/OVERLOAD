@@ -169,5 +169,7 @@ public class PlayerInventoryUI : MonoBehaviour
             return;
 
         RefreshUI();
+
+        MechPreviewStudio.Instance.RefreshPreview();
     }
 }
