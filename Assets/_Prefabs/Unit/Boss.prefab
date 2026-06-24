@@ -798,6 +798,7 @@ GameObject:
   - component: {fileID: 686557033273232310}
   - component: {fileID: 8000017475965422333}
   - component: {fileID: 3197601243126901006}
+  - component: {fileID: 1692399701948022177}
   m_Layer: 7
   m_Name: Boss
   m_TagString: Enemy
@@ -1064,6 +1065,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BossMovementController
   _baseSpeed: 10
+  _acceleration: 15
+  _deceleration: 20
 --- !u!114 &895686393185249137
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1324,6 +1327,22 @@ MonoBehaviour:
   _patternController: {fileID: 4519246669561015794}
   _aimController: {fileID: 6652644905612055174}
   _target: {fileID: 0}
+--- !u!114 &1692399701948022177
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8152066459892416290}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b17e4279784d86643a820c9a0c0a1d94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BossLegAnimationBridge
+  _motor: {fileID: 895686393185249137}
+  _legYawRoot: {fileID: 7255762801483906578}
+  _fullTurnSpeed: 180
+  _turningThreshold: 5
 --- !u!1 &8213577477162688194
 GameObject:
   m_ObjectHideFlags: 0

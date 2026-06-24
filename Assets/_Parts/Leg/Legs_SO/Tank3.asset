@@ -15,13 +15,13 @@ MonoBehaviour:
   _partsName: Tank3
   _partsPrefab: {fileID: 100012, guid: 9448507b40d9b3c44870be46252172db, type: 3}
   _requiredLoad: 0
-  _partsImage: {fileID: 0}
+  _partsImage: {fileID: -1377179150, guid: d991d11f035068440a19ca5872fefd0f, type: 3}
   _partsIcon: {fileID: 21300000, guid: 4df296b71a143724585cf3e4d13deea5, type: 3}
   _maxDurability: 800
   _description: 
   _buyCost:
-    Gear: 0
-    Scrap: 0
+    Gear: 120
+    Scrap: 150
   _legTypeProfile: {fileID: 11400000, guid: 2dacd288b3403e4489fcb8270ef6d424, type: 2}
   _moveSpeed: 5
   _acceleration: 8

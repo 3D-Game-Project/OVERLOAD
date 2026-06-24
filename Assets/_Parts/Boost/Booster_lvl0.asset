@@ -12,23 +12,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42f49db9aa69f5a4c838e2be92e1ed3b, type: 3}
   m_Name: Booster_lvl0
   m_EditorClassIdentifier: Assembly-CSharp::BoosterPartsData
-  _partsName: 
+  _partsName: 'Booster [lvl.0]'
   _partsPrefab: {fileID: 100000, guid: ed67898dc934c5047ab72d727704c750, type: 3}
   _requiredLoad: 0
-  _partsImage: {fileID: 0}
+  _partsImage: {fileID: -1325259872, guid: 90c7d3cbce0c87342ad4e169693f8974, type: 3}
   _partsIcon: {fileID: 21300000, guid: 9667604b8df457142b7954a0c3bee4d4, type: 3}
-  _maxDurability: 300
+  _maxDurability: 250
   _description: 
   _buyCost:
-    Gear: 0
-    Scrap: 0
+    Gear: 60
+    Scrap: 80
   _boosterFunction: 1
   _jumpVelocity: 8
   _jumpEnergyCost: 15
-  _dashSpeed: 12
-  _dashEnergyCostPerSec: 20
-  _flightVerticalAcceleration: 25
-  _flightHorizontalSpeed: 4
-  _flightEnergyCostPerSec: 20
-  _glideFallSpeedLimit: -3
-  _glideEnergyCostPerSec: 5
+  _dashSpeed: 0
+  _dashEnergyCostPerSec: 0
+  _flightVerticalAcceleration: 0
+  _flightHorizontalSpeed: 0
+  _flightEnergyCostPerSec: 0
+  _glideFallSpeedLimit: 0
+  _glideEnergyCostPerSec: 0

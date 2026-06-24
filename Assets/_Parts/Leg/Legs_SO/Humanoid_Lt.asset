@@ -15,13 +15,13 @@ MonoBehaviour:
   _partsName: HumanoidHvy
   _partsPrefab: {fileID: 100000, guid: 5b30c3f78ead33a49bdf298c45818916, type: 3}
   _requiredLoad: 0
-  _partsImage: {fileID: 0}
+  _partsImage: {fileID: 1762065746, guid: d991d11f035068440a19ca5872fefd0f, type: 3}
   _partsIcon: {fileID: 21300000, guid: 4df359932c23d194b83eb1e1aa38d333, type: 3}
   _maxDurability: 300
   _description: 
   _buyCost:
-    Gear: 0
-    Scrap: 0
+    Gear: 60
+    Scrap: 80
   _legTypeProfile: {fileID: 11400000, guid: 97d947647cd77114b9ddd35abeed7609, type: 2}
   _moveSpeed: 3.5
   _acceleration: 12

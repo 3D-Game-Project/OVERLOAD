@@ -16,6 +16,12 @@ public class BossLocomotionMotor : MonoBehaviour
     private Vector3 _lookTarget;
     private bool _hasLookTarget = false;
 
+    public Vector3 CurrentMoveVelocity => _currentMoveVelocity;
+
+    public bool IsGrounded =>
+        _characterController != null &&
+        _characterController.isGrounded;
+
     private void Awake()
     {
         if (_characterController == null)

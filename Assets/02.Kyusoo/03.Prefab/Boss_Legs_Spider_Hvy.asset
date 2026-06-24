@@ -10,21 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e29c905744c8acb4b8991a8175c732aa, type: 3}
-  m_Name: Spider_Med
+  m_Name: Boss_Legs_Spider_Hvy
   m_EditorClassIdentifier: Assembly-CSharp::LegPartsData
-  _partsName: 'Spider [med]'
-  _partsPrefab: {fileID: 100000, guid: a32798260998a5e4598f31c4107a4226, type: 3}
+  _partsName: 'Spider [hvy]'
+  _partsPrefab: {fileID: 100000, guid: aa412701a96e884478f9b491265b31f0, type: 3}
   _requiredLoad: 0
-  _partsImage: {fileID: 941234417, guid: 90c7d3cbce0c87342ad4e169693f8974, type: 3}
+  _partsImage: {fileID: 1241192219, guid: 90c7d3cbce0c87342ad4e169693f8974, type: 3}
   _partsIcon: {fileID: 21300000, guid: e948d8f170f9895419520190102e9dd8, type: 3}
-  _maxDurability: 550
+  _maxDurability: 700
   _description: 
   _buyCost:
-    Gear: 110
-    Scrap: 140
+    Gear: 120
+    Scrap: 150
   _legTypeProfile: {fileID: 11400000, guid: c78541e47dd59b044a76185612e811fa, type: 2}
   _moveSpeed: 4
   _acceleration: 12
   _decceleration: 16
   _dashEnergyCost: 0
-  _animatorController: {fileID: 9100000, guid: 4c720197673e81848925fc17532ced2e, type: 2}
+  _animatorController: {fileID: 9100000, guid: a7b6f14ae21d32a47a07570f0eeb8eef, type: 2}

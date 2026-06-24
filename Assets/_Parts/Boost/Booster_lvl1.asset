@@ -12,16 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42f49db9aa69f5a4c838e2be92e1ed3b, type: 3}
   m_Name: Booster_lvl1
   m_EditorClassIdentifier: Assembly-CSharp::BoosterPartsData
-  _partsName: 
+  _partsName: 'Boosterr [lvl.1]'
   _partsPrefab: {fileID: 100000, guid: c7452c041a8e6334ea1c86249c6fc4af, type: 3}
   _requiredLoad: 0
-  _partsImage: {fileID: 0}
+  _partsImage: {fileID: -275783091, guid: 90c7d3cbce0c87342ad4e169693f8974, type: 3}
   _partsIcon: {fileID: 21300000, guid: 9667604b8df457142b7954a0c3bee4d4, type: 3}
-  _maxDurability: 300
+  _maxDurability: 350
   _description: 
   _buyCost:
-    Gear: 0
-    Scrap: 0
+    Gear: 100
+    Scrap: 150
   _boosterFunction: 3
   _jumpVelocity: 8
   _jumpEnergyCost: 15

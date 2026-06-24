@@ -20,8 +20,8 @@ MonoBehaviour:
   _maxDurability: 400
   _description: 
   _buyCost:
-    Gear: 0
-    Scrap: 0
+    Gear: 80
+    Scrap: 100
   _legTypeProfile: {fileID: 11400000, guid: c78541e47dd59b044a76185612e811fa, type: 2}
   _moveSpeed: 4
   _acceleration: 12

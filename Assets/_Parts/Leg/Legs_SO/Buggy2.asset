@@ -15,13 +15,13 @@ MonoBehaviour:
   _partsName: Buggy2
   _partsPrefab: {fileID: 100030, guid: 32922ffd2cf238c408d38e85456f21ad, type: 3}
   _requiredLoad: 0
-  _partsImage: {fileID: 0}
+  _partsImage: {fileID: 1906174753, guid: d991d11f035068440a19ca5872fefd0f, type: 3}
   _partsIcon: {fileID: 21300000, guid: 7eef8b171391dda45ab9bb91a7756384, type: 3}
   _maxDurability: 500
   _description: 
   _buyCost:
     Gear: 25
-    Scrap: 150
+    Scrap: 70
   _legTypeProfile: {fileID: 11400000, guid: b50dd01f13ca5c44281f0812ed009875, type: 2}
   _moveSpeed: 7
   _acceleration: 20
