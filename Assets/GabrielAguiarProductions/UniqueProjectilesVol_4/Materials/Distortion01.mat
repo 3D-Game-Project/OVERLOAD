@@ -64,10 +64,12 @@ Material:
     - _DistortionAmount: 0
     - _DistortionScale: 70
     - _DstBlend: 10
+    - _DstBlendAlpha: 10
     - _MaskPower: 1
     - _QueueControl: 0
     - _QueueOffset: 0
     - _SrcBlend: 5
+    - _SrcBlendAlpha: 1
     - _Surface: 1
     - _ZTest: 4
     - _ZWrite: 0

@@ -194,7 +194,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AttachmentSlot
   _slotId: Backpack
-  _allowedPartsTypes: 02000000040000000000000003000000
+  _allowedPartsTypes: 0200000004000000
   _mirrorVisualX: 0
   _attachPoint: {fileID: 0}
 --- !u!1 &2732858497938499727
